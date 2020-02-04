@@ -2,7 +2,7 @@
 " Version:     2.2
 " Last Change: 20-01-2020
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
-" URL:         https://github.com/neg-serg/neovim-colorschemes/blob/master/colors/neg.vim
+" URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 
 set background=dark
@@ -204,3 +204,10 @@ hi LineNr guifg=#202022 guibg=#040404
 
 " add pmenu transparency
 hi PmenuSel blend=0
+
+hi EasyMotionTarget ctermbg=none ctermfg=green
+hi EasyMotionShade  ctermbg=none ctermfg=blue
+hi EasyMotionTarget2First ctermbg=none ctermfg=red
+hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
+hi EasyMotionMoveHL ctermbg=green ctermfg=black
+hi EasyMotionIncSearch ctermbg=green ctermfg=black
