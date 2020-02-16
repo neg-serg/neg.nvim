@@ -126,8 +126,6 @@ call s:hi('IncSearch',            s:dark, s:csel, 'italic,underline')
 call s:hi('WarningMsg',           'NONE', s:errm, '')
 call s:hi('Question',             'NONE', s:lbgn, '')
 call s:hi('Visual',               s:visu, s:high, '')
-call s:hi('StatusLine',           'NONE', s:ops4, 'bold')
-call s:hi('StatusLineNC',         'NONE', 'NONE', 'none')
 call s:hi('VertSplit',            'NONE', 'NONE', 'none')
 
 call s:hi('TabLine',              s:dark, s:high, '')
@@ -211,3 +209,15 @@ hi EasyMotionTarget2First ctermbg=none ctermfg=red
 hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
 hi EasyMotionMoveHL ctermbg=green ctermfg=black
 hi EasyMotionIncSearch ctermbg=green ctermfg=black
+
+hi StatusLine guifg=black guibg=cyan
+hi StatusLineNC guifg=black guibg=cyan
+hi Base guibg=NONE guifg=#929dcb
+hi Git guibg=#010C12 guifg=#005faf
+hi LineCol guibg=#010C12 guifg=#929dcb
+hi Mode guibg=#010C12 guifg=#005f87
+hi Filetype guibg=#010C12 guifg=#005f87
+hi PowerlineMode guibg=NONE guifg=#010C12
+hi StatusLeftDelimiter1 guibg=#010C12 guifg=#1C3D4E
+hi StatusRightDelimiter1 guibg=#010C12 guifg=#1C3D4E
+hi StatusRight guibg=#010C12 guifg=#005f87
