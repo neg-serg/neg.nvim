@@ -213,6 +213,7 @@ hi EasyMotionIncSearch ctermbg=green ctermfg=black
 hi StatusLine guifg=black guibg=cyan
 hi StatusLineNC guifg=black guibg=cyan
 hi Base guibg=NONE guifg=#929dcb
+hi Decoration guibg=black guifg=#010C12
 hi Git guibg=#010C12 guifg=#005faf
 hi LineCol guibg=#010C12 guifg=#929dcb
 hi Mode guibg=#010C12 guifg=#005f87
