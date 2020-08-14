@@ -175,6 +175,11 @@ call s:hi('diffAdded',            '',     s:ops4, '')
 call s:hi('diffRemoved',          '',     s:cdbg, '')
 call s:hi('diffChanged',          '',     s:ops2, '')
 
+call s:hi('GitGutterAdd',          '', s:ops2, '')
+call s:hi('GitGutterChange',       '', s:incl, '')
+call s:hi('GitGutterDelete',       '', s:blod, 'underline')
+call s:hi('GitGutterChangeDelete', '', s:blod, '')
+
 call s:hi('fzf1',                 '',     s:cdbg, '')
 call s:hi('fzf2',                 '',     s:lit3, '')
 call s:hi('fzf3',                 '',     s:otag, '')
