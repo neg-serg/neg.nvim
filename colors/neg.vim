@@ -1,18 +1,11 @@
 " Name:        neg
-" Version:     2.2
-" Last Change: 20-01-2020
+" Version:     2.3
+" Last Change: 15-08-2020
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 
-set background=dark
-hi clear
-if exists('syntax on')
-    syntax reset
-endif
-
 let s:bclr='#000000'   " background color hexadecimal
-
 let s:dark='#121212'   " dark color
 let s:whit='#c0c0c0'   " white color
 
