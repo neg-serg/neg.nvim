@@ -220,3 +220,6 @@ hi PowerlineMode guibg=NONE guifg=#010C12
 hi StatusLeftDelimiter1 guibg=#010C12 guifg=#1C3D4E
 hi StatusRightDelimiter1 guibg=#010C12 guifg=#1C3D4E
 hi StatusRight guibg=#010C12 guifg=#005f87
+
+highlight link ALEWarningSign String
+highlight link ALEErrorSign Title
