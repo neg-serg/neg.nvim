@@ -1,62 +1,62 @@
 " Name:        neg
-" Version:     2.3
-" Last Change: 15-08-2020
+" Version:     2.4
+" Last Change: 17-09-2020
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 
-let s:bclr='#000000'   " background color hexadecimal
-let s:dark='#121212'   " dark color
-let s:whit='#c0c0c0'   " white color
+let s:bclr='#000000' " background color hexadecimal
+let s:dark='#121212' " dark color
+let s:whit='#c0c0c0' " white color
 
-let s:culc='#272727'   " cursor line/column hexadecimal
-let s:comm='#3C4754'   " comment color
+let s:culc='#272727' " cursor line/column hexadecimal
+let s:comm='#3c4754' " comment color
 
-let s:lit1='#017978'   " literal color 1
-let s:lit2='#008787'   " literal color 2
-let s:lit3='#007A51'   " literal color 3
-let s:ops1='#367cb0'   " operations color 1
-let s:ops2='#2b7694'   " operations color 2
-let s:ops3='#005faf'   " operations color 3
-let s:ops4='#395573'   " operations color 4
-let s:otag='#357B63'   " tag highlight color
-let s:lstr='#54667A'   " literal string highlight
-let s:incl='#005f87'   " include color
-let s:dlim='#4779b3'   " delimiter color
-let s:cdbg='#8a2f58'   " debug color
+let s:lit1='#017978' " literal color 1
+let s:lit2='#008787' " literal color 2
+let s:lit3='#007a51' " literal color 3
+let s:ops1='#367cb0' " operations color 1
+let s:ops2='#2b7694' " operations color 2
+let s:ops3='#005faf' " operations color 3
+let s:ops4='#395573' " operations color 4
+let s:otag='#357b63' " tag highlight color
+let s:lstr='#54667a' " literal string highlight
+let s:incl='#005f87' " include color
+let s:dlim='#4779b3' " delimiter color
+let s:cdbg='#8a2f58' " debug color
 
-let s:visu='#002b36'   " visual highlight
-let s:high='#899ca1'   " highlight color
+let s:visu='#002b36' " visual highlight
+let s:high='#899ca1' " highlight color
 
-let s:func='#7095b0'   " function highlight
-let s:dadd='#25533f'   " diff add
-let s:dchg='#00406d'   " diff change
-let s:errm='#666666'   " error message
-let s:clin='#080808'   " cursor line
+let s:func='#7095b0' " function highlight
+let s:dadd='#25533f' " diff add
+let s:dchg='#00406d' " diff change
+let s:errm='#666666' " error message
+let s:clin='#080808' " cursor line
 
-let s:blod='#5f0000'   " bloody red
+let s:blod='#5f0000' " bloody red
 
-let s:pmen='#6C7E96'   " pmenu color
-let s:msel='#0c1014'   " menu select color
+let s:pmen='#6c7e96' " pmenu color
+let s:msel='#0c1014' " menu select color
 
-let s:ccur='#375bc1'   " color cursor
-let s:csel='#005faf'   " search highlight color
+let s:ccur='#375bc1' " color cursor
+let s:csel='#005faf' " search highlight color
 
-let s:iden='#6289B3'   " identifier color
+let s:iden='#6289b3' " identifier color
 
-let s:syne='#cf4f88'   " Syntastic error
+let s:syne='#cf4f88' " Syntastic error
 
-let s:lbgn='#7095b0'   " light preprocessor color
-let s:dbng='#506a7d'   " dark preprocessor color
+let s:lbgn='#7095b0' " light preprocessor color
+let s:dbng='#506a7d' " dark preprocessor color
 
 fun! s:hi(group, bg, fg, attr)
-    exec "hi" a:group
-         \ . ' ' . (a:bg   != '' ? 'guibg=' . a:bg   : '')
-         \ . ' ' . (a:fg   != '' ? 'guifg=' . a:fg   : '')
-         \ . ' ' . (a:attr != '' ? 'gui='   . a:attr : '')
+    exec 'hi' a:group
+         \ . ' ' . (a:bg   !=# '' ? 'guibg=' . a:bg   : '')
+         \ . ' ' . (a:fg   !=# '' ? 'guifg=' . a:fg   : '')
+         \ . ' ' . (a:attr !=# '' ? 'gui='   . a:attr : '')
 endfun
 
-hi Normal guifg=#6C7E96 guibg=NONE
+hi Normal guifg=#6c7e96 guibg=NONE
 
 hi! clear DiffAdd
 hi! clear DiffAdded
@@ -126,8 +126,8 @@ call s:hi('TabLineFill',          'NONE', s:dark, '')
 call s:hi('TabLineSel',           s:dark, s:high, '')
 
 call s:hi('Cursor',               s:ccur, 'NONE', 'NONE')
-call s:hi('CursorLine',           s:clin, 'NONE', 'none')
-call s:hi('CursorLineNr',         'NONE', s:otag, 'none')
+call s:hi('CursorLine',           'NONE', 'NONE', 'NONE')
+call s:hi('CursorLineNr',         'NONE', s:otag, 'NONE')
 call s:hi('CursorColumn',         s:culc, 'NONE', '')
 call s:hi('ColorColumn',          s:culc, 'NONE', '')
 call s:hi('FoldColumn',           'NONE', s:comm, '')
@@ -200,13 +200,6 @@ hi LineNr guifg=#202022 guibg=#040404
 
 " add pmenu transparency
 hi PmenuSel blend=0
-
-hi EasyMotionTarget ctermbg=none ctermfg=green
-hi EasyMotionShade  ctermbg=none ctermfg=blue
-hi EasyMotionTarget2First ctermbg=none ctermfg=red
-hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
-hi EasyMotionMoveHL ctermbg=green ctermfg=black
-hi EasyMotionIncSearch ctermbg=green ctermfg=black
 
 hi StatusLine guifg=black guibg=cyan
 hi StatusLineNC guifg=black guibg=cyan
