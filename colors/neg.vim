@@ -9,6 +9,8 @@ let s:bclr='#000000' " background color hexadecimal
 let s:dark='#121212' " dark color
 let s:whit='#c0c0c0' " white color
 
+let s:norm='#6c7e96' " default foreground
+
 let s:culc='#272727' " cursor line/column hexadecimal
 let s:comm='#3c4754' " comment color
 
@@ -31,7 +33,6 @@ let s:high='#899ca1' " highlight color
 let s:func='#7095b0' " function highlight
 let s:dadd='#25533f' " diff add
 let s:dchg='#00406d' " diff change
-let s:errm='#666666' " error message
 let s:clin='#0E0F29' " cursor line
 
 let s:blod='#5f0000' " bloody red
@@ -57,20 +58,7 @@ fun! s:hi(group, bg, fg, attr)
          \ . ' ' . (a:attr !=# '' ? 'gui='   . a:attr : '')
 endfun
 
-hi Normal guifg=#6c7e96 guibg=NONE
-
-hi! clear DiffAdd
-hi! clear DiffAdded
-hi! clear DiffRemoved
-hi! clear DiffChange
-hi! clear DiffDelete
-hi! clear DiffText
-
-hi! link DeclRefExpr Normal
-hi! link Conceal Operator
-hi! link DiffRemoved Constant
-hi! link DiffAdded String
-
+call s:hi('Normal',               '',     s:norm, '')
 call s:hi('Ignore',               '',     s:comm, '')
 call s:hi('Comment',              '',     s:comm, '')
 call s:hi('Float',                '',     s:lit3, '')
@@ -112,12 +100,12 @@ call s:hi('MoreMsg',              'NONE', s:ops3, '')
 call s:hi('ModeMsg',              'NONE', s:ops3, '')
 call s:hi('Debug',                'NONE', s:cdbg, '')
 call s:hi('MatchParen',           s:high, s:dark, '')
-call s:hi('ErrorMsg',             'NONE', s:errm, '')
+call s:hi('ErrorMsg',             'NONE', s:norm, '')
 call s:hi('WildMenu',             s:dark, s:incl, '')
 call s:hi('Folded',               s:visu, s:high, '')
 call s:hi('Search',               'NONE', s:csel, 'italic')
 call s:hi('IncSearch',            s:dark, s:csel, 'italic,underline')
-call s:hi('WarningMsg',           'NONE', s:errm, '')
+call s:hi('WarningMsg',           'NONE', s:norm, '')
 call s:hi('Question',             'NONE', s:lbgn, '')
 call s:hi('Visual',               s:visu, s:high, '')
 call s:hi('VertSplit',            'NONE', 'NONE', '')
@@ -177,6 +165,18 @@ call s:hi('GitGutterChangeDelete', '', s:blod, '')
 call s:hi('fzf1',                 '',     s:cdbg, '')
 call s:hi('fzf2',                 '',     s:lit3, '')
 call s:hi('fzf3',                 '',     s:otag, '')
+
+hi! clear DiffAdd
+hi! clear DiffAdded
+hi! clear DiffRemoved
+hi! clear DiffChange
+hi! clear DiffDelete
+hi! clear DiffText
+
+hi! link DeclRefExpr Normal
+hi! link Conceal Operator
+hi! link DiffRemoved Constant
+hi! link DiffAdded String
 
 if has('spell')
     hi clear SpellBad
