@@ -1,15 +1,16 @@
 " Name:        neg
-" Version:     2.5
-" Last Change: 04-10-2020
+" Version:     2.7
+" Last Change: 26-10-2020
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 
+let s:norm='#6c7e96' " default foreground
+
 let s:bclr='#000000' " background color hexadecimal
 let s:dark='#121212' " dark color
-let s:whit='#c0c0c0' " white color
-
-let s:norm='#6c7e96' " default foreground
+let s:drk2='#223f73' " dark 2 color
+let s:whit='#d1e5ff' " white color
 
 let s:culc='#272727' " cursor line/column hexadecimal
 let s:comm='#3c4754' " comment color
@@ -27,8 +28,8 @@ let s:incl='#005f87' " include color
 let s:dlim='#4779b3' " delimiter color
 let s:cdbg='#8a2f58' " debug color
 
-let s:visu='#002b36' " visual highlight
-let s:high='#899ca1' " highlight color
+let s:visu='#131e30' " visual highlight
+let s:high='#a5c1e6' " highlight color
 
 let s:func='#7095b0' " function highlight
 let s:dadd='#25533f' " diff add
@@ -110,9 +111,9 @@ call s:hi('Question',             'NONE', s:lbgn, '')
 call s:hi('Visual',               s:visu, s:high, '')
 call s:hi('VertSplit',            'NONE', 'NONE', '')
 
-call s:hi('TabLine',              s:dark, s:high, '')
-call s:hi('TabLineFill',          'NONE', s:dark, '')
-call s:hi('TabLineSel',           s:dark, s:high, '')
+call s:hi('TabLine',              s:bclr, s:drk2, 'NONE')
+call s:hi('TabLineFill',          s:ops2, s:bclr, '')
+call s:hi('TabLineSel',           s:visu, s:drk2, 'NONE')
 
 call s:hi('Cursor',               s:ccur, 'NONE', 'NONE')
 call s:hi('CursorLine',           'NONE', 'NONE', 'NONE')
@@ -166,13 +167,6 @@ call s:hi('fzf1',                 '',     s:cdbg, '')
 call s:hi('fzf2',                 '',     s:lit3, '')
 call s:hi('fzf3',                 '',     s:otag, '')
 
-hi! clear DiffAdd
-hi! clear DiffAdded
-hi! clear DiffRemoved
-hi! clear DiffChange
-hi! clear DiffDelete
-hi! clear DiffText
-
 hi! link DeclRefExpr Normal
 hi! link Conceal Operator
 hi! link DiffRemoved Constant
@@ -191,7 +185,6 @@ endif
 
 call s:hi('SyntasticErrorSign',   s:culc, s:syne, '')
 call s:hi('SyntasticWarningSign', s:culc, s:ops3, '')
-
 call s:hi('TermCursor',   s:ccur, 'NONE', 'NONE')
 call s:hi('TermCursorNC', s:comm, 'NONE', 'NONE')
 
