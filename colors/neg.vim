@@ -74,23 +74,8 @@ if has('spell')
     call s:hi('SpellLocal', '', '', 'underline')
 endif
 
-hi LineNr guifg=#202022 guibg=#040404
-
-" add pmenu transparency
 hi PmenuSel blend=0
-
-hi StatusLine guifg=black guibg=cyan
-hi StatusLineNC guifg=black guibg=cyan
-hi Base guibg=NONE guifg=#929dcb
-hi Decoration guibg=black guifg=#010C12
-hi Git guibg=#010C12 guifg=#005faf
-hi LineCol guibg=#010C12 guifg=#929dcb
-hi Mode guibg=#010C12 guifg=#005f87
-hi Filetype guibg=#010C12 guifg=#005f87
-hi PowerlineMode guibg=NONE guifg=#010C12
-hi StatusLeftDelimiter1 guibg=#010C12 guifg=#1C3D4E
-hi StatusRightDelimiter1 guibg=#010C12 guifg=#1C3D4E
-hi StatusRight guibg=#010C12 guifg=#005f87
+hi LineNr guifg=#202022 guibg=NONE gui=italic
 
 call s:hi('Normal',                '',     s:norm, '')
 call s:hi('Ignore',                '',     s:comm, '')
