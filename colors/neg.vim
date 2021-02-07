@@ -1,6 +1,6 @@
 " Name:        neg
-" Version:     2.8
-" Last Change: 07-11-2020
+" Version:     2.9
+" Last Change: 07-02-2021
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -52,30 +52,6 @@ fun! s:hi(group, bg, fg, attr)
          \ . ' ' . (a:fg   !=# '' ? 'guifg=' . a:fg   : '')
          \ . ' ' . (a:attr !=# '' ? 'gui='   . a:attr : '')
 endfun
-
-hi link NormalFloat Normal
-hi link CocFloating Normal
-hi! link DeclRefExpr Normal
-hi! link Conceal Operator
-hi! link DiffRemoved Constant
-hi! link DiffAdded String
-
-hi link ALEWarningSign String
-hi link ALEErrorSign Title
-
-if has('spell')
-    hi clear SpellBad
-    hi clear SpellCap
-    hi clear SpellRare
-    hi clear SpellLocal
-    call s:hi('SpellBad',   '', '', 'underline')
-    call s:hi('SpellCap',   '', '', 'underline')
-    call s:hi('SpellRare',  '', '', 'underline')
-    call s:hi('SpellLocal', '', '', 'underline')
-endif
-
-hi PmenuSel blend=0
-hi LineNr guifg=#202022 guibg=NONE gui=italic
 
 call s:hi('Normal',                '',     s:norm, '')
 call s:hi('Ignore',                '',     s:comm, '')
@@ -187,3 +163,33 @@ call s:hi('ALEErrorSign',          '', s:blod, '')
 call s:hi('ALEWarningSign',        '', s:ops2, '')
 call s:hi('ALEWarningSignLineNR',  '', s:darkhigh, '')
 call s:hi('ALEErrorSignLineNR',    '', s:darkhigh, '')
+
+hi link NormalFloat Normal
+hi link CocFloating Normal
+hi! link DeclRefExpr Normal
+hi! link Conceal Operator
+hi! link DiffRemoved Constant
+hi! link DiffAdded String
+
+hi link ALEWarningSign String
+hi link ALEErrorSign Title
+
+if has('spell')
+    hi clear SpellBad
+    hi clear SpellCap
+    hi clear SpellRare
+    hi clear SpellLocal
+    call s:hi('SpellBad',   '', '', 'underline')
+    call s:hi('SpellCap',   '', '', 'underline')
+    call s:hi('SpellRare',  '', '', 'underline')
+    call s:hi('SpellLocal', '', '', 'underline')
+endif
+
+hi PmenuSel blend=0
+hi LineNr guifg=#202022 guibg=NONE gui=italic
+
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
