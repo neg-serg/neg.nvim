@@ -1,6 +1,6 @@
 " Name:        neg
-" Version:     2.9
-" Last Change: 07-02-2021
+" Version:     2.91
+" Last Change: 25-08-2021
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -186,7 +186,7 @@ if has('spell')
 endif
 
 hi PmenuSel blend=0
-hi LineNr guifg=#202022 guibg=NONE gui=italic
+hi LineNr guifg=#2c3641 guibg=NONE gui=italic
 
 highlight ConflictMarkerBegin guibg=#2f7366
 highlight ConflictMarkerOurs guibg=#2e5049
