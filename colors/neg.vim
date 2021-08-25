@@ -55,7 +55,7 @@ endfun
 
 call s:hi('Normal',                '',     s:norm, '')
 call s:hi('Ignore',                '',     s:comm, '')
-call s:hi('Comment',               '',     s:comm, '')
+call s:hi('Comment',               '',     s:comm, 'italic')
 call s:hi('Float',                 '',     s:lit3, '')
 call s:hi('Include',               '',     s:incl, '')
 call s:hi('Define',                '',     s:dbng, '')
