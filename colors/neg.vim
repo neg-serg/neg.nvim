@@ -198,3 +198,4 @@ highlight TelescopeBorder guifg=#111d26
 highlight TelescopePromptBorder guifg=#111d26
 highlight TelescopeResultsBorder guifg=#111d26
 highlight TelescopePreviewBorder guifg=#111d26
+highlight CocFloating guifg=#266da5
