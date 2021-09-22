@@ -28,7 +28,7 @@ let s:incl='#005f87' " include color
 let s:dlim='#4779b3' " delimiter color
 let s:blod='#5f0000' " bloody red
 
-let s:visu='#131e30' " visual highlight
+let s:visu='#080808' " visual highlight
 let s:high='#a5c1e6' " highlight color
 let s:darkhigh='#7387a1' " darker highlight color
 
@@ -102,7 +102,7 @@ call s:hi('Search',                'NONE', s:csel, 'italic')
 call s:hi('IncSearch',             s:dark, s:csel, 'italic,underline')
 call s:hi('WarningMsg',            'NONE', s:norm, '')
 call s:hi('Question',              'NONE', s:lbgn, '')
-call s:hi('Visual',                s:visu, s:high, '')
+call s:hi('Visual',                s:visu, s:ops3, 'bold')
 call s:hi('VertSplit',             s:dark, s:bclr, '')
 
 call s:hi('TabLine',               s:bclr, s:drk2, 'NONE')
