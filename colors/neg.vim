@@ -54,6 +54,7 @@ fun! s:hi(group, bg, fg, attr)
 endfun
 
 call s:hi('Normal',                '',     s:norm, '')
+call s:hi('StatusLineNC',          'NONE', 'NONE', 'NONE')
 call s:hi('Ignore',                '',     s:comm, '')
 call s:hi('Comment',               '',     s:comm, 'italic')
 call s:hi('Float',                 '',     s:lit3, '')
