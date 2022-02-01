@@ -1,6 +1,6 @@
 " Name:        neg
-" Version:     2.92
-" Last Change: 22-01-2022
+" Version:     2.93
+" Last Change: 01-02-2022
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -158,7 +158,7 @@ call s:hi('diffRemoved',           '',     s:blod, '')
 call s:hi('GitGutterAdd',          '', s:ops2, '')
 call s:hi('GitGutterChangeDelete', '', s:blod, '')
 call s:hi('GitGutterChange',       '', s:incl, '')
-call s:hi('GitGutterDelete',       '', s:blod, 'underline')
+call s:hi('GitGutterDelete',       '', s:blod, '')
 
 call s:hi('ALEErrorSignLineNR',    '', s:darkhigh, '')
 call s:hi('ALEErrorSign',          '', s:blod, '')
