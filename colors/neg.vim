@@ -1,6 +1,6 @@
 " Name:        neg
-" Version:     2.93
-" Last Change: 01-02-2022
+" Version:     2.94
+" Last Change: 11-02-2022
 " Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 " URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 " About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -161,9 +161,11 @@ call s:hi('GitGutterChange',       '', s:incl, '')
 call s:hi('GitGutterDelete',       '', s:blod, '')
 
 call s:hi('ALEErrorSignLineNR',    '', s:darkhigh, '')
-call s:hi('ALEErrorSign',          '', s:blod, '')
 call s:hi('ALEWarningSignLineNR',  '', s:darkhigh, '')
-call s:hi('ALEWarningSign',        '', s:ops2, '')
+hi link ALEErrorSign Title
+hi link ALEWarningSign String
+hi link DiagnosticError Title
+hi link DiagnosticWarn String
 
 hi link CocFloating Normal
 hi link NormalFloat Normal
@@ -172,9 +174,6 @@ hi! link Conceal Operator
 hi! link DeclRefExpr Normal
 hi! link DiffAdded String
 hi! link DiffRemoved Constant
-
-hi link ALEErrorSign Title
-hi link ALEWarningSign String
 
 if has('spell')
     hi clear SpellBad
