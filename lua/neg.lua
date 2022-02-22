@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.00
--- Last Change: 11-02-2022
+-- Version:     3.01
+-- Last Change: 23-02-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -108,7 +108,7 @@ hi(0, 'TabLineSel', {bg = visu, fg = drk2, nil})
 hi(0, 'ColorColumn', {bg = culc, nil})
 hi(0, 'CursorColumn', {bg = culc, nil})
 hi(0, 'CursorLine', {nil, nil, nil})
-hi(0, 'CursorLineNr', {clin, ops3, italic=true, bold=true})
+hi(0, 'CursorLineNr', {bg = clin, fg = ops3, italic=true, bold=true})
 hi(0, 'FoldColumn', {bg = 'NONE', fg = comm})
 hi(0, 'SignColumn', {bg = 'NONE', fg = 'NONE'})
 
@@ -175,8 +175,6 @@ hi(0, 'TelescopeBorder', {fg = '#111d26'})
 hi(0, 'TelescopePreviewBorder', {fg = '#111d26'})
 hi(0, 'TelescopePromptBorder', {fg = '#111d26'})
 hi(0, 'TelescopeResultsBorder', {fg = '#111d26'})
-
-hi(0, 'PmenuSel' {blend = 0})
 
 hi(0, 'ALEErrorSign', {link = 'Title'})
 hi(0, 'ALEWarningSign', {link = 'String'})
