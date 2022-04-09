@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.01
--- Last Change: 23-02-2022
+-- Version:     3.02
+-- Last Change: 10-04-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -188,3 +188,10 @@ hi(0, 'Conceal', {link = 'Operator'})
 hi(0, 'DeclRefExpr', {link = 'Normal'})
 hi(0, 'DiffAdded', {link = 'String'})
 hi(0, 'DiffRemoved', {link = 'Constant'})
+
+hi(0, 'CmpItemKindFunction', {bg = blod, fg = 'NONE'})
+hi(0, 'CmpItemKindInterface', {bg = ops3, fg = 'NONE'})
+hi(0, 'CmpItemKindKeyword', {bg = lit3, fg = 'NONE'})
+hi(0, 'CmpItemKindMethod', {bg = blod, fg = 'NONE'})
+hi(0, 'CmpItemKindProperty', {bg = lit3, fg = 'NONE'})
+hi(0, 'CmpItemKindVariable', {bg = ops3, fg = 'NONE'})
