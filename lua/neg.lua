@@ -27,7 +27,6 @@ local lstr='#54667a' -- literal string highlight
 local incl='#005f87' -- include color
 local dlim='#4779b3' -- delimiter color
 local blod='#5f0000' -- bloody red
-local self='#7095B0' -- self highlight
 
 local visu='#080808' -- visual highlight
 local high='#a5c1e6' -- highlight color
