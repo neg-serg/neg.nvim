@@ -189,6 +189,8 @@ hi(0, 'DeclRefExpr', {link = 'Normal'})
 hi(0, 'DiffAdded', {link = 'String'})
 hi(0, 'DiffRemoved', {link = 'Constant'})
 
+hi(0, 'ExtraWhitespace', {bg = lit3, fg = 'NONE'})
+
 hi(0, 'CmpItemKindFunction', {bg = blod, fg = 'NONE'})
 hi(0, 'CmpItemKindInterface', {bg = ops3, fg = 'NONE'})
 hi(0, 'CmpItemKindKeyword', {bg = lit3, fg = 'NONE'})
