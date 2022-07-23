@@ -22,6 +22,8 @@ local colors = {
     dlim='#4779b3', -- delimiter color
     blod='#5f0000', -- bloody red
 
+    violet='#3D005D', -- violet
+
     visu='#080808', -- visual highlight
     high='#a5c1e6', -- highlight color
     darkhigh='#7387a1', -- darker highlight color

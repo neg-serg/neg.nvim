@@ -81,7 +81,7 @@ function M.setup()
     hi(0, 'DiffDelete', {bg = p.blod, fg = p.bclr})
     hi(0, 'DiffText', {bg = 'NONE', fg = p.whit})
 
-    hi(0, 'Error', {bg = p.blod, fg = p.bclr})
+    hi(0, 'Error', {bg = p.bclr, fg = p.violet})
 
     hi(0, 'Pmenu', {bg = p.pmen, fg = p.bclr, italic=true,reverse=true})
     hi(0, 'PmenuSbar', {bg = p.clin, fg = 'NONE'})
