@@ -1,1 +1,1 @@
-require("neg").colorscheme()
+require'neg'.colorscheme()

@@ -1,16 +1,14 @@
 -- Name:        neg
--- Version:     3.04
+-- Version:     3.05
 -- Last Change: 02-06-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 local M = {}
-local p = require("neg.palette")
+local p = require'neg.palette'
+local hi = vim.api.nvim_set_hl
 
 function M.setup()
-
-    local hi = vim.api.nvim_set_hl
-
     hi(0, 'Boolean', {bg = '', fg = p.lit3})
     hi(0, 'cFunctionTag', {bg = '', fg = p.lit2})
     hi(0, 'Comment', {bg = '', fg = p.comm, italic=true})
