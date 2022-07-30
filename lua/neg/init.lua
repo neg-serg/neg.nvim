@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.10
+-- Version:     3.11
 -- Last Change: 01-08-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -169,8 +169,8 @@ local diff={
 }
 
 local telescope={
-    TelescopeMatching={bg='NONE', fg=p.col18, italic=true},
-    TelescopeSelection={fg=p.col16},
+    TelescopeMatching={bg='NONE', fg=p.col19, italic=true},
+    TelescopeSelection={fg=p.col17},
     TelescopeBorder={fg='#111d26'},
     TelescopePreviewBorder={fg='#111d26'},
     TelescopePromptBorder={fg='#111d26'},
