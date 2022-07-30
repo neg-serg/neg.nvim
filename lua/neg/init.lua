@@ -2,7 +2,7 @@
 -- Version:     3.09
 -- Last Change: 01-08-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
--- URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
+-- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
 local M={}
 local p=require'neg.palette'
