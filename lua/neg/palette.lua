@@ -41,6 +41,30 @@ local colors = {
 
     lbgn='#7095b0', -- light preprocessor color
     dbng='#506a7d', -- dark preprocessor color
+    col1='#000408',
+    col2='#010912',
+    col3='#040f1c',
+    col4='#071526',
+    col5='#0c1c30',
+    col6='#10233a',
+    col7='#162b44',
+    col8='#1c334e',
+    col9='#233b58',
+    col10='#2b4462',
+    col11='#344d6c',
+    col12='#3f5876',
+    col13='#496280',
+    col14='#546c8a',
+    col15='#607794',
+    col16='#6d839e',
+    col17='#7c90a8',
+    col18='#8d9eb2',
+    col19='#95a7bc',
+    col20='#a4b3c6',
+    col21='#b7c2d0',
+    col22='#bfc8d0',
+    col23='#dbdfe4',
+    col24='#EEEEEE',
 }
 
 return colors
