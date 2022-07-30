@@ -162,7 +162,7 @@ local diff={
 }
 
 local telescope={
-    TelescopeMatching={bg='NONE', fg=p.lbgn, underline=true},
+    TelescopeMatching={bg='NONE', fg='None', italic=true},
     TelescopeSelection={link='Question'},
     TelescopeBorder={fg='#111d26'},
     TelescopePreviewBorder={fg='#111d26'},
