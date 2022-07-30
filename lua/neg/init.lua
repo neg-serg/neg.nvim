@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.06
--- Last Change: 24-07-2022
+-- Version:     3.08
+-- Last Change: 31-07-2022
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg/blob/master/colors/neg.vim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -162,6 +162,8 @@ local diff={
 }
 
 local telescope={
+    TelescopeMatching={bg='NONE', fg=p.lbgn, underline=true},
+    TelescopeSelection={link='Question'},
     TelescopeBorder={fg='#111d26'},
     TelescopePreviewBorder={fg='#111d26'},
     TelescopePromptBorder={fg='#111d26'},
@@ -172,7 +174,7 @@ function M.setup()
     for _, group in ipairs({styles,diff,cmp,gitgutter,telescope}) do
         for name, style in pairs(group) do hi(0, name, style) end
     end
-    if false then
+    if "" then
         for _, group in ipairs({tabline,perl}) do
             for name, style in pairs(group) do hi(0, name, style) end
         end
