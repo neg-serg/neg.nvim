@@ -8,7 +8,7 @@ local M={}
 local p=require'neg.palette'
 local hi=vim.api.nvim_set_hl
 
-local all_styles={
+local styles={
     Boolean={bg='', fg=p.lit3},
     cFunctionTag={bg='', fg=p.lit2},
     Comment={bg='', fg=p.comm, italic=true},
@@ -63,21 +63,12 @@ local all_styles={
     WarningMsg={bg='NONE', fg=p.norm},
     WildMenu={bg=p.dark, fg=p.incl},
 
-    TabLineFill={bg=p.ops2, fg=p.bclr},
-    TabLine={bg=p.bclr, fg=p.drk2, nil},
-    TabLineSel={bg=p.visu, fg=p.drk2, nil},
-
     ColorColumn={bg=p.culc, nil},
     CursorColumn={bg=p.culc, nil},
     CursorLine={nil, nil, nil},
     CursorLineNr={bg=p.clin, fg=p.ops3, italic=true, bold=true},
     FoldColumn={bg='NONE', fg=p.comm},
     SignColumn={bg='NONE', fg='NONE'},
-
-    DiffAdd={bg=p.whit, fg=p.dadd},
-    DiffChange={bg=p.whit, fg=p.dchg},
-    DiffDelete={bg=p.blod, fg=p.bclr},
-    DiffText={bg='NONE', fg=p.whit},
 
     Error={bg=p.bclr, fg=p.violet},
 
@@ -96,26 +87,7 @@ local all_styles={
     htmlEndTag={fg=p.ops2},
     htmlTagName={fg=p.otag},
 
-    perlSharplbgn={fg=p.lbgn, standout=true},
-    perlStatement={fg=p.ops3},
-    perlStatementStorage={fg=p.blod},
-    perlVarPlain2={fg=p.otag},
-    perlVarPlain={fg=p.lit3},
-
     rubySharplbgn={fg=p.lbgn, standout=true},
-
-    diffAdded={fg=p.ops4},
-    diffChanged={fg=p.ops2},
-    diffLine={fg=p.lbgn},
-    diffNewFile={fg=p.dbng},
-    diffOldFile={fg=p.dbng},
-    diffOldLine={fg=p.dbng},
-    diffRemoved={fg=p.blod},
-
-    GitGutterAdd={fg=p.ops2},
-    GitGutterChangeDelete={fg=p.blod},
-    GitGutterChange={fg=p.incl},
-    GitGutterDelete={fg=p.blod},
 
     SpellBad={underline=true},
     SpellCap={underline=true},
@@ -129,11 +101,6 @@ local all_styles={
     ConflictMarkerOurs={bg='#2e5049'},
     ConflictMarkerTheirs={bg='#344f69'},
 
-    TelescopeBorder={fg='#111d26'},
-    TelescopePreviewBorder={fg='#111d26'},
-    TelescopePromptBorder={fg='#111d26'},
-    TelescopeResultsBorder={fg='#111d26'},
-
     ALEErrorSign={link='Title'},
     ALEWarningSign={link='String'},
     DiagnosticError={link='Title'},
@@ -144,11 +111,25 @@ local all_styles={
 
     Conceal={link='Operator'},
     DeclRefExpr={link='Normal'},
-    DiffAdded={link='String'},
-    DiffRemoved={link='Constant'},
 
     ExtraWhitespace={bg=p.lit3, fg='NONE'},
+}
 
+local tabline={
+    TabLineFill={bg=p.ops2, fg=p.bclr},
+    TabLine={bg=p.bclr, fg=p.drk2, nil},
+    TabLineSel={bg=p.visu, fg=p.drk2, nil},
+}
+
+local perl={
+    perlSharplbgn={fg=p.lbgn, standout=true},
+    perlStatement={fg=p.ops3},
+    perlStatementStorage={fg=p.blod},
+    perlVarPlain2={fg=p.otag},
+    perlVarPlain={fg=p.lit3},
+}
+
+local cmp={
     CmpItemKindFunction={bg=p.blod, fg='NONE'},
     CmpItemKindInterface={bg=p.ops3, fg='NONE'},
     CmpItemKindKeyword={bg=p.lit3, fg='NONE'},
@@ -157,9 +138,44 @@ local all_styles={
     CmpItemKindVariable={bg=p.ops3, fg='NONE'},
 }
 
+local gitgutter={
+    GitGutterAdd={fg=p.ops2},
+    GitGutterChangeDelete={fg=p.blod},
+    GitGutterChange={fg=p.incl},
+    GitGutterDelete={fg=p.blod},
+}
+
+local diff={
+    DiffAdd={bg=p.whit, fg=p.dadd},
+    diffAdded={fg=p.ops4},
+    DiffAdded={link='String'},
+    DiffChange={bg=p.whit, fg=p.dchg},
+    diffChanged={fg=p.ops2},
+    DiffDelete={bg=p.blod, fg=p.bclr},
+    diffLine={fg=p.lbgn},
+    diffNewFile={fg=p.dbng},
+    diffOldFile={fg=p.dbng},
+    diffOldLine={fg=p.dbng},
+    diffRemoved={fg=p.blod},
+    DiffRemoved={link='Constant'},
+    DiffText={bg='NONE', fg=p.whit},
+}
+
+local telescope={
+    TelescopeBorder={fg='#111d26'},
+    TelescopePreviewBorder={fg='#111d26'},
+    TelescopePromptBorder={fg='#111d26'},
+    TelescopeResultsBorder={fg='#111d26'},
+}
+
 function M.setup()
-    for name, style in pairs(all_styles) do
-        hi(0, name, style)
+    for _, group in ipairs({styles,diff,cmp,gitgutter,telescope}) do
+        for name, style in pairs(group) do hi(0, name, style) end
+    end
+    if false then
+        for _, group in ipairs({tabline,perl}) do
+            for name, style in pairs(group) do hi(0, name, style) end
+        end
     end
 end
 
