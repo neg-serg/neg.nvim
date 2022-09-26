@@ -9,9 +9,9 @@ local colors = {
     culc='#272727', -- cursor line/column hexadecimal
     comm='#3c4754', -- comment color
 
-    lit1='#01636b', -- literal color 1
-    lit2='#01575e', -- literal color 2
-    lit3='#015057', -- literal color 3
+    lit1='#017978', -- literal color 1
+    lit2='#008787', -- literal color 2
+    lit3='#007a51', -- literal color 3
     ops1='#367cb0', -- operations color 1
     ops2='#2b7694', -- operations color 2
     ops3='#005faf', -- operations color 3
