@@ -97,9 +97,9 @@ local html={
 }
 
 local pmenu={
-    Pmenu={bg=p.pmen, fg=p.bclr, italic=true,reverse=true},
+    Pmenu={bg=p.bclr, fg=p.pmen, italic=true},
     PmenuSbar={bg=p.clin, fg='NONE'},
-    PmenuSel={bg=p.clin, fg=p.ops3, nil},
+    PmenuSel={bg=p.clin, fg=p.ops3},
     PmenuThumb={bg=p.ops3, fg='NONE'},
 }
 
@@ -137,12 +137,12 @@ local perl={
 }
 
 local cmp={
-    CmpItemKindFunction={bg=p.blod, fg='NONE'},
-    CmpItemKindInterface={bg=p.ops3, fg='NONE'},
-    CmpItemKindKeyword={bg=p.lit3, fg='NONE'},
-    CmpItemKindMethod={bg=p.blod, fg='NONE'},
-    CmpItemKindProperty={bg=p.lit3, fg='NONE'},
-    CmpItemKindVariable={bg=p.ops3, fg='NONE'},
+    CmpItemKindFunction={fg=p.blod, bg='NONE'},
+    CmpItemKindInterface={fg=p.ops3, bg='NONE'},
+    CmpItemKindKeyword={fg=p.lit3, bg='NONE'},
+    CmpItemKindMethod={fg=p.blod, bg='NONE'},
+    CmpItemKindProperty={fg=p.lit3, bg='NONE'},
+    CmpItemKindVariable={fg=p.ops3, bg='NONE'},
 }
 
 local gitgutter={
