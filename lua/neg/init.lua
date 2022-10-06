@@ -123,7 +123,7 @@ local conflicts={
 }
 
 local tabline={
-    TabLineFill={bg=p.ops2, fg=p.bclr},
+    TabLineFill={bg=p.bclr, fg=p.ops2},
     TabLine={bg=p.bclr, fg=p.drk2, nil},
     TabLineSel={bg=p.visu, fg=p.drk2, nil},
 }
