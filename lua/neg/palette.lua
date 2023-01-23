@@ -65,6 +65,14 @@ local colors = {
     col22='#bfc8d0',
     col23='#dbdfe4',
     col24='#EEEEEE',
+
+    br1='#4064be',
+    br2='#4361b0',
+    br3='#455fa3',
+    br4='#465e9c',
+    br5='#475c94',
+    br6='#485a8c',
+    br7='#485885',
 }
 
 return colors

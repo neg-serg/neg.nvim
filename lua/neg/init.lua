@@ -177,6 +177,16 @@ local telescope={
     TelescopeResultsBorder={fg='#111d26'},
 }
 
+local rainbow={
+   TSRainbowRed={fg=p.br1},
+   TSRainbowYellow={fg=p.br2},
+   TSRainbowBlue={fg=p.br3},
+   TSRainbowOrange={fg=p.br4},
+   TSRainbowGreen={fg=p.br5},
+   TSRainbowViolet={fg=p.br6},
+   TSRainbowCyan={fg=p.br7},
+}
+
 function M.setup()
     for _, group in ipairs({
         main,
@@ -188,6 +198,7 @@ function M.setup()
         spell,
         telescope,
         vim,
+        rainbow
     }) do
         for name, style in pairs(group) do hi(0, name, style) end
     end
