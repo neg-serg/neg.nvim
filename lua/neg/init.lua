@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.11
--- Last Change: 01-08-2022
+-- Version:     3.12
+-- Last Change: 10-07-2023
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -187,6 +187,12 @@ local rainbow={
    TSRainbowCyan={fg=p.br7},
 }
 
+local noice={
+    Cursor={bg=p.csel},
+    NoiceCursor={bg=p.csel},
+    NoiceCmdLine={fg='#6c7e96',italic=true},
+}
+
 function M.setup()
     for _, group in ipairs({
         main,
@@ -198,10 +204,9 @@ function M.setup()
         spell,
         telescope,
         vim,
-        rainbow
-    }) do
-        for name, style in pairs(group) do hi(0, name, style) end
-    end
+        rainbow,
+        noice
+    }) do for name, style in pairs(group) do hi(0, name, style) end end
     if "" then
         for _, group in ipairs({tabline,perl,html,misc}) do
             for name, style in pairs(group) do hi(0, name, style) end
