@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.13
--- Last Change: 17-07-2023
+-- Version:     3.14
+-- Last Change: 21-09-2023
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -175,6 +175,7 @@ local telescope={
     TelescopePreviewBorder={fg='#111d26'},
     TelescopePromptBorder={fg='#111d26'},
     TelescopeResultsBorder={fg='#111d26'},
+    TelescopePathSeparator={link='Normal'},
 }
 
 local rainbow={
