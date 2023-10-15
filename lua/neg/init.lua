@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.14
--- Last Change: 21-09-2023
+-- Version:     3.15
+-- Last Change: 15-10-2023
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -192,6 +192,7 @@ local noice={
     Cursor={bg=p.csel},
     NoiceCursor={bg=p.csel},
     NoiceCmdLine={fg='#6c7e96',italic=true},
+    FlashLabel={link='Todo'},
 }
 
 local headline={
