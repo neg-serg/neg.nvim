@@ -74,7 +74,7 @@ local colors = {
     br6='#485a8c',
     br7='#485885',
 
-    dnorm='#191c24'
+    dnorm='#15181f'
 }
 
 return colors
