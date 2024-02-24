@@ -137,6 +137,7 @@ local perl={
 }
 
 local cmp={
+    CmpItemKindDefault={fg=p.cmpdef, bg='NONE'},
     CmpItemKindFunction={fg=p.blod, bg='NONE'},
     CmpItemKindInterface={fg=p.ops3, bg='NONE'},
     CmpItemKindKeyword={fg=p.lit3, bg='NONE'},

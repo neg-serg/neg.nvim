@@ -37,6 +37,8 @@ local colors = {
     pmen='#6c7e96', -- pmenu color
     csel='#005faf', -- search highlight color
 
+    cmpdef='#0c2430', -- cmp item
+
     iden='#6289b3', -- identifier color
 
     lbgn='#7095b0', -- light preprocessor color
