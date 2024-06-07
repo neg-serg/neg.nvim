@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.17
+-- Version:     3.18
 -- Last Change: 08-06-2024
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -203,7 +203,7 @@ local headline={
     Dash={bg=p.visu,bold=true}
 }
 
-local new_treesitter={
+local compatibility={
     -- tree-sitter "standard capture names"
     ['@variable.parameter']={link='@parameter'},
     ['@variable.member']={link='@field'},
@@ -264,7 +264,7 @@ function M.setup()
         rainbow,
         noice,
         headline,
-        new_treesitter
+        treesitter_compatibility
     }) do for name, style in pairs(group) do hi(0, name, style) end end
     if "" then
         for _, group in ipairs({tabline,perl,html,misc}) do
