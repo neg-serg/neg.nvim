@@ -28,6 +28,7 @@ local colors = {
     high='#a5c1e6', -- highlight color
     darkhigh='#7387a1', -- darker highlight color
 
+    var='#7387a1', -- function highlight
     func='#7095b0', -- function highlight
 
     dadd='#25533f', -- diff add

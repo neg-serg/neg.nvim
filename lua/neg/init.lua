@@ -249,7 +249,7 @@ local treesitter_compatibility={
     ['@keyword.import']={link='@include'},
     ['@keyword.repeat']={link='@repeat'},
 
-    ['@variable']={fg='NONE', bold=true},
+    ['@variable']={fg=p.var},
 }
 
 function M.setup()
