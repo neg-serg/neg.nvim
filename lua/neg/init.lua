@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.16
--- Last Change: 04-12-2023
+-- Version:     3.17
+-- Last Change: 08-06-2024
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -203,6 +203,53 @@ local headline={
     Dash={bg=p.visu,bold=true}
 }
 
+local new_treesitter={
+    -- tree-sitter "standard capture names"
+    ['@variable.parameter']={link='@parameter'},
+    ['@variable.member']={link='@field'},
+    ['@module']={link='@namespace'},
+    ['@number.float']={link='@float'},
+    ['@string.special.symbol']={link='@symbol'},
+    ['@string.regexp']={link='@string.regex'},
+    ['@markup.strong']={link='@text.strong'},
+    ['@markup.italic']={link='@text.emphasis'},
+    ['@markup.underline']={link='@text.underline'},
+    ['@markup.strikethrough']={link='@text.strike'},
+    ['@markup.heading']={link='@text.title'},
+    ['@markup.quote']={link='@text.quote'},
+    ['@markup.link.url']={link='@text.uri'},
+    ['@markup.math']={link='@text.math'},
+    ['@markup.environment']={link='@text.environment'},
+    ['@markup.environment.name']={link='@text.environment.name'},
+    ['@markup.link']={link='@text.reference'},
+    ['@markup.raw']={link='@text.literal'},
+    ['@markup.raw.block']={link='@text.literal.block'},
+    ['@markup.link.label']={link='@string.special'},
+    ['@markup.list']={link='@punctuation.special'},
+    -- Helix captures
+    ['@function.method']={link='@method'},
+    ['@function.method.call']={link='@method.call'},
+    ['@comment.todo']={link='@text.todo'},
+    ['@comment.error']={link='@text.danger'},
+    ['@comment.warning']={link='@text.warning'},
+    ['@comment.hint']={link='@text.note'},
+    ['@comment.info']={link='@text.note'},
+    ['@comment.note']={link='@text.note'},
+    ['@comment.ok']={link='@text.note'},
+    ['@diff.plus']={link='@text.diff.add'},
+    ['@diff.minus']={link='@text.diff.delete'},
+    ['@diff.delta']={link='@text.diff.change'},
+    ['@string.special.url']={link='@text.uri'},
+    ['@keyword.directive']={link='@preproc'},
+    ['@keyword.storage']={link='@storageclass'},
+    ['@keyword.directive']={link='@define'},
+    ['@keyword.conditional']={link='@conditional'},
+    ['@keyword.debug']={link='@debug'},
+    ['@keyword.exception']={link='@exception'},
+    ['@keyword.import']={link='@include'},
+    ['@keyword.repeat']={link='@repeat'},
+}
+
 function M.setup()
     for _, group in ipairs({
         main,
@@ -216,7 +263,8 @@ function M.setup()
         vim,
         rainbow,
         noice,
-        headline
+        headline,
+        new_treesitter
     }) do for name, style in pairs(group) do hi(0, name, style) end end
     if "" then
         for _, group in ipairs({tabline,perl,html,misc}) do
