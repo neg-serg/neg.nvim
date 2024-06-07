@@ -203,7 +203,7 @@ local headline={
     Dash={bg=p.visu,bold=true}
 }
 
-local compatibility={
+local treesitter_compatibility={
     -- tree-sitter "standard capture names"
     ['@variable.parameter']={link='@parameter'},
     ['@variable.member']={link='@field'},
@@ -248,6 +248,8 @@ local compatibility={
     ['@keyword.exception']={link='@exception'},
     ['@keyword.import']={link='@include'},
     ['@keyword.repeat']={link='@repeat'},
+
+    ['@variable']={fg='NONE', bold=true},
 }
 
 function M.setup()
