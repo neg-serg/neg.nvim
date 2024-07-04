@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.18
--- Last Change: 08-06-2024
+-- Version:     3.19
+-- Last Change: 05-07-2024
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -180,13 +180,13 @@ local telescope={
 }
 
 local rainbow={
-   TSRainbowRed={fg=p.br1},
-   TSRainbowYellow={fg=p.br2},
-   TSRainbowBlue={fg=p.br3},
-   TSRainbowOrange={fg=p.br4},
-   TSRainbowGreen={fg=p.br5},
-   TSRainbowViolet={fg=p.br6},
-   TSRainbowCyan={fg=p.br7},
+   RainbowDelimiterRed={fg=p.br1},
+   RainbowDelimiterYellow={fg=p.br2},
+   RainbowDelimiterBlue={fg=p.br3},
+   RainbowDelimiterOrange={fg=p.br4},
+   RainbowDelimiterGreen={fg=p.br5},
+   RainbowDelimiterViolet={fg=p.br6},
+   RainbowDelimiterCyan={fg=p.br7},
 }
 
 local noice={
