@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.19
--- Last Change: 05-07-2024
+-- Version:     3.20
+-- Last Change: 02-05-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -81,6 +81,8 @@ local main={
     DeclRefExpr={link='Normal'},
 
     ExtraWhitespace={bg=p.lit3, fg='NONE'},
+    FloatBorder={link='Vertsplit'},
+    WinSeparator={link='Vertsplit'},
 }
 
 local spell={
