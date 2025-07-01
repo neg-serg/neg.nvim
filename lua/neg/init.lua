@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.21
+-- Version:     3.22
 -- Last Change: 01-07-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -27,7 +27,6 @@ local main={
     Identifier={bg='', fg=p.iden},
     Ignore={bg='', fg=p.comm},
     Include={bg='', fg=p.incl},
-    IncSearch={bg=p.dark, fg=p.csel, italic=true,underline=true},
     Keyword={bg='', fg=p.ops2},
     Label={bg='', fg=p.ops3},
     LineNr={fg='#2c3641', bg=nil, italic=true},
@@ -43,7 +42,6 @@ local main={
     PreProc={bg='', fg=p.lbgn},
     Question={bg='NONE', fg=p.lbgn},
     Repeat={bg='', fg=p.ops1},
-    Search={bg='NONE', fg=p.csel, italic=true},
     Special={bg='', fg=p.lit1},
     SpecialChar={bg='', fg=p.lit2},
     SpecialComment={bg='', fg=p.high, underline=true},
@@ -64,6 +62,10 @@ local main={
     Visual={bg=p.dnorm, fg='NONE', bold=true},
     WarningMsg={bg='NONE', fg=p.norm},
     WildMenu={bg=p.dark, fg=p.incl},
+
+    IncSearch={bg=p.dark, fg=p.csel, italic=true,underline=true},
+    Search={bg='NONE', fg=p.csel, italic=true},
+    CurSearch={bg=p.dark, fg=p.csel, italic=true, bold=true},
 
     ColorColumn={bg=p.culc, nil},
     CursorColumn={bg=p.culc, nil},
