@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.20
--- Last Change: 02-05-2025
+-- Version:     3.21
+-- Last Change: 01-07-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -205,6 +205,20 @@ local headline={
     Dash={bg=p.visu,bold=true}
 }
 
+local obsidian={
+    ObsidianExtLinkIcon={fg=p.ops1},
+    ObsidianRefText={fg=p.ops1, underline=true},
+    ObsidianBullet={fg=p.ops3, bold=true},
+    ObsidianImportant={link='Error', bold=true},
+    ObsidianTilde={link='Error', bold=true},
+    ObsidianRightArrow={link='Title', bold=true},
+    ObsidianDone={fg=p.ops3, bold=true},
+    ObsidianTodo={link='Title', bold=true},
+    ObsidianHighlightText={link='Visual'},
+    ObsidianBlockID={fg=p.ops3, italic=true},
+    ObsidianTag={fg=p.ops3, italic=true},
+}
+
 local treesitter_compatibility={
     -- tree-sitter "standard capture names"
     ['@variable.parameter']={link='@parameter'},
@@ -268,7 +282,8 @@ function M.setup()
         rainbow,
         noice,
         headline,
-        treesitter_compatibility
+        treesitter_compatibility,
+        obsidian
     }) do for name, style in pairs(group) do hi(0, name, style) end end
     if "" then
         for _, group in ipairs({tabline,perl,html,misc}) do
