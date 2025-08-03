@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.22
--- Last Change: 01-07-2025
+-- Version:     3.23
+-- Last Change: 03-08-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -158,12 +158,12 @@ local gitgutter={
 }
 
 local diff={
-    DiffAdd={bg=p.whit, fg=p.dadd},
+    DiffAdd={bg='#123425', fg=p.dadd},
     diffAdded={fg=p.ops4},
     DiffAdded={link='String'},
-    DiffChange={bg=p.whit, fg=p.dchg},
+    DiffChange={bg='#122c34', fg=p.dchg},
     diffChanged={fg=p.ops2},
-    DiffDelete={bg=p.blod, fg=p.bclr},
+    DiffDelete={bg=p.blod, fg=p.dred},
     diffLine={fg=p.lbgn},
     diffNewFile={fg=p.dbng},
     diffOldFile={fg=p.dbng},

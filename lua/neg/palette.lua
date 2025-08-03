@@ -31,8 +31,9 @@ local colors = {
     var='#7387a1', -- function highlight
     func='#7095b0', -- function highlight
 
-    dadd='#25533f', -- diff add
+    dadd='#15b22d', -- diff add
     dchg='#00406d', -- diff change
+    dred='#ce162b', -- diff red
 
     clin='#131e30', -- cursor line
     pmen='#6c7e96', -- pmenu color
