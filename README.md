@@ -285,6 +285,54 @@ require('neg').setup({
 
 ## Plugins Coverage
 
+### Color utility recipes (alpha/lighten/darken)
+
+You can use the color helpers from `neg.util` to derive colors on the fly in your overrides. This is helpful for subtle backgrounds, undercurls or tuned floats.
+
+- Subtle diagnostic backgrounds via alpha blending on top of your theme background:
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticVirtualTextError = { bg = U.alpha(c.fg_diff_delete, c.bg_default, 0.16) },
+      DiagnosticVirtualTextWarn  = { bg = U.alpha(c.fg_warning,     c.bg_default, 0.14) },
+      DiagnosticVirtualTextInfo  = { bg = U.alpha(c.fg_preproc_light, c.bg_default, 0.12) },
+      DiagnosticVirtualTextHint  = { bg = U.alpha(c.fg_identifier,  c.bg_default, 0.12) },
+    }
+  end,
+})
+```
+
+- Lighten/darken for selection or floats:
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      Visual = { bg = U.darken(c.bg_default, 6) },     -- darker selection
+      NormalFloat = { bg = U.lighten('#111d26', 8) },  -- soften float background
+    }
+  end,
+})
+```
+
+- Fine‑tuned undercurl hues (slightly darker than the base):
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticUnderlineError = { undercurl = true, sp = U.darken(c.fg_diff_delete, 8) },
+      DiagnosticUnderlineWarn  = { undercurl = true, sp = U.darken(c.fg_warning, 6) },
+    }
+  end,
+})
+```
+
 - telescope.nvim, nvim-cmp
 - telescope.nvim, nvim-cmp
 - gitsigns.nvim, gitgutter (basic), diff
