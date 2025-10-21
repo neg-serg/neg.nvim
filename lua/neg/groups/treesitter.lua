@@ -2,7 +2,7 @@ local p = require('neg.palette')
 
 -- Treesitter + LSP semantic token links
 return {
-  ['@variable']={fg=p.var},
+  ['@variable']={fg=p.variable_color},
   ['@variable.parameter']={link='@parameter'},
   ['@variable.member']={link='@field'},
   ['@module']={link='@namespace'},

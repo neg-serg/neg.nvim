@@ -1,10 +1,9 @@
 local p = require('neg.palette')
 
 return {
-  LspInlayHint={fg=p.comm, italic=true},
-  LspCodeLens={fg=p.comm, italic=true},
-  LspReferenceText={bg=p.visu},
-  LspReferenceRead={bg=p.visu},
-  LspReferenceWrite={bg=p.visu},
+  LspInlayHint={fg=p.comment_color, italic=true},
+  LspCodeLens={fg=p.comment_color, italic=true},
+  LspReferenceText={bg=p.bg_visual},
+  LspReferenceRead={bg=p.bg_visual},
+  LspReferenceWrite={bg=p.bg_visual},
 }
-

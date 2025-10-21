@@ -2,6 +2,48 @@
 
 All notable changes to this project are documented here.
 
+
+## [3.74] - 2025-10-21
+- Plugins: new integrations
+  - neotest (status and UI groups)
+  - harpoon (float Normal/Border)
+  - alpha-nvim (header/footer/buttons/shortcut)
+  - mini.statusline + mini.tabline
+  - todo-comments (severity backgrounds)
+  - nvim-navic (text/separator)
+  - treesitter-playground (focus/lang/query/help)
+- Docs: README plugin lists updated.
+
+
+
+
+## [3.73] - 2025-10-21
+- Validator: optional contrast ratio checks (enable with `NEG_VALIDATE_CONTRAST=1` and set `NEG_VALIDATE_CONTRAST_MIN`, default off).
+- Validator: verbose summary line when `NEG_VALIDATE_VERBOSE=1`.
+- Validator: extended module coverage to include more plugin integrations (bufferline, gitsigns, hop, indent, neo-tree, notify, nvim-tree, treesitter-context, trouble, which-key, dap/dap-ui).
+- Docs: README documents new validator options.
+
+## [3.72] - 2025-10-21
+- Transparent zones: add more popular plugin groups
+  - Float: Mason (`MasonNormal`, `MasonBorder`), lazy.nvim (`LazyNormal`, `LazyBorder`), Neo-tree float (`NeoTreeFloatNormal`, `NeoTreeFloatBorder`), `LspInfoBorder`.
+  - Sidebar: symbols-outline (`SymbolsOutlineNormal`), aerial.nvim (`AerialNormal`).
+- Docs: README “Detailed Plugin Coverage” mentions the new transparent float/sidebar coverage.
+
+## [3.71] - 2025-10-21
+- Cleanup: removed stray positional `nil` values in editor highlight tables (`StatusLine*`, `TabLine*`, `Cursor*`, `ColorColumn`).
+- Transparent zones: extended `transparent.float` to cover more plugin groups (Telescope, cmp docs, Noice popups, Dressing, FzfLua).
+
+## [3.70] - 2025-10-21
+- Migration: Start gradual code migration to descriptive palette names.
+  - Lualine theme: replace `clin`/`comm` with `bg_cursorline`/`comment_color`.
+  - Docs: update README override examples from `fg_*` to descriptive aliases.
+
+## [3.69] - 2025-10-21
+- Docs: Added README migration cheat sheet (old → new palette names). Recommend descriptive aliases; keep `fg_*` and short names as compatibility aliases.
+
+## [3.68] - 2025-10-21
+- Palette: Completed migration to descriptive non-prefixed palette names internally; minimized `fg_*` usage in code while keeping aliases for backward compatibility.
+
 ## [3.67] - 2025-10-21
 - Docs: README color utility recipes using `neg.util` (alpha/lighten/darken).
 

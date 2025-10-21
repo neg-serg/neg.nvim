@@ -71,10 +71,30 @@ function M.apply_transparent(cfg)
   end
   if type(cfg) == 'table' then
     if cfg.float then
-      set_bg({ 'NormalFloat','Pmenu','FloatBorder','FloatTitle','WhichKeyFloat','WhichKeyBorder','DapUIFloatNormal' })
+      set_bg({
+        'NormalFloat','Pmenu','FloatBorder','FloatTitle',
+        -- Common plugin floats
+        'WhichKeyFloat','WhichKeyBorder','DapUIFloatNormal',
+        'CmpDocumentation','CmpDocumentationBorder',
+        'TelescopeNormal','TelescopePreviewNormal','TelescopePromptNormal','TelescopeResultsNormal',
+        'TelescopeBorder','TelescopePreviewBorder','TelescopePromptBorder','TelescopeResultsBorder',
+        'NoicePopup','NoicePopupmenu','NoiceCmdlinePopup',
+        'DressingInput','DressingInputBorder','DressingSelect','DressingSelectBorder',
+        'FzfLuaNormal','FzfLuaBorder',
+        'LazyNormal','LazyBorder',
+        'MasonNormal','MasonBorder',
+        'NeoTreeFloatNormal','NeoTreeFloatBorder',
+        'LspInfoBorder'
+      })
     end
     if cfg.sidebar then
-      set_bg({ 'NvimTreeNormal','NvimTreeNormalNC','NeoTreeNormal','NeoTreeNormalNC','TroubleNormal' })
+      set_bg({
+        'NvimTreeNormal','NvimTreeNormalNC',
+        'NeoTreeNormal','NeoTreeNormalNC',
+        'TroubleNormal',
+        'SymbolsOutlineNormal',
+        'AerialNormal'
+      })
     end
     if cfg.statusline then
       set_bg({ 'StatusLine','StatusLineNC','WinBar','WinBarNC','TabLine','TabLineFill','TabLineSel' })

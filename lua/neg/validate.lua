@@ -32,17 +32,38 @@ local builtin_targets = {
 
 local function load_tables()
   local mods = {
+    -- core
     'neg.groups.syntax',
     'neg.groups.editor',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
+    -- plugins (extended)
+    'neg.groups.plugins.bufferline',
     'neg.groups.plugins.cmp',
-    'neg.groups.plugins.telescope',
+    'neg.groups.plugins.alpha',
+    'neg.groups.plugins.dap',
+    'neg.groups.plugins.dapui',
+    'neg.groups.plugins.harpoon',
     'neg.groups.plugins.git',
+    'neg.groups.plugins.gitsigns',
+    'neg.groups.plugins.headline',
+    'neg.groups.plugins.hop',
+    'neg.groups.plugins.indent',
+    'neg.groups.plugins.mini_statusline',
+    'neg.groups.plugins.mini_tabline',
+    'neg.groups.plugins.navic',
+    'neg.groups.plugins.neo_tree',
     'neg.groups.plugins.noice',
+    'neg.groups.plugins.notify',
+    'neg.groups.plugins.nvim_tree',
     'neg.groups.plugins.obsidian',
     'neg.groups.plugins.rainbow',
-    'neg.groups.plugins.headline',
+    'neg.groups.plugins.todo_comments',
+    'neg.groups.plugins.telescope',
+    'neg.groups.plugins.treesitter_playground',
+    'neg.groups.plugins.treesitter_context',
+    'neg.groups.plugins.trouble',
+    'neg.groups.plugins.which_key',
   }
   local tables = {}
   for _, m in ipairs(mods) do
@@ -70,11 +91,49 @@ local function keycount(t)
   return n
 end
 
+-- Helpers for optional contrast checks
+local function getenv_bool(name)
+  local v = (vim and vim.env and vim.env[name]) or os.getenv(name)
+  if not v then return false end
+  v = tostring(v):lower()
+  return v == '1' or v == 'true' or v == 'yes' or v == 'on'
+end
+
+local function hex_to_rgb(hex)
+  if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
+  return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
+end
+
+local function srgb_to_linear(c)
+  c = c/255
+  if c <= 0.03928 then return c/12.92 end
+  return ((c + 0.055)/1.055)^2.4
+end
+
+local function rel_luminance(hex)
+  local r, g, b = hex_to_rgb(hex)
+  if not r then return nil end
+  r, g, b = srgb_to_linear(r), srgb_to_linear(g), srgb_to_linear(b)
+  return 0.2126*r + 0.7152*g + 0.0722*b
+end
+
+local function contrast_ratio(fg, bg)
+  local L1 = rel_luminance(fg)
+  local L2 = rel_luminance(bg)
+  if not L1 or not L2 then return nil end
+  if L1 < L2 then L1, L2 = L2, L1 end
+  return (L1 + 0.05) / (L2 + 0.05)
+end
+
 local function validate()
   local tables = load_tables()
   local defined, duplicates = collect_defined(tables)
 
   local errors, warnings = {}, {}
+
+  local contrast_on = getenv_bool('NEG_VALIDATE_CONTRAST')
+  local verbose_on = getenv_bool('NEG_VALIDATE_VERBOSE')
+  local min_ratio = tonumber((vim and vim.env and vim.env.NEG_VALIDATE_CONTRAST_MIN) or os.getenv('NEG_VALIDATE_CONTRAST_MIN')) or 0
 
   -- Warn duplicate group definitions
   for name in pairs(duplicates) do
@@ -136,6 +195,13 @@ local function validate()
                 add_warn(('%s: %s is empty string; prefer nil or "NONE"'):format(name, field))
               elseif type(v) ~= 'string' then
                 add_err(('%s: %s must be string (hex or "NONE"), got %s'):format(name, field, type(v)))
+              else
+                local s = v
+                if s ~= 'NONE' then
+                  if not s:match('^#%x%x%x%x%x%x$') then
+                    add_err(('%s: %s has invalid color %q (expect #RRGGBB or "NONE")'):format(name, field, s))
+                  end
+                end
               end
             end
           end
@@ -150,9 +216,24 @@ local function validate()
               add_err(('%s: %s must be boolean, got %s'):format(name, key, type(v)))
             end
           end
+          -- Simple contrast sanity: if both fg and bg present and equal → warn
+          if style.fg and style.bg and style.fg ~= 'NONE' and style.bg ~= 'NONE' then
+            if style.fg == style.bg then
+              add_warn(('%s: fg equals bg (%s); low contrast'):format(name, style.fg))
+            elseif contrast_on and min_ratio > 0 then
+              local ratio = contrast_ratio(style.fg, style.bg)
+              if ratio and ratio < min_ratio then
+                add_warn(('%s: low contrast %.2f (fg %s on bg %s)'):format(name, ratio, style.fg, style.bg))
+              end
+            end
+          end
         end
       end
     end
+  end
+
+  if verbose_on then
+    print(('INFO: groups defined: %d; duplicates: %d'):format(keycount(defined), keycount(duplicates)))
   end
 
   return errors, warnings

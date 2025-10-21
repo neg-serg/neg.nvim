@@ -4,41 +4,40 @@ local p = require('neg.palette')
 -- VirtualText*, Underline* (undercurl with sp), Sign*, Floating*
 return {
   -- Base severities
-  DiagnosticError={fg=p.dred},
-  DiagnosticWarn={fg=p.dwarn},
-  DiagnosticInfo={fg=p.lbgn},
-  DiagnosticHint={fg=p.iden},
-  DiagnosticOk={fg=p.dadd},
+  DiagnosticError={fg=p.diff_delete_color},
+  DiagnosticWarn={fg=p.warning_color},
+  DiagnosticInfo={fg=p.preproc_light_color},
+  DiagnosticHint={fg=p.identifier_color},
+  DiagnosticOk={fg=p.diff_add_color},
 
   -- Virtual text
-  DiagnosticVirtualTextError={fg=p.dred},
-  DiagnosticVirtualTextWarn={fg=p.dwarn},
-  DiagnosticVirtualTextInfo={fg=p.lbgn},
-  DiagnosticVirtualTextHint={fg=p.iden},
-  DiagnosticVirtualTextOk={fg=p.dadd},
+  DiagnosticVirtualTextError={fg=p.diff_delete_color},
+  DiagnosticVirtualTextWarn={fg=p.warning_color},
+  DiagnosticVirtualTextInfo={fg=p.preproc_light_color},
+  DiagnosticVirtualTextHint={fg=p.identifier_color},
+  DiagnosticVirtualTextOk={fg=p.diff_add_color},
 
   -- Underlines (prefer undercurl)
-  DiagnosticUnderlineError={undercurl=true, sp=p.dred},
-  DiagnosticUnderlineWarn={undercurl=true, sp=p.dwarn},
-  DiagnosticUnderlineInfo={undercurl=true, sp=p.lbgn},
-  DiagnosticUnderlineHint={undercurl=true, sp=p.iden},
-  DiagnosticUnderlineOk={undercurl=true, sp=p.dadd},
+  DiagnosticUnderlineError={undercurl=true, sp=p.diff_delete_color},
+  DiagnosticUnderlineWarn={undercurl=true, sp=p.warning_color},
+  DiagnosticUnderlineInfo={undercurl=true, sp=p.preproc_light_color},
+  DiagnosticUnderlineHint={undercurl=true, sp=p.identifier_color},
+  DiagnosticUnderlineOk={undercurl=true, sp=p.diff_add_color},
 
   -- Signs
-  DiagnosticSignError={fg=p.dred},
-  DiagnosticSignWarn={fg=p.dwarn},
-  DiagnosticSignInfo={fg=p.lbgn},
-  DiagnosticSignHint={fg=p.iden},
-  DiagnosticSignOk={fg=p.dadd},
+  DiagnosticSignError={fg=p.diff_delete_color},
+  DiagnosticSignWarn={fg=p.warning_color},
+  DiagnosticSignInfo={fg=p.preproc_light_color},
+  DiagnosticSignHint={fg=p.identifier_color},
+  DiagnosticSignOk={fg=p.diff_add_color},
 
   -- Floating windows
-  DiagnosticFloatingError={fg=p.dred},
-  DiagnosticFloatingWarn={fg=p.dwarn},
-  DiagnosticFloatingInfo={fg=p.lbgn},
-  DiagnosticFloatingHint={fg=p.iden},
-  DiagnosticFloatingOk={fg=p.dadd},
+  DiagnosticFloatingError={fg=p.diff_delete_color},
+  DiagnosticFloatingWarn={fg=p.warning_color},
+  DiagnosticFloatingInfo={fg=p.preproc_light_color},
+  DiagnosticFloatingHint={fg=p.identifier_color},
+  DiagnosticFloatingOk={fg=p.diff_add_color},
 
   -- Extras
-  DiagnosticDeprecated={strikethrough=true, fg=p.comm},
+  DiagnosticDeprecated={strikethrough=true, fg=p.comment_color},
 }
-

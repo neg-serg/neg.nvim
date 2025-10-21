@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.68
+-- Version:     3.74
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -43,6 +43,15 @@ local default_config = {
     git = true,
     gitsigns = true,
     bufferline = true,
+    -- additional supported plugins
+    alpha = true,
+    mini_statusline = true,
+    mini_tabline = true,
+    todo_comments = true,
+    navic = true,
+    neotest = true,
+    harpoon = true,
+    treesitter_playground = true,
     noice = true,
     obsidian = true,
     rainbow = true,
@@ -192,6 +201,14 @@ function M.setup(opts)
     git = 'neg.groups.plugins.git',
     gitsigns = 'neg.groups.plugins.gitsigns',
     bufferline = 'neg.groups.plugins.bufferline',
+    alpha = 'neg.groups.plugins.alpha',
+    mini_statusline = 'neg.groups.plugins.mini_statusline',
+    mini_tabline = 'neg.groups.plugins.mini_tabline',
+    todo_comments = 'neg.groups.plugins.todo_comments',
+    navic = 'neg.groups.plugins.navic',
+    neotest = 'neg.groups.plugins.neotest',
+    harpoon = 'neg.groups.plugins.harpoon',
+    treesitter_playground = 'neg.groups.plugins.treesitter_playground',
     noice = 'neg.groups.plugins.noice',
     obsidian = 'neg.groups.plugins.obsidian',
     rainbow = 'neg.groups.plugins.rainbow',

@@ -124,6 +124,7 @@ require('neg').setup({
     telescope = true,
     git = true,
     gitsigns = true,
+    bufferline = true,
     noice = true,
     obsidian = true,
     rainbow = true,
@@ -138,6 +139,15 @@ require('neg').setup({
     notify = true,
     treesitter_context = true,
     hop = true,
+    -- additional supported plugins
+    alpha = true,
+    mini_statusline = true,
+    mini_tabline = true,
+    todo_comments = true,
+    navic = true,
+    neotest = true,
+    harpoon = true,
+    treesitter_playground = true,
   },
 
   overrides = nil,                     -- table or function(colors) -> table
@@ -148,6 +158,61 @@ require('neg').setup({
   diagnostics_virtual_bg_strength = 0.15,  -- strength for alpha/lighten/darken (0..1)
 })
 ```
+
+## Migration: Palette Names (old → new)
+
+The palette now exposes descriptive aliases without the `fg_` prefix. Old short names remain for compatibility, but new names are recommended for overrides and custom recipes.
+
+- Base/backgrounds
+  - `norm` → `default_color`
+  - `bclr` → `bg_default`
+  - `dark` → `dark_color`
+  - `drk2` → `dark_secondary_color`
+  - `whit` → `white_color`
+  - `culc` → `bg_cursorcolumn`
+  - `comm` → `comment_color`
+
+- Syntax/categories
+  - `lit1` → `literal1_color`
+  - `lit2` → `literal2_color`
+  - `lit3` → `literal3_color`
+  - `ops1` → `keyword1_color`
+  - `ops2` → `keyword2_color`
+  - `ops3` → `keyword3_color`
+  - `ops4` → `keyword4_color`
+  - `otag` → `tag_color`
+  - `lstr` → `string_color`
+  - `incl` → `include_color`
+  - `dlim` → `delimiter_color`
+  - `blod` → `red_blood_color`
+  - `violet` → `violet_color`
+  - `high` → `highlight_color`
+  - `darkhigh` → `highlight_dark_color`
+  - `var` → `variable_color`
+  - `func` → `function_color`
+
+- Diff/diagnostics
+  - `dadd` → `diff_add_color`
+  - `dchg` → `diff_change_color`
+  - `dred` → `diff_delete_color`
+  - `dwarn` → `warning_color`
+
+- UI and misc
+  - `visu` → `bg_visual`
+  - `clin` → `bg_cursorline`
+  - `pmen` → `pmenu_color`
+  - `csel` → `search_color`
+  - `cmpdef` → `cmp_default_color`
+  - `iden` → `identifier_color`
+  - `lbgn` → `preproc_light_color`
+  - `dbng` → `preproc_dark_color`
+  - `dnorm` → `bg_selection_dim`
+
+- Shades/rainbow
+  - `col1..col24` → `shade_01..shade_24`
+  - `br1..br7` → `rainbow_1..rainbow_7`
+
+Prefix note: `fg_*` aliases (e.g. `fg_warning`, `fg_diff_delete`) remain for backward compatibility and map 1:1 to the new names (e.g. `warning_color`, `diff_delete_color`). Prefer the descriptive names going forward.
 
 ## Presets
 
@@ -196,7 +261,7 @@ or provide a function that receives the palette:
 ```lua
 require('neg').setup({
   overrides = function(c)
-    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.fg_warning } }
+    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.warning_color } }
   end
 })
 ```
@@ -239,10 +304,10 @@ require('neg').setup({
 require('neg').setup({
   overrides = function(c)
     return {
-      DiagnosticVirtualTextError = { bg = c.fg_diff_delete, blend = 12 },
-      DiagnosticVirtualTextWarn  = { bg = c.fg_warning, blend = 12 },
-      DiagnosticVirtualTextInfo  = { bg = c.fg_preproc_light, blend = 12 },
-      DiagnosticVirtualTextHint  = { bg = c.fg_identifier, blend = 12 },
+      DiagnosticVirtualTextError = { bg = c.diff_delete_color, blend = 12 },
+      DiagnosticVirtualTextWarn  = { bg = c.warning_color, blend = 12 },
+      DiagnosticVirtualTextInfo  = { bg = c.preproc_light_color, blend = 12 },
+      DiagnosticVirtualTextHint  = { bg = c.identifier_color, blend = 12 },
     }
   end,
 })
@@ -264,7 +329,7 @@ require('neg').setup({
 ```lua
 require('neg').setup({
   overrides = function(c)
-    return { LspInlayHint = { fg = c.fg_comment } }
+    return { LspInlayHint = { fg = c.comment_color } }
   end,
 })
 ```
@@ -296,10 +361,10 @@ local U = require('neg.util')
 require('neg').setup({
   overrides = function(c)
     return {
-      DiagnosticVirtualTextError = { bg = U.alpha(c.fg_diff_delete, c.bg_default, 0.16) },
-      DiagnosticVirtualTextWarn  = { bg = U.alpha(c.fg_warning,     c.bg_default, 0.14) },
-      DiagnosticVirtualTextInfo  = { bg = U.alpha(c.fg_preproc_light, c.bg_default, 0.12) },
-      DiagnosticVirtualTextHint  = { bg = U.alpha(c.fg_identifier,  c.bg_default, 0.12) },
+      DiagnosticVirtualTextError = { bg = U.alpha(c.diff_delete_color, c.bg_default, 0.16) },
+      DiagnosticVirtualTextWarn  = { bg = U.alpha(c.warning_color,      c.bg_default, 0.14) },
+      DiagnosticVirtualTextInfo  = { bg = U.alpha(c.preproc_light_color, c.bg_default, 0.12) },
+      DiagnosticVirtualTextHint  = { bg = U.alpha(c.identifier_color,   c.bg_default, 0.12) },
     }
   end,
 })
@@ -326,17 +391,17 @@ local U = require('neg.util')
 require('neg').setup({
   overrides = function(c)
     return {
-      DiagnosticUnderlineError = { undercurl = true, sp = U.darken(c.fg_diff_delete, 8) },
-      DiagnosticUnderlineWarn  = { undercurl = true, sp = U.darken(c.fg_warning, 6) },
+      DiagnosticUnderlineError = { undercurl = true, sp = U.darken(c.diff_delete_color, 8) },
+      DiagnosticUnderlineWarn  = { undercurl = true, sp = U.darken(c.warning_color, 6) },
     }
   end,
 })
 ```
 
 - telescope.nvim, nvim-cmp
-- telescope.nvim, nvim-cmp
 - gitsigns.nvim, gitgutter (basic), diff
 - indent‑blankline/ibl, mini.indentscope
+- mini.statusline, mini.tabline
 - which‑key.nvim
 - neo‑tree, nvim‑tree
 - bufferline.nvim
@@ -347,14 +412,24 @@ require('neg').setup({
 - treesitter‑context
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
+- alpha‑nvim
+- todo‑comments.nvim
+- neotest
+- harpoon
+- nvim‑navic
+- treesitter‑playground
 
 ### Detailed Plugin Coverage
 
 - telescope.nvim
   - Groups: `TelescopeMatching`, `TelescopeSelection`, `TelescopeBorder`, `TelescopePreviewBorder`, `TelescopePromptBorder`, `TelescopeResultsBorder`, `TelescopePathSeparator`
   - Transparent float zone also covers: `TelescopeNormal`, `TelescopePreviewNormal`, `TelescopePromptNormal`, `TelescopeResultsNormal`, and the corresponding `*Border`
+- mason.nvim
+  - Transparent float zone also covers: `MasonNormal`, `MasonBorder`
+- lazy.nvim
+  - Transparent float zone also covers: `LazyNormal`, `LazyBorder`
 - nvim-cmp
-  - Groups: `CmpItemKindDefault`, `CmpItemKindFunction`, `CmpItemKindInterface`, `CmpItemKindKeyword`, `CmpItemKindMethod`, `CmpItemKindProperty`, `CmpItemKindVariable`
+  - Groups: `CmpItemKind*` (extended kinds: Text/Class/Module/Field/Constructor/Enum/Unit/Value/EnumMember/Constant/Struct/Event/Operator/TypeParameter/Snippet/Color/File/Reference/Folder)
   - Transparent float zone also covers: `CmpDocumentation`, `CmpDocumentationBorder`
 - gitsigns.nvim
   - Groups: `GitSignsAdd`, `GitSignsAddNr`, `GitSignsAddLn`, `GitSignsChange`, `GitSignsChangeNr`, `GitSignsChangeLn`, `GitSignsDelete`, `GitSignsDeleteNr`, `GitSignsDeleteLn`, `GitSignsTopdelete`, `GitSignsChangedelete`, `GitSignsUntracked`, `GitSignsCurrentLineBlame`
@@ -366,8 +441,13 @@ require('neg').setup({
   - Groups: `WhichKey`, `WhichKeyGroup`, `WhichKeyDesc`, `WhichKeySeparator`, `WhichKeyFloat`, `WhichKeyBorder`, `WhichKeyValue`
 - neo‑tree
   - Groups: `NeoTreeNormal`, `NeoTreeNormalNC`, `NeoTreeRootName`, `NeoTreeDirectoryIcon`, `NeoTreeDirectoryName`, `NeoTreeCursorLine`, `NeoTreeGitAdded`, `NeoTreeGitModified`, `NeoTreeGitDeleted`, `NeoTreeDimText`
+  - Transparent float zone also covers: `NeoTreeFloatNormal`, `NeoTreeFloatBorder`
 - nvim‑tree
   - Groups: `NvimTreeNormal`, `NvimTreeNormalNC`, `NvimTreeFolderIcon`, `NvimTreeFolderName`, `NvimTreeOpenedFolderName`, `NvimTreeRootFolder`, `NvimTreeIndentMarker`, `NvimTreeCursorLine`, `NvimTreeGitDirty`, `NvimTreeGitNew`, `NvimTreeGitDeleted`
+- symbols-outline.nvim
+  - Transparent sidebar zone also covers: `SymbolsOutlineNormal`
+- aerial.nvim
+  - Transparent sidebar zone also covers: `AerialNormal`
 - nvim‑dap
   - Groups: `DebugBreakpoint`, `DebugBreakpointCondition`, `DebugBreakpointRejected`, `DebugStopped`, `DebugLogPoint`, `DebugPC`
 - dap‑ui
@@ -383,11 +463,25 @@ require('neg').setup({
 - rainbow‑delimiters
   - Groups: `RainbowDelimiterRed`, `RainbowDelimiterYellow`, `RainbowDelimiterBlue`, `RainbowDelimiterOrange`, `RainbowDelimiterGreen`, `RainbowDelimiterViolet`, `RainbowDelimiterCyan`
 - obsidian.nvim
+- alpha‑nvim / startify
+- todo‑comments.nvim
+- lspsaga.nvim
+- overseer.nvim
+- neotest
+- harpoon
+- nvim‑navic
+- navbuddy
+- treesitter‑playground
   - Groups: `ObsidianExtLinkIcon`, `ObsidianRefText`, `ObsidianBullet`, `ObsidianImportant`, `ObsidianTilde`, `ObsidianRightArrow`, `ObsidianDone`, `ObsidianTodo`, `ObsidianHighlightText`, `ObsidianBlockID`, `ObsidianTag`
 - headline.nvim
   - Groups: `Headline1`, `Headline2`, `CodeBlock`, `Dash`
 - noice.nvim
-  - Groups: `NoiceCursor`, `NoiceCmdLine`, `FlashLabel`; transparent float zone also covers `NoicePopup`, `NoicePopupmenu`, `NoiceCmdlinePopup`
+  - Groups: `NoiceCursor`, `NoiceCmdLine`, popup/cmdline menu (`NoiceCmdlinePopup`, `NoiceCmdlinePopupBorder`, `NoicePopup`, `NoicePopupBorder`, `NoicePopupmenu`, `NoicePopupmenuBorder`); transparent float zone also covers `NoicePopup`, `NoicePopupmenu`, `NoiceCmdlinePopup`
+- dressing.nvim
+  - Transparent float zone also covers: `DressingInput`, `DressingInputBorder`, `DressingSelect`, `DressingSelectBorder`
+- fzf-lua
+  - Transparent float zone also covers: `FzfLuaNormal`, `FzfLuaBorder`
+
 
 ## Troubleshooting
 
@@ -433,6 +527,10 @@ require('neg').setup({
 - Locally: `./scripts/validate.sh`
 - Strict mode (treat WARN as errors): `NEG_VALIDATE_STRICT=1 ./scripts/validate.sh`
 - GitHub Actions: `.github/workflows/validate.yml`
+- Optional contrast check: `NEG_VALIDATE_CONTRAST=1 NEG_VALIDATE_CONTRAST_MIN=3.0 ./scripts/validate.sh`
+  - Reports warnings if contrast ratio (fg vs bg) is below the threshold.
+  - Tip: enable only when tuning colors; strict mode will fail on warnings.
+- Verbose summary: `NEG_VALIDATE_VERBOSE=1 ./scripts/validate.sh` prints a short coverage line.
 
 ## Demo shots
 
