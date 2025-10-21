@@ -94,6 +94,59 @@ EOF
 colorscheme neg
 ```
 
+## Options
+
+All options are optional. Defaults are shown below.
+
+```lua
+require('neg').setup({
+  transparent = false,                  -- boolean or { float, sidebar, statusline }
+  -- transparent = { float = false, sidebar = false, statusline = false },
+  terminal_colors = true,              -- set 16 ANSI terminal colors
+  preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
+
+  styles = {
+    comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
+    keywords = 'none',
+    functions = 'none',
+    strings = 'none',
+    variables = 'none',
+    types = 'none',
+    operators = 'none',
+    numbers = 'none',
+    booleans = 'none',
+    constants = 'none',
+    punctuation = 'none',
+  },
+
+  plugins = {                          -- set to false to disable integration
+    cmp = true,
+    telescope = true,
+    git = true,
+    gitsigns = true,
+    noice = true,
+    obsidian = true,
+    rainbow = true,
+    headline = true,
+    indent = true,                     -- indent-blankline/ibl + mini.indentscope
+    which_key = true,
+    nvim_tree = false,                 -- disabled by default if using neo-tree
+    neo_tree = true,
+    dap = true,
+    dapui = true,
+    trouble = true,
+    notify = true,
+    treesitter_context = true,
+    hop = true,
+  },
+
+  overrides = nil,                     -- table or function(colors) -> table
+
+  diagnostics_virtual_bg = false,      -- virtual text with soft background
+  diagnostics_virtual_bg_blend = 15,   -- 0..100 (larger = more transparent)
+})
+```
+
 ## Presets
 
 Built-in style presets you can use via `preset` option or `:NegPreset`:
