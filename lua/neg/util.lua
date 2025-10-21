@@ -2,6 +2,24 @@ local M = {}
 
 local hi = vim.api.nvim_set_hl
 
+local function clamp(x, a, b)
+  if x < a then return a end
+  if x > b then return b end
+  return x
+end
+
+local function hex_to_rgb(hex)
+  if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
+  local r = tonumber(hex:sub(2,3), 16)
+  local g = tonumber(hex:sub(4,5), 16)
+  local b = tonumber(hex:sub(6,7), 16)
+  return r, g, b
+end
+
+local function rgb_to_hex(r, g, b)
+  return string.format('#%02x%02x%02x', clamp(math.floor(r + 0.5), 0, 255), clamp(math.floor(g + 0.5), 0, 255), clamp(math.floor(b + 0.5), 0, 255))
+end
+
 function M.flags_from(v)
   local f = {}
   if type(v) == 'string' then
@@ -62,6 +80,38 @@ function M.apply_transparent(cfg)
       set_bg({ 'StatusLine','StatusLineNC','WinBar','WinBarNC','TabLine','TabLineFill','TabLineSel' })
     end
   end
+end
+
+-- Color utilities
+function M.lighten(hex, percent)
+  local r, g, b = hex_to_rgb(hex)
+  if not r then return hex end
+  local k = clamp(tonumber(percent) or 0, 0, 100) / 100
+  r = r + (255 - r) * k
+  g = g + (255 - g) * k
+  b = b + (255 - b) * k
+  return rgb_to_hex(r, g, b)
+end
+
+function M.darken(hex, percent)
+  local r, g, b = hex_to_rgb(hex)
+  if not r then return hex end
+  local k = 1 - clamp(tonumber(percent) or 0, 0, 100) / 100
+  r = r * k
+  g = g * k
+  b = b * k
+  return rgb_to_hex(r, g, b)
+end
+
+function M.alpha(fg, bg, a)
+  local r1, g1, b1 = hex_to_rgb(fg)
+  local r2, g2, b2 = hex_to_rgb(bg)
+  if not r1 or not r2 then return fg end
+  local k = clamp(tonumber(a) or 0.15, 0, 1)
+  local r = r1 * k + r2 * (1 - k)
+  local g = g1 * k + g2 * (1 - k)
+  local b = b1 * k + b2 * (1 - k)
+  return rgb_to_hex(r, g, b)
 end
 
 function M.apply_overrides(overrides, p)

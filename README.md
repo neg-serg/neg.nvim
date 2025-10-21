@@ -143,7 +143,9 @@ require('neg').setup({
   overrides = nil,                     -- table or function(colors) -> table
 
   diagnostics_virtual_bg = false,      -- virtual text with soft background
-  diagnostics_virtual_bg_blend = 15,   -- 0..100 (larger = more transparent)
+  diagnostics_virtual_bg_blend = 15,   -- used when mode = 'blend' (0..100; larger = more transparent)
+  diagnostics_virtual_bg_mode = 'blend',   -- 'blend' | 'alpha' | 'lighten' | 'darken'
+  diagnostics_virtual_bg_strength = 0.15,  -- strength for alpha/lighten/darken (0..1)
 })
 ```
 

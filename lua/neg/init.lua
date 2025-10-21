@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.62
+-- Version:     3.63
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -61,6 +61,8 @@ local default_config = {
   overrides = nil,
   diagnostics_virtual_bg = false,
   diagnostics_virtual_bg_blend = 15,
+  diagnostics_virtual_bg_mode = 'blend',   -- 'blend' | 'alpha' | 'lighten' | 'darken'
+  diagnostics_virtual_bg_strength = 0.15,  -- 0..1 for alpha/lighten/darken strength
 }
 
 local apply_transparent = function(cfg) return U.apply_transparent(cfg) end
@@ -97,7 +99,7 @@ end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
 
-local function apply_diagnostics_virtual_bg(blend)
+local function apply_diagnostics_virtual_bg(cfg)
   local map = {
     DiagnosticVirtualTextError = p.dred,
     DiagnosticVirtualTextWarn  = p.dwarn,
@@ -105,8 +107,27 @@ local function apply_diagnostics_virtual_bg(blend)
     DiagnosticVirtualTextHint  = p.iden,
     DiagnosticVirtualTextOk    = p.dadd,
   }
-  for g, col in pairs(map) do
-    hi(0, g, { bg = col, blend = blend or 15 })
+  local mode = (cfg and cfg.diagnostics_virtual_bg_mode) or 'blend'
+  local strength = (cfg and cfg.diagnostics_virtual_bg_strength) or 0.15
+  if mode == 'blend' then
+    for g, col in pairs(map) do
+      hi(0, g, { bg = col, blend = cfg and cfg.diagnostics_virtual_bg_blend or 15 })
+    end
+  elseif mode == 'alpha' then
+    for g, col in pairs(map) do
+      local bg = U.alpha(col, p.bclr, strength)
+      hi(0, g, { bg = bg })
+    end
+  elseif mode == 'lighten' then
+    for g, col in pairs(map) do
+      local bg = U.lighten(col, strength * 100)
+      hi(0, g, { bg = bg })
+    end
+  elseif mode == 'darken' then
+    for g, col in pairs(map) do
+      local bg = U.darken(col, strength * 100)
+      hi(0, g, { bg = bg })
+    end
   end
 end
 
@@ -195,7 +216,7 @@ function M.setup(opts)
   apply_styles(cfg.styles)
   apply_preset(cfg.preset, cfg)
   apply_overrides(cfg.overrides)
-  if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg.diagnostics_virtual_bg_blend) end
+  if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
   M._applied_key = U.config_signature(cfg)
 end
