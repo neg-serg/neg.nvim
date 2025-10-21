@@ -106,4 +106,13 @@ return {
   ['@lsp.typemod.enum.defaultLibrary']={link='@type.builtin'},
   ['@lsp.typemod.type.defaultLibrary']={link='@type.builtin'},
   ['@lsp.typemod.deprecated']={link='DiagnosticDeprecated'},
+  -- extra common modifiers
+  ['@lsp.typemod.variable.declaration']={link='@variable'},
+  ['@lsp.typemod.variable.definition']={link='@variable'},
+  ['@lsp.typemod.variable.reference']={link='@variable'},
+  ['@lsp.typemod.parameter.readonly']={link='@parameter'},
+  ['@lsp.typemod.property.readonly']={link='@constant'},
+  ['@lsp.typemod.method.static']={link='@method'},
+  ['@lsp.typemod.function.async']={link='@function'},
+  ['@lsp.typemod.keyword.async']={link='@keyword'},
 }
