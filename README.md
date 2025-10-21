@@ -281,6 +281,7 @@ require('neg').setup({
 ## Plugins Coverage
 
 - telescope.nvim, nvim-cmp
+- telescope.nvim, nvim-cmp
 - gitsigns.nvim, gitgutter (basic), diff
 - indent‑blankline/ibl, mini.indentscope
 - which‑key.nvim
@@ -291,6 +292,45 @@ require('neg').setup({
 - treesitter‑context
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
+
+## Troubleshooting
+
+- Theme looks mixed or not applied sometimes
+  - Ensure only one colorscheme is active. If using multiple themes, remove extra `colorscheme` calls.
+  - With lazy.nvim, set a high `priority` (e.g. 1000) and `lazy = false` for this plugin.
+  - Run `:colorscheme neg` after your UI plugins load if something overrides highlights late.
+- Transparency seems not applied
+  - Terminal must support transparency (or set GUI background). `transparent` sets highlight backgrounds to `NONE`, it does not change the terminal background.
+  - For specific areas, use `transparent = { float = true, sidebar = true, statusline = true }` or the command `:NegToggleTransparentZone`.
+  - Check your overrides — they have the last word. Use `:NegInfo` to inspect active options.
+- Overriding a linked group has no effect
+  - When a group `link`s to another, its own attrs are ignored. Provide attributes in your `overrides` to break the link (Neovim will clear the link when attrs are set).
+  - Example: `NormalFloat = { bg = 'NONE' }` will override any previous link.
+- Colors look off
+  - Add `:set termguicolors` to your config and keep `terminal_colors = true` (or tune them in overrides).
+- Treesitter/LSP highlight mismatch
+  - Use `:Inspect` on a token to see active captures. Some captures differ between Neovim 0.9/0.10 and parsers.
+  - This colorscheme links common modern captures; update Neovim/parsers if something is missing.
+- Diagnostics are too strong/too soft
+  - Disable colored virtual backgrounds with `diagnostics_virtual_bg = false` or tune `diagnostics_virtual_bg_blend`.
+  - Or override individual severities.
+- Italics not visible
+  - Your terminal font might not support italics. Try a GUI (Neovide) or a font that supports italics.
+- Light background?
+  - This is a dark theme. `set background=light` is not supported at the moment.
+
+## FAQ
+
+- How do I use it with `:colorscheme`?
+  - The plugin provides `colors/neg.lua`. Use `:colorscheme neg` after `require('neg').setup(...)`.
+- How do I disable a specific plugin integration?
+  - Set its flag to `false` under `plugins`.
+- Can I customize the palette?
+  - Use `overrides` for highlight groups and `require('neg.palette')` if you need palette colors. Direct palette overrides are not exposed yet.
+- How do I toggle presets/transparency on the fly?
+  - Use `:NegPreset soft|hard|pro|writing|none` and `:NegToggleTransparent`/`:NegToggleTransparentZone {float|sidebar|statusline}`.
+- A plugin's group is not covered — what do I do?
+  - Add an `overrides` entry for that group. PRs to add more integrations are welcome.
 
 ## Validator & CI
 
