@@ -2,6 +2,71 @@
 
 All notable changes to this project are documented here.
 
+## [3.67] - 2025-10-21
+- Docs: README color utility recipes using `neg.util` (alpha/lighten/darken).
+
+## [3.66] - 2025-10-21
+- Commands: `:NegInfo` now shows diagnostics virtual background settings (enabled, mode, strength, blend).
+
+## [3.65] - 2025-10-21
+- Palette: Added descriptive aliases (e.g., `fg_default`, `bg_default`, `fg_keyword_*`, etc.) and refactored internal usage.
+- Docs: Updated examples to use new color names.
+
+## [3.64] - 2025-10-21
+- Commands: Added `:NegDiagBgMode`, `:NegDiagBgStrength`, `:NegDiagBgBlend` to control diagnostics virtual text background at runtime.
+- Docs: Documented the new commands.
+
+## [3.63] - 2025-10-21
+- Palette utils: Added `lighten`, `darken`, and `alpha` in `neg.util`.
+- Diagnostics: Advanced `diagnostics_virtual_bg` modes (`blend`|`alpha`|`lighten`|`darken`) with `strength`.
+- Docs: Extended Options section with the new fields.
+
+## [3.62] - 2025-10-21
+- Internal: incremental changes toward advanced diagnostics backgrounds.
+
+## [3.61] - 2025-10-21
+- LSP: Expanded `@lsp.typemod.*` mappings (declaration/definition/reference/readonly/static/async).
+
+## [3.60] - 2025-10-21
+- Plugins: Added bufferline highlight groups.
+- Lualine: Provided `lualine.themes.neg` theme.
+
+## [3.59] - 2025-10-21
+- Refactor: Extracted helpers to `neg.util` (flags, transparency, terminal colors, overrides, config signature).
+- Core: Idempotent setup — skip reapply on unchanged config; support `setup({ force = true })`.
+
+## [3.58] - 2025-10-21
+- Docs: Added Detailed Plugin Coverage section.
+
+## [3.57] - 2025-10-21
+- Docs: Added Troubleshooting and FAQ sections.
+
+## [3.56] - 2025-10-21
+- Docs: Added Common override recipes section.
+
+## [3.55] - 2025-10-21
+- Docs: Added Options section with defaults and descriptions.
+
+## [3.54] - 2025-10-21
+- Docs: Added Presets section (soft/hard/pro/writing) with examples.
+
+## [3.53] - 2025-10-21
+- Commands: Added `:NegPreset {soft|hard|pro|writing|none}`.
+- Docs: Documented the command.
+
+## [3.52] - 2025-10-21
+- Commands: Added `:NegToggleTransparentZone {float|sidebar|statusline}`.
+- Docs: Documented the command and zoned transparency usage.
+
+## [3.51] - 2025-10-21
+- Transparent: Zoned transparency via `transparent.{float,sidebar,statusline}` (boolean still supported).
+
+## [3.50] - 2025-10-21
+- Presets: Added style presets (`soft`, `hard`, `pro`, `writing`) selectable via `preset` or `:NegPreset`.
+
+## [3.49] - 2025-10-21
+- Docs: README now links to CHANGELOG; created release tag `v3.48`.
+
 ## [3.47] - 2025-10-21
 - Docs: README switched fully to English (commands, overrides, sections).
 
@@ -80,4 +145,3 @@ All notable changes to this project are documented here.
 
 ## [3.23]
 - Previous version prior to the refactor documented above.
-
