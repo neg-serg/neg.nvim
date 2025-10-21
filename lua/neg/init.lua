@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.51
+-- Version:     3.52
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -151,6 +151,19 @@ local function apply_terminal_colors()
   end
 end
 
+local function apply_diagnostics_virtual_bg(blend)
+  local map = {
+    DiagnosticVirtualTextError = p.dred,
+    DiagnosticVirtualTextWarn  = p.dwarn,
+    DiagnosticVirtualTextInfo  = p.lbgn,
+    DiagnosticVirtualTextHint  = p.iden,
+    DiagnosticVirtualTextOk    = p.dadd,
+  }
+  for g, col in pairs(map) do
+    hi(0, g, { bg = col, blend = blend or 15 })
+  end
+end
+
 local function apply_styles(styles)
   local map = {
     comments = { 'Comment','SpecialComment' },
@@ -261,18 +274,33 @@ local function define_commands()
       :format(tostring(cfg.transparent), tostring(cfg.terminal_colors), vim.inspect(cfg.plugins))
     if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
   end, { desc = 'neg.nvim: Show current config' })
+
+  vim.api.nvim_create_user_command('NegToggleTransparentZone', function(opts)
+    local zone = (opts.args or ''):lower()
+    if zone ~= 'float' and zone ~= 'sidebar' and zone ~= 'statusline' then
+      print("neg.nvim: unknown zone '" .. zone .. "'. Use: float|sidebar|statusline")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    local t = newcfg.transparent
+    if t == true then
+      t = { float = true, sidebar = true, statusline = true }
+    elseif t == false or t == nil then
+      t = { float = false, sidebar = false, statusline = false }
+    elseif type(t) ~= 'table' then
+      t = { float = false, sidebar = false, statusline = false }
+    end
+    t[zone] = not t[zone]
+    newcfg.transparent = t
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    complete = function()
+      return { 'float', 'sidebar', 'statusline' }
+    end,
+    desc = 'neg.nvim: Toggle transparent zone (float|sidebar|statusline)'
+  })
 end
 
 return M
-local function apply_diagnostics_virtual_bg(blend)
-  local map = {
-    DiagnosticVirtualTextError = p.dred,
-    DiagnosticVirtualTextWarn  = p.dwarn,
-    DiagnosticVirtualTextInfo  = p.lbgn,
-    DiagnosticVirtualTextHint  = p.iden,
-    DiagnosticVirtualTextOk    = p.dadd,
-  }
-  for g, col in pairs(map) do
-    hi(0, g, { bg = col, blend = blend or 15 })
-  end
-end

@@ -97,6 +97,7 @@ colorscheme neg
 ## Commands
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
+- :NegToggleTransparentZone {float|sidebar|statusline} — toggle transparency for a specific zone
 - :NegReload — re‑apply highlights using the current config
 - :NegInfo — show a short summary of current options
 
