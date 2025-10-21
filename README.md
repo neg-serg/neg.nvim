@@ -293,6 +293,47 @@ require('neg').setup({
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
 
+### Detailed Plugin Coverage
+
+- telescope.nvim
+  - Groups: `TelescopeMatching`, `TelescopeSelection`, `TelescopeBorder`, `TelescopePreviewBorder`, `TelescopePromptBorder`, `TelescopeResultsBorder`, `TelescopePathSeparator`
+  - Transparent float zone also covers: `TelescopeNormal`, `TelescopePreviewNormal`, `TelescopePromptNormal`, `TelescopeResultsNormal`, and the corresponding `*Border`
+- nvim-cmp
+  - Groups: `CmpItemKindDefault`, `CmpItemKindFunction`, `CmpItemKindInterface`, `CmpItemKindKeyword`, `CmpItemKindMethod`, `CmpItemKindProperty`, `CmpItemKindVariable`
+  - Transparent float zone also covers: `CmpDocumentation`, `CmpDocumentationBorder`
+- gitsigns.nvim
+  - Groups: `GitSignsAdd`, `GitSignsAddNr`, `GitSignsAddLn`, `GitSignsChange`, `GitSignsChangeNr`, `GitSignsChangeLn`, `GitSignsDelete`, `GitSignsDeleteNr`, `GitSignsDeleteLn`, `GitSignsTopdelete`, `GitSignsChangedelete`, `GitSignsUntracked`, `GitSignsCurrentLineBlame`
+- gitgutter/diff
+  - Groups: `GitGutterAdd`, `GitGutterChangeDelete`, `GitGutterChange`, `GitGutterDelete`, `DiffAdd`, `DiffChange`, `DiffDelete`, `DiffText`, `DiffAdded`, `DiffRemoved`, `diffAdded`, `diffChanged`, `diffRemoved`, `diffLine`, `diffNewFile`, `diffOldFile`, `diffOldLine`
+- indent‑blankline/ibl/mini.indentscope
+  - Groups: `IndentBlanklineChar`, `IndentBlanklineSpaceChar`, `IndentBlanklineSpaceCharBlankline`, `IndentBlanklineContextChar`, `IndentBlanklineContextStart`, `IblIndent`, `IblWhitespace`, `IblScope`, `MiniIndentscopeSymbol`, `MiniIndentscopePrefix`
+- which‑key.nvim
+  - Groups: `WhichKey`, `WhichKeyGroup`, `WhichKeyDesc`, `WhichKeySeparator`, `WhichKeyFloat`, `WhichKeyBorder`, `WhichKeyValue`
+- neo‑tree
+  - Groups: `NeoTreeNormal`, `NeoTreeNormalNC`, `NeoTreeRootName`, `NeoTreeDirectoryIcon`, `NeoTreeDirectoryName`, `NeoTreeCursorLine`, `NeoTreeGitAdded`, `NeoTreeGitModified`, `NeoTreeGitDeleted`, `NeoTreeDimText`
+- nvim‑tree
+  - Groups: `NvimTreeNormal`, `NvimTreeNormalNC`, `NvimTreeFolderIcon`, `NvimTreeFolderName`, `NvimTreeOpenedFolderName`, `NvimTreeRootFolder`, `NvimTreeIndentMarker`, `NvimTreeCursorLine`, `NvimTreeGitDirty`, `NvimTreeGitNew`, `NvimTreeGitDeleted`
+- nvim‑dap
+  - Groups: `DebugBreakpoint`, `DebugBreakpointCondition`, `DebugBreakpointRejected`, `DebugStopped`, `DebugLogPoint`, `DebugPC`
+- dap‑ui
+  - Groups: `DapUIFloatNormal`, `DapUIFloatBorder`, `DapUIVariable`, `DapUIDecoration`, `DapUIScope`, `DapUIType`, `DapUIValue`, `DapUILineNumber`, `DapUIBreakpointsPath`, `DapUIBreakpointsLine`, `DapUIBreakpointsCurrentLine`, `DapUIBreakpointsDisabledLine`, `DapUIPlayPause`, `DapUIRestart`, `DapUIStop`, `DapUIUnavailable`, `DapUIWinSelect`
+- trouble.nvim
+  - Groups: `TroubleNormal`, `TroubleText`, `TroubleCount`, `TroubleFoldIcon`, `TroubleLocation`, `TroubleFilename`, `TroubleIndent`, `TroubleSignError`, `TroubleSignWarning`, `TroubleSignInformation`, `TroubleSignHint`
+- nvim‑notify
+  - Groups: `NotifyBackground`, plus `Notify{ERROR|WARN|INFO|DEBUG|TRACE}{Border|Icon|Title}`
+- treesitter‑context
+  - Groups: `TreesitterContext`, `TreesitterContextLineNumber`, `TreesitterContextSeparator`
+- hop.nvim
+  - Groups: `HopNextKey`, `HopNextKey1`, `HopNextKey2`, `HopUnmatched`
+- rainbow‑delimiters
+  - Groups: `RainbowDelimiterRed`, `RainbowDelimiterYellow`, `RainbowDelimiterBlue`, `RainbowDelimiterOrange`, `RainbowDelimiterGreen`, `RainbowDelimiterViolet`, `RainbowDelimiterCyan`
+- obsidian.nvim
+  - Groups: `ObsidianExtLinkIcon`, `ObsidianRefText`, `ObsidianBullet`, `ObsidianImportant`, `ObsidianTilde`, `ObsidianRightArrow`, `ObsidianDone`, `ObsidianTodo`, `ObsidianHighlightText`, `ObsidianBlockID`, `ObsidianTag`
+- headline.nvim
+  - Groups: `Headline1`, `Headline2`, `CodeBlock`, `Dash`
+- noice.nvim
+  - Groups: `NoiceCursor`, `NoiceCmdLine`, `FlashLabel`; transparent float zone also covers `NoicePopup`, `NoicePopupmenu`, `NoiceCmdlinePopup`
+
 ## Troubleshooting
 
 - Theme looks mixed or not applied sometimes
