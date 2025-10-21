@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.59
+-- Version:     3.60
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -42,6 +42,7 @@ local default_config = {
     telescope = true,
     git = true,
     gitsigns = true,
+    bufferline = true,
     noice = true,
     obsidian = true,
     rainbow = true,
@@ -166,6 +167,7 @@ function M.setup(opts)
     telescope = 'neg.groups.plugins.telescope',
     git = 'neg.groups.plugins.git',
     gitsigns = 'neg.groups.plugins.gitsigns',
+    bufferline = 'neg.groups.plugins.bufferline',
     noice = 'neg.groups.plugins.noice',
     obsidian = 'neg.groups.plugins.obsidian',
     rainbow = 'neg.groups.plugins.rainbow',
