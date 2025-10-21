@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.52
+-- Version:     3.53
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -333,6 +333,26 @@ local function define_commands()
       return { 'float', 'sidebar', 'statusline' }
     end,
     desc = 'neg.nvim: Toggle transparent zone (float|sidebar|statusline)'
+  })
+
+  vim.api.nvim_create_user_command('NegPreset', function(opts)
+    local preset = (opts.args or ''):lower()
+    local allowed = { soft=true, hard=true, pro=true, writing=true, none=true }
+    if not allowed[preset] then
+      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|none")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    if preset == 'none' then preset = nil end
+    newcfg.preset = preset
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    complete = function()
+      return { 'soft', 'hard', 'pro', 'writing', 'none' }
+    end,
+    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|none)'
   })
 end
 

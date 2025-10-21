@@ -98,6 +98,7 @@ colorscheme neg
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
 - :NegToggleTransparentZone {float|sidebar|statusline} — toggle transparency for a specific zone
+- :NegPreset {soft|hard|pro|writing|none} — apply a style preset (or clear with 'none')
 - :NegReload — re‑apply highlights using the current config
 - :NegInfo — show a short summary of current options
 
