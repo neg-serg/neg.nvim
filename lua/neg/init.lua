@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.65
+-- Version:     3.66
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -240,8 +240,24 @@ local function define_commands()
   vim.api.nvim_create_user_command('NegInfo', function()
     local cfg = M._config or default_config
     local ok_notify, _ = pcall(require, 'notify')
-    local msg = ('neg.nvim\ntransparent: %s\nterminal_colors: %s\nplugins: %s')
-      :format(tostring(cfg.transparent), tostring(cfg.terminal_colors), vim.inspect(cfg.plugins))
+    local msg = (
+      'neg.nvim' ..
+      '\ntransparent: %s' ..
+      '\nterminal_colors: %s' ..
+      '\ndiag_bg: %s' ..
+      '\n   mode: %s' ..
+      '\n   strength: %s' ..
+      '\n   blend: %s' ..
+      '\nplugins: %s'
+    ):format(
+      tostring(cfg.transparent),
+      tostring(cfg.terminal_colors),
+      tostring(cfg.diagnostics_virtual_bg),
+      tostring(cfg.diagnostics_virtual_bg_mode),
+      tostring(cfg.diagnostics_virtual_bg_strength),
+      tostring(cfg.diagnostics_virtual_bg_blend),
+      vim.inspect(cfg.plugins)
+    )
     if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
   end, { desc = 'neg.nvim: Show current config' })
 
