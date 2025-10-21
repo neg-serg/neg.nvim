@@ -90,13 +90,13 @@ colorscheme neg
 
 ## Commands
 
-- :NegToggleTransparent — переключение прозрачности и пере‑применение темы
-- :NegReload — пере‑применение текущего конфига
-- :NegInfo — краткая сводка текущих опций
+- :NegToggleTransparent — toggle transparency and re‑apply the theme
+- :NegReload — re‑apply highlights using the current config
+- :NegInfo — show a short summary of current options
 
 ## Overrides
 
-Вы можете переопределить любые группы:
+You can override any highlight groups:
 
 ```lua
 require('neg').setup({
@@ -107,7 +107,7 @@ require('neg').setup({
 })
 ```
 
-или функцией, получающей палитру:
+or provide a function that receives the palette:
 
 ```lua
 require('neg').setup({
@@ -117,7 +117,7 @@ require('neg').setup({
 })
 ```
 
-## Plugins coverage (основные)
+## Plugins Coverage
 
 - telescope.nvim, nvim-cmp
 - gitsigns.nvim, gitgutter (basic), diff
@@ -131,10 +131,10 @@ require('neg').setup({
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
 
-## Validator и CI
+## Validator & CI
 
-- Локально: `./scripts/validate.sh`
-- Строгий режим (любые WARN → ошибка): `NEG_VALIDATE_STRICT=1 ./scripts/validate.sh`
+- Locally: `./scripts/validate.sh`
+- Strict mode (treat WARN as errors): `NEG_VALIDATE_STRICT=1 ./scripts/validate.sh`
 - GitHub Actions: `.github/workflows/validate.yml`
 
 ## Demo shots
