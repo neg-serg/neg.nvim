@@ -174,6 +174,9 @@ require('neg').setup({ preset = 'hard' })
 - :NegPreset {soft|hard|pro|writing|none} — apply a style preset (or clear with 'none')
 - :NegReload — re‑apply highlights using the current config
 - :NegInfo — show a short summary of current options
+- :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — set diagnostics virtual text background mode (or turn off/on)
+- :NegDiagBgStrength {0..1} — set strength for alpha/lighten/darken modes
+- :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
 
 ## Overrides
 

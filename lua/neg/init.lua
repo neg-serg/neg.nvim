@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.63
+-- Version:     3.64
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -290,6 +290,64 @@ local function define_commands()
       return { 'soft', 'hard', 'pro', 'writing', 'none' }
     end,
     desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|none)'
+  })
+
+  vim.api.nvim_create_user_command('NegDiagBgMode', function(opts)
+    local mode = (opts.args or ''):lower()
+    local allowed = { blend=true, alpha=true, lighten=true, darken=true, off=true, on=true }
+    if not allowed[mode] then
+      print("neg.nvim: unknown mode '" .. mode .. "'. Use: blend|alpha|lighten|darken|off|on")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    if mode == 'off' then
+      newcfg.diagnostics_virtual_bg = false
+    else
+      newcfg.diagnostics_virtual_bg = true
+      if mode ~= 'on' then newcfg.diagnostics_virtual_bg_mode = mode end
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    complete = function()
+      return { 'blend', 'alpha', 'lighten', 'darken', 'off', 'on' }
+    end,
+    desc = 'neg.nvim: Set diagnostics virtual text background mode'
+  })
+
+  vim.api.nvim_create_user_command('NegDiagBgStrength', function(opts)
+    local v = tonumber(opts.args)
+    if not v then
+      print("neg.nvim: strength must be a number in 0..1")
+      return
+    end
+    if v < 0 then v = 0 end
+    if v > 1 then v = 1 end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.diagnostics_virtual_bg_strength = v
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    desc = 'neg.nvim: Set diagnostics bg strength (0..1) for alpha/lighten/darken modes'
+  })
+
+  vim.api.nvim_create_user_command('NegDiagBgBlend', function(opts)
+    local v = tonumber(opts.args)
+    if not v then
+      print("neg.nvim: blend must be a number in 0..100")
+      return
+    end
+    if v < 0 then v = 0 end
+    if v > 100 then v = 100 end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.diagnostics_virtual_bg_blend = v
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    desc = 'neg.nvim: Set diagnostics bg blend (0..100) when mode=blend'
   })
 end
 
