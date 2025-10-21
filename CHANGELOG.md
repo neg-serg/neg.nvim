@@ -17,6 +17,15 @@ All notable changes to this project are documented here.
 
 
 
+
+## [3.75] - 2025-10-21
+- Plugins: more integrations
+  - lspsaga.nvim (SagaNormal/Border/Title)
+  - overseer.nvim (Normal/Border/Title + statuses: Pending/Running/Success/Failed/Canceled/Error)
+  - startify: detailed groups (Number/Path/Slash/Bracket/File/Var/Special/Header/Footer/Section/Select)
+- nvim-navic: icon groups for many symbol kinds (NavicIcons*)
+- Options: added toggles for startify/overseer/lspsaga in README, wired in code.
+
 ## [3.73] - 2025-10-21
 - Validator: optional contrast ratio checks (enable with `NEG_VALIDATE_CONTRAST=1` and set `NEG_VALIDATE_CONTRAST_MIN`, default off).
 - Validator: verbose summary line when `NEG_VALIDATE_VERBOSE=1`.

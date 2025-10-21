@@ -145,9 +145,12 @@ require('neg').setup({
     mini_tabline = true,
     todo_comments = true,
     navic = true,
+    lspsaga = true,
     neotest = true,
     harpoon = true,
     treesitter_playground = true,
+    startify = true,
+    overseer = true,
   },
 
   overrides = nil,                     -- table or function(colors) -> table
@@ -413,7 +416,10 @@ require('neg').setup({
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
 - alpha‑nvim
+- startify
 - todo‑comments.nvim
+- lspsaga.nvim
+- overseer.nvim
 - neotest
 - harpoon
 - nvim‑navic
@@ -463,8 +469,11 @@ require('neg').setup({
 - rainbow‑delimiters
   - Groups: `RainbowDelimiterRed`, `RainbowDelimiterYellow`, `RainbowDelimiterBlue`, `RainbowDelimiterOrange`, `RainbowDelimiterGreen`, `RainbowDelimiterViolet`, `RainbowDelimiterCyan`
 - obsidian.nvim
-- alpha‑nvim / startify
+- alpha‑nvim
+- startify / startify
 - todo‑comments.nvim
+- lspsaga.nvim
+- overseer.nvim
 - lspsaga.nvim
 - overseer.nvim
 - neotest
