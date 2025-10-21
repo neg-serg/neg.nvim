@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.42
+-- Version:     3.43
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -50,10 +50,12 @@ local default_config = {
     cmp = true,
     telescope = true,
     git = true,
+    gitsigns = true,
     noice = true,
     obsidian = true,
     rainbow = true,
     headline = true,
+    indent = true,
   },
   overrides = nil,
 }
@@ -119,10 +121,12 @@ function M.setup(opts)
     cmp = 'neg.groups.plugins.cmp',
     telescope = 'neg.groups.plugins.telescope',
     git = 'neg.groups.plugins.git',
+    gitsigns = 'neg.groups.plugins.gitsigns',
     noice = 'neg.groups.plugins.noice',
     obsidian = 'neg.groups.plugins.obsidian',
     rainbow = 'neg.groups.plugins.rainbow',
     headline = 'neg.groups.plugins.headline',
+    indent = 'neg.groups.plugins.indent',
   }) do
     if cfg.plugins[key] ~= false then safe_apply(mod) end
   end
