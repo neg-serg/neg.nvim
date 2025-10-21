@@ -1,14 +1,14 @@
 local p = require('neg.palette')
 
 return {
-  NeoTreeNormal={bg='#111d26', fg=p.fg_default},
-  NeoTreeNormalNC={bg='#111d26', fg=p.fg_default},
-  NeoTreeRootName={fg=p.fg_preproc_light, bold=true},
-  NeoTreeDirectoryIcon={fg=p.fg_keyword_2},
-  NeoTreeDirectoryName={fg=p.fg_keyword_2},
+  NeoTreeNormal={bg='#111d26', fg=p.default_color},
+  NeoTreeNormalNC={bg='#111d26', fg=p.default_color},
+  NeoTreeRootName={fg=p.preproc_light_color, bold=true},
+  NeoTreeDirectoryIcon={fg=p.keyword2_color},
+  NeoTreeDirectoryName={fg=p.keyword2_color},
   NeoTreeCursorLine={bg=p.bg_cursorline},
-  NeoTreeGitAdded={fg=p.fg_diff_add},
-  NeoTreeGitModified={fg=p.fg_include},
-  NeoTreeGitDeleted={fg=p.fg_red_blood},
-  NeoTreeDimText={fg=p.fg_comment},
+  NeoTreeGitAdded={fg=p.diff_add_color},
+  NeoTreeGitModified={fg=p.include_color},
+  NeoTreeGitDeleted={fg=p.red_blood_color},
+  NeoTreeDimText={fg=p.comment_color},
 }

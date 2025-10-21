@@ -1,15 +1,15 @@
 local p = require('neg.palette')
 
 return {
-  ObsidianExtLinkIcon={fg=p.fg_keyword_1},
-  ObsidianRefText={fg=p.fg_keyword_1, underline=true},
-  ObsidianBullet={fg=p.fg_keyword_3, bold=true},
+  ObsidianExtLinkIcon={fg=p.keyword1_color},
+  ObsidianRefText={fg=p.keyword1_color, underline=true},
+  ObsidianBullet={fg=p.keyword3_color, bold=true},
   ObsidianImportant={link='Error'},
   ObsidianTilde={link='Error'},
   ObsidianRightArrow={link='Title'},
-  ObsidianDone={fg=p.fg_keyword_3, bold=true},
+  ObsidianDone={fg=p.keyword3_color, bold=true},
   ObsidianTodo={link='Title'},
   ObsidianHighlightText={link='Visual'},
-  ObsidianBlockID={fg=p.fg_keyword_3, italic=true},
-  ObsidianTag={fg=p.fg_keyword_3, italic=true},
+  ObsidianBlockID={fg=p.keyword3_color, italic=true},
+  ObsidianTag={fg=p.keyword3_color, italic=true},
 }

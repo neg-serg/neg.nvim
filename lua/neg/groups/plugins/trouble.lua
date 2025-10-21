@@ -1,15 +1,15 @@
 local p = require('neg.palette')
 
 return {
-  TroubleNormal={bg='#111d26', fg=p.fg_default},
-  TroubleText={fg=p.fg_default},
-  TroubleCount={fg=p.fg_keyword_3, bold=true},
-  TroubleFoldIcon={fg=p.fg_comment},
-  TroubleLocation={fg=p.fg_comment},
-  TroubleFilename={fg=p.fg_include},
+  TroubleNormal={bg='#111d26', fg=p.default_color},
+  TroubleText={fg=p.default_color},
+  TroubleCount={fg=p.keyword3_color, bold=true},
+  TroubleFoldIcon={fg=p.comment_color},
+  TroubleLocation={fg=p.comment_color},
+  TroubleFilename={fg=p.include_color},
   TroubleIndent={fg=p.shade_07},
-  TroubleSignError={fg=p.fg_diff_delete},
-  TroubleSignWarning={fg=p.fg_warning},
-  TroubleSignInformation={fg=p.fg_preproc_light},
-  TroubleSignHint={fg=p.fg_identifier},
+  TroubleSignError={fg=p.diff_delete_color},
+  TroubleSignWarning={fg=p.warning_color},
+  TroubleSignInformation={fg=p.preproc_light_color},
+  TroubleSignHint={fg=p.identifier_color},
 }

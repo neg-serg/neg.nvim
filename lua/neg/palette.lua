@@ -82,51 +82,82 @@ local colors = {
     dnorm='#15181f'
 }
 
-return colors
 -- Backwards-compatible descriptive aliases
 -- Base and backgrounds
 colors.fg_default = colors.norm
+colors.default_color = colors.norm
 colors.bg_default = colors.bclr
 colors.fg_dark = colors.dark
+colors.dark_color = colors.dark
 colors.fg_dark_secondary = colors.drk2
+colors.dark_secondary_color = colors.drk2
 colors.fg_white = colors.whit
+colors.white_color = colors.whit
 colors.bg_cursorcolumn = colors.culc
 colors.fg_comment = colors.comm
+colors.comment_color = colors.comm
 
 -- Syntax categories
 colors.fg_literal_1 = colors.lit1
+colors.literal1_color = colors.lit1
 colors.fg_literal_2 = colors.lit2
+colors.literal2_color = colors.lit2
 colors.fg_literal_3 = colors.lit3
+colors.literal3_color = colors.lit3
 colors.fg_keyword_1 = colors.ops1
+colors.keyword1_color = colors.ops1
 colors.fg_keyword_2 = colors.ops2
+colors.keyword2_color = colors.ops2
 colors.fg_keyword_3 = colors.ops3
+colors.keyword3_color = colors.ops3
 colors.fg_keyword_4 = colors.ops4
+colors.keyword4_color = colors.ops4
 colors.fg_tag = colors.otag
+colors.tag_color = colors.otag
 colors.fg_string = colors.lstr
+colors.string_color = colors.lstr
 colors.fg_include = colors.incl
+colors.include_color = colors.incl
 colors.fg_delimiter = colors.dlim
+colors.delimiter_color = colors.dlim
 colors.fg_red_blood = colors.blod
+colors.red_blood_color = colors.blod
 colors.fg_violet = colors.violet
+colors.violet_color = colors.violet
 colors.bg_visual = colors.visu
 colors.fg_highlight = colors.high
+colors.highlight_color = colors.high
 colors.fg_highlight_dark = colors.darkhigh
+colors.highlight_dark_color = colors.darkhigh
 colors.fg_variable = colors.var
+colors.variable_color = colors.var
 colors.fg_function = colors.func
+colors.function_color = colors.func
 
 -- Diff/diagnostic
 colors.fg_diff_add = colors.dadd
+colors.diff_add_color = colors.dadd
 colors.fg_diff_change = colors.dchg
+colors.diff_change_color = colors.dchg
 colors.fg_diff_delete = colors.dred
+colors.diff_delete_color = colors.dred
 colors.fg_warning = colors.dwarn
+colors.warning_color = colors.dwarn
 
 -- UI
 colors.bg_cursorline = colors.clin
 colors.fg_pmenu = colors.pmen
+colors.pmenu_color = colors.pmen
 colors.fg_search = colors.csel
+colors.search_color = colors.csel
 colors.fg_cmp_default = colors.cmpdef
+colors.cmp_default_color = colors.cmpdef
 colors.fg_identifier = colors.iden
+colors.identifier_color = colors.iden
 colors.fg_preproc_light = colors.lbgn
+colors.preproc_light_color = colors.lbgn
 colors.fg_preproc_dark = colors.dbng
+colors.preproc_dark_color = colors.dbng
 
 -- Shades and rainbow
 colors.shade_01=colors.col1; colors.shade_02=colors.col2; colors.shade_03=colors.col3; colors.shade_04=colors.col4;
@@ -141,3 +172,5 @@ colors.rainbow_5=colors.br5; colors.rainbow_6=colors.br6; colors.rainbow_7=color
 
 -- Selection
 colors.bg_selection_dim = colors.dnorm
+
+return colors

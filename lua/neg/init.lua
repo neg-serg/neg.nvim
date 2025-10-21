@@ -101,11 +101,11 @@ local function apply_terminal_colors() U.apply_terminal_colors(p) end
 
 local function apply_diagnostics_virtual_bg(cfg)
   local map = {
-    DiagnosticVirtualTextError = p.fg_diff_delete,
-    DiagnosticVirtualTextWarn  = p.fg_warning,
-    DiagnosticVirtualTextInfo  = p.fg_preproc_light,
-    DiagnosticVirtualTextHint  = p.fg_identifier,
-    DiagnosticVirtualTextOk    = p.fg_diff_add,
+    DiagnosticVirtualTextError = p.diff_delete_color,
+    DiagnosticVirtualTextWarn  = p.warning_color,
+    DiagnosticVirtualTextInfo  = p.preproc_light_color,
+    DiagnosticVirtualTextHint  = p.identifier_color,
+    DiagnosticVirtualTextOk    = p.diff_add_color,
   }
   local mode = (cfg and cfg.diagnostics_virtual_bg_mode) or 'blend'
   local strength = (cfg and cfg.diagnostics_virtual_bg_strength) or 0.15

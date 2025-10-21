@@ -9,15 +9,15 @@ local function sev(name, col)
 end
 
 local M = {
-  NotifyBackground={bg='#111d26', fg=p.fg_default},
+  NotifyBackground={bg='#111d26', fg=p.default_color},
 }
 
 for _, s in ipairs({
-  {"ERROR", p.fg_diff_delete},
-  {"WARN", p.fg_warning},
-  {"INFO", p.fg_preproc_light},
-  {"DEBUG", p.fg_identifier},
-  {"TRACE", p.fg_comment},
+  {"ERROR", p.diff_delete_color},
+  {"WARN", p.warning_color},
+  {"INFO", p.preproc_light_color},
+  {"DEBUG", p.identifier_color},
+  {"TRACE", p.comment_color},
 }) do
   local name, col = s[1], s[2]
   local t = sev(name, col)

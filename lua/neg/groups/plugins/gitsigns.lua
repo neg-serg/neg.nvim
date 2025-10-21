@@ -1,21 +1,21 @@
 local p = require('neg.palette')
 
 return {
-  GitSignsAdd={fg=p.fg_diff_add},
-  GitSignsAddNr={fg=p.fg_diff_add},
-  GitSignsAddLn={fg=p.fg_diff_add},
+  GitSignsAdd={fg=p.diff_add_color},
+  GitSignsAddNr={fg=p.diff_add_color},
+  GitSignsAddLn={fg=p.diff_add_color},
 
-  GitSignsChange={fg=p.fg_include},
-  GitSignsChangeNr={fg=p.fg_include},
-  GitSignsChangeLn={fg=p.fg_include},
+  GitSignsChange={fg=p.include_color},
+  GitSignsChangeNr={fg=p.include_color},
+  GitSignsChangeLn={fg=p.include_color},
 
-  GitSignsDelete={fg=p.fg_red_blood},
-  GitSignsDeleteNr={fg=p.fg_red_blood},
-  GitSignsDeleteLn={fg=p.fg_red_blood},
+  GitSignsDelete={fg=p.red_blood_color},
+  GitSignsDeleteNr={fg=p.red_blood_color},
+  GitSignsDeleteLn={fg=p.red_blood_color},
 
-  GitSignsTopdelete={fg=p.fg_red_blood},
-  GitSignsChangedelete={fg=p.fg_red_blood},
-  GitSignsUntracked={fg=p.fg_keyword_3},
+  GitSignsTopdelete={fg=p.red_blood_color},
+  GitSignsChangedelete={fg=p.red_blood_color},
+  GitSignsUntracked={fg=p.keyword3_color},
 
-  GitSignsCurrentLineBlame={fg=p.fg_comment, italic=true},
+  GitSignsCurrentLineBlame={fg=p.comment_color, italic=true},
 }
