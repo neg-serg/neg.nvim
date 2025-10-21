@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.49
+-- Version:     3.50
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -40,6 +40,7 @@ end
 local default_config = {
   transparent = false,
   terminal_colors = true,
+  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
   styles = {
     comments = 'italic',
     keywords = 'none',
@@ -85,6 +86,36 @@ local function apply_transparent()
     'Pmenu'
   }
   for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
+end
+
+local function apply_preset(preset, cfg)
+  if not preset or preset == '' then return end
+  preset = tostring(preset):lower()
+  local s = cfg.styles or {}
+  if preset == 'soft' then
+    -- keep defaults: subtle, with italic comments
+  elseif preset == 'hard' then
+    s.keywords = s.keywords ~= 'none' and s.keywords or 'bold'
+    s.functions = s.functions ~= 'none' and s.functions or 'bold'
+    s.types = s.types ~= 'none' and s.types or 'bold'
+    s.constants = s.constants ~= 'none' and s.constants or 'bold'
+    s.booleans = s.booleans ~= 'none' and s.booleans or 'bold'
+    s.numbers = s.numbers ~= 'none' and s.numbers or 'bold'
+    hi(0, 'Title', { bold = true })
+  elseif preset == 'pro' then
+    -- no italics anywhere
+    s.comments = 'none'
+    -- try to neutralize commonly italic things
+    hi(0, 'LspInlayHint', { italic = false })
+    hi(0, 'LspCodeLens', { italic = false })
+    hi(0, '@markup.italic', { italic = false })
+  elseif preset == 'writing' then
+    -- emphasize markdown/markup
+    hi(0, 'Title', { bold = true })
+    hi(0, '@markup.heading', { bold = true })
+    hi(0, '@markup.strong', { bold = true })
+    hi(0, '@markup.italic', { italic = true })
+  end
 end
 
 local function apply_terminal_colors()
@@ -185,6 +216,7 @@ function M.setup(opts)
   if cfg.transparent then apply_transparent() end
   if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)
+  apply_preset(cfg.preset, cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg.diagnostics_virtual_bg_blend) end
   define_commands()

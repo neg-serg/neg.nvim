@@ -31,6 +31,8 @@ lazy.nvim
   priority = 1000,
   config = function()
     require('neg').setup({
+      -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing'
+      preset = nil,
       transparent = false,
       terminal_colors = true,
       diagnostics_virtual_bg = false,
