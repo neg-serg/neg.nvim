@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.50
+-- Version:     3.51
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -79,13 +79,29 @@ local default_config = {
   diagnostics_virtual_bg_blend = 15,
 }
 
-local function apply_transparent()
-  local groups = {
-    'Normal','NormalNC','NormalFloat','SignColumn','FoldColumn',
-    'StatusLine','StatusLineNC','TabLine','TabLineFill','TabLineSel',
-    'Pmenu'
-  }
-  for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
+local function apply_transparent(cfg)
+  local function set_bg(groups)
+    for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
+  end
+  if cfg == true then
+    set_bg({
+      'Normal','NormalNC','NormalFloat','SignColumn','FoldColumn',
+      'StatusLine','StatusLineNC','TabLine','TabLineFill','TabLineSel',
+      'Pmenu','FloatBorder','FloatTitle','WinSeparator'
+    })
+    return
+  end
+  if type(cfg) == 'table' then
+    if cfg.float then
+      set_bg({ 'NormalFloat','Pmenu','FloatBorder','FloatTitle','WhichKeyFloat','WhichKeyBorder','DapUIFloatNormal' })
+    end
+    if cfg.sidebar then
+      set_bg({ 'NvimTreeNormal','NvimTreeNormalNC','NeoTreeNormal','NeoTreeNormalNC','TroubleNormal' })
+    end
+    if cfg.statusline then
+      set_bg({ 'StatusLine','StatusLineNC','WinBar','WinBarNC','TabLine','TabLineFill','TabLineSel' })
+    end
+  end
 end
 
 local function apply_preset(preset, cfg)
@@ -213,7 +229,7 @@ function M.setup(opts)
   end
 
   -- Post-processing
-  if cfg.transparent then apply_transparent() end
+  if cfg.transparent then apply_transparent(cfg.transparent) end
   if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)
   apply_preset(cfg.preset, cfg)

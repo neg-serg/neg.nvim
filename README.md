@@ -33,7 +33,9 @@ lazy.nvim
     require('neg').setup({
       -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing'
       preset = nil,
-      transparent = false,
+      -- Transparency: boolean for global, or table for zones
+      -- transparent = true,
+      transparent = { float = false, sidebar = false, statusline = false },
       terminal_colors = true,
       diagnostics_virtual_bg = false,
       diagnostics_virtual_bg_blend = 15,
