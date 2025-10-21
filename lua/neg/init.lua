@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     3.23
--- Last Change: 03-08-2025
+-- Version:     3.24
+-- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
