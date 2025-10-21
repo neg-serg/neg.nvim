@@ -93,10 +93,43 @@ local function apply_transparent(cfg)
   end
   if type(cfg) == 'table' then
     if cfg.float then
-      set_bg({ 'NormalFloat','Pmenu','FloatBorder','FloatTitle','WhichKeyFloat','WhichKeyBorder','DapUIFloatNormal' })
+      set_bg({
+        'NormalFloat','Pmenu','FloatBorder','FloatTitle',
+        -- which-key
+        'WhichKeyFloat','WhichKeyBorder',
+        -- nvim-cmp docs
+        'CmpDocumentation','CmpDocumentationBorder',
+        -- dap-ui floats
+        'DapUIFloatNormal','DapUIFloatBorder',
+        -- notify
+        'NotifyBackground',
+        -- telescope
+        'TelescopeNormal','TelescopePreviewNormal','TelescopePromptNormal','TelescopeResultsNormal',
+        'TelescopeBorder','TelescopePreviewBorder','TelescopePromptBorder','TelescopeResultsBorder',
+        -- noice
+        'NoicePopup','NoicePopupmenu','NoiceCmdlinePopup',
+        -- fzf-lua
+        'FzfLuaNormal','FzfLuaBorder',
+        -- dressing.nvim
+        'DressingInput','DressingBorder','DressingSelect',
+        -- LSP info/float
+        'LspFloatWinNormal','LspFloatWinBorder','LspInfoBorder'
+      })
     end
     if cfg.sidebar then
-      set_bg({ 'NvimTreeNormal','NvimTreeNormalNC','NeoTreeNormal','NeoTreeNormalNC','TroubleNormal' })
+      set_bg({
+        'NvimTreeNormal','NvimTreeNormalNC',
+        'NeoTreeNormal','NeoTreeNormalNC',
+        'TroubleNormal',
+        -- outlines
+        'OutlineNormal','AerialNormal',
+        -- package managers / tools
+        'MasonNormal','LazyNormal',
+        -- dap-ui panels
+        'DapUINormal',
+        -- spectre
+        'SpectrePanel'
+      })
     end
     if cfg.statusline then
       set_bg({ 'StatusLine','StatusLineNC','WinBar','WinBarNC','TabLine','TabLineFill','TabLineSel' })
