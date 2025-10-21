@@ -541,6 +541,15 @@ require('neg').setup({
   - Tip: enable only when tuning colors; strict mode will fail on warnings.
 - Verbose summary: `NEG_VALIDATE_VERBOSE=1 ./scripts/validate.sh` prints a short coverage line.
 
+- Coverage listing (optional):
+  - `NEG_VALIDATE_LIST=1` — print all defined groups as `DEF: <name>` lines
+  - `NEG_VALIDATE_LIST_FILTER='^CmpItem'` — filter names by Lua pattern
+  - `NEG_VALIDATE_LIST_LIMIT=200` — limit number of printed names
+- Module stats & duplicates:
+  - `NEG_VALIDATE_MODULE_STATS=1` — per‑module group counts
+  - `NEG_VALIDATE_DUP_SOURCES=1` — show duplicate group sources (module names)
+
+
 ## Demo shots
 
 ## Python

@@ -77,6 +77,76 @@ local function load_tables()
   return tables
 end
 
+local function load_modules()
+  local mods = {
+    -- core
+    'neg.groups.syntax',
+    'neg.groups.editor',
+    'neg.groups.diagnostics',
+    'neg.groups.treesitter',
+    -- plugins (extended)
+    'neg.groups.plugins.bufferline',
+    'neg.groups.plugins.cmp',
+    'neg.groups.plugins.alpha',
+    'neg.groups.plugins.startify',
+    'neg.groups.plugins.dap',
+    'neg.groups.plugins.dapui',
+    'neg.groups.plugins.overseer',
+    'neg.groups.plugins.harpoon',
+    'neg.groups.plugins.git',
+    'neg.groups.plugins.gitsigns',
+    'neg.groups.plugins.headline',
+    'neg.groups.plugins.hop',
+    'neg.groups.plugins.indent',
+    'neg.groups.plugins.mini_statusline',
+    'neg.groups.plugins.mini_tabline',
+    'neg.groups.plugins.navic',
+    'neg.groups.plugins.navbuddy',
+    'neg.groups.plugins.lspsaga',
+    'neg.groups.plugins.neo_tree',
+    'neg.groups.plugins.noice',
+    'neg.groups.plugins.notify',
+    'neg.groups.plugins.nvim_tree',
+    'neg.groups.plugins.obsidian',
+    'neg.groups.plugins.rainbow',
+    'neg.groups.plugins.todo_comments',
+    'neg.groups.plugins.telescope',
+    'neg.groups.plugins.treesitter_playground',
+    'neg.groups.plugins.treesitter_context',
+    'neg.groups.plugins.trouble',
+    'neg.groups.plugins.which_key',
+  }
+  local modules = {}
+  for _, m in ipairs(mods) do
+    local ok, t = pcall(require, m)
+    if ok and type(t) == 'table' then
+      modules[#modules+1] = { name = m, table = t }
+    end
+  end
+  return modules
+end
+
+local function collect_defined_with_sources(modules)
+  local defined = {}
+  local dup_sources = {}
+  for _, mod in ipairs(modules) do
+    for name, _ in pairs(mod.table) do
+      if defined[name] then
+        dup_sources[name] = dup_sources[name] or {}
+        dup_sources[name][#dup_sources[name]+1] = mod.name
+      else
+        defined[name] = true
+        dup_sources[name] = { mod.name }
+      end
+    end
+  end
+  local duplicates = {}
+  for name, mods in pairs(dup_sources) do
+    if #mods > 1 then duplicates[name] = mods end
+  end
+  return defined, duplicates
+end
+
 local function collect_defined(tables)
   local defined = {}
   local duplicates = {}
@@ -131,7 +201,8 @@ end
 
 local function validate()
   local tables = load_tables()
-  local defined, duplicates = collect_defined(tables)
+  local modules = load_modules()
+  local defined, duplicates = collect_defined_with_sources(modules)
 
   local errors, warnings = {}, {}
 
@@ -139,9 +210,20 @@ local function validate()
   local verbose_on = getenv_bool('NEG_VALIDATE_VERBOSE')
   local min_ratio = tonumber((vim and vim.env and vim.env.NEG_VALIDATE_CONTRAST_MIN) or os.getenv('NEG_VALIDATE_CONTRAST_MIN')) or 0
 
+  -- configuration for reporting
+  local list_on = getenv_bool('NEG_VALIDATE_LIST')
+  local module_stats_on = getenv_bool('NEG_VALIDATE_MODULE_STATS')
+  local dup_sources_on = getenv_bool('NEG_VALIDATE_DUP_SOURCES') or verbose_on
+  local list_filter = (vim and vim.env and vim.env.NEG_VALIDATE_LIST_FILTER) or os.getenv('NEG_VALIDATE_LIST_FILTER')
+  local list_limit = tonumber((vim and vim.env and vim.env.NEG_VALIDATE_LIST_LIMIT) or os.getenv('NEG_VALIDATE_LIST_LIMIT')) or 0
+
   -- Warn duplicate group definitions
-  for name in pairs(duplicates) do
-    warnings[#warnings+1] = ("duplicate group: %s is defined in multiple modules"):format(name)
+  for name, mods in pairs(duplicates) do
+    if dup_sources_on then
+      warnings[#warnings+1] = ("duplicate group: %s in %s"):format(name, table.concat(mods, ", "))
+    else
+      warnings[#warnings+1] = ("duplicate group: %s is defined in multiple modules"):format(name)
+    end
   end
 
   local function add_err(msg)
@@ -155,8 +237,11 @@ local function validate()
     return type(s) == 'string' and s:sub(1,1) == '@'
   end
 
+  local missing_link_targets = 0
+  local total = 0
   for _, tbl in ipairs(tables) do
     for name, style in pairs(tbl) do
+      total = total + 1
       if type(style) ~= 'table' then
         add_err(('%s: value must be table, got %s'):format(name, type(style)))
       else
@@ -188,6 +273,7 @@ local function validate()
           else
             if not defined[target] and not builtin_targets[target] and not is_capture(target) then
               add_warn(('%s: link target %q not found (may be builtin or capture)'):format(name, target))
+              missing_link_targets = missing_link_targets + 1
             end
           end
         else
@@ -237,7 +323,33 @@ local function validate()
   end
 
   if verbose_on then
-    print(('INFO: groups defined: %d; duplicates: %d'):format(keycount(defined), keycount(duplicates)))
+    print(('INFO: groups defined: %d; duplicates: %d; modules loaded: %d; scanned entries: %d; missing link targets: %d')
+      :format(keycount(defined), keycount(duplicates), #modules, total, missing_link_targets))
+  end
+
+  if module_stats_on then
+    print('INFO: module group counts:')
+    for _, mod in ipairs(modules) do
+      local c = 0
+      for _ in pairs(mod.table) do c = c + 1 end
+      print((' - %s: %d'):format(mod.name, c))
+    end
+  end
+
+  if list_on then
+    local list = {}
+    for name in pairs(defined) do
+      if not list_filter or tostring(name):match(list_filter) then
+        list[#list+1] = name
+      end
+    end
+    table.sort(list)
+    local n = 0
+    for _, name in ipairs(list) do
+      print(('DEF: %s'):format(name))
+      n = n + 1
+      if list_limit > 0 and n >= list_limit then break end
+    end
   end
 
   return errors, warnings
