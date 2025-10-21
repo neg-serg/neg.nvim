@@ -10,6 +10,19 @@ return {
   ['@string.special.symbol']={link='@symbol'},
   ['@string.regexp']={link='@string.regex'},
 
+  -- Additional common captures
+  ['@attribute']={link='Identifier'},
+  ['@constructor']={link='Function'},
+  ['@constant.builtin']={link='Constant'},
+  ['@function.builtin']={link='Function'},
+  ['@property']={link='Identifier'},
+  ['@field']={link='Identifier'},
+  ['@punctuation.bracket']={link='Delimiter'},
+  ['@punctuation.delimiter']={link='Delimiter'},
+  ['@string.escape']={link='SpecialChar'},
+  ['@string.special.url']={link='Underlined'},
+  ['@character']={link='String'},
+
   -- Legacy @text.* → modern @markup.*
   ['@text.strong']={link='@markup.strong'},
   ['@text.emphasis']={link='@markup.italic'},
@@ -94,4 +107,3 @@ return {
   ['@lsp.typemod.type.defaultLibrary']={link='@type.builtin'},
   ['@lsp.typemod.deprecated']={link='DiagnosticDeprecated'},
 }
-

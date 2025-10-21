@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.44
+-- Version:     3.45
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -46,6 +46,12 @@ local default_config = {
     functions = 'none',
     strings = 'none',
     variables = 'none',
+    types = 'none',
+    operators = 'none',
+    numbers = 'none',
+    booleans = 'none',
+    constants = 'none',
+    punctuation = 'none',
   },
   plugins = {
     cmp = true,
@@ -57,8 +63,19 @@ local default_config = {
     rainbow = true,
     headline = true,
     indent = true,
+    which_key = true,
+    nvim_tree = false,
+    neo_tree = true,
+    dap = true,
+    dapui = true,
+    trouble = true,
+    notify = true,
+    treesitter_context = true,
+    hop = true,
   },
   overrides = nil,
+  diagnostics_virtual_bg = false,
+  diagnostics_virtual_bg_blend = 15,
 }
 
 local function apply_transparent()
@@ -90,10 +107,16 @@ end
 local function apply_styles(styles)
   local map = {
     comments = { 'Comment','SpecialComment' },
-    keywords = { 'Keyword','Statement','Conditional','Repeat','Label','Operator','PreProc','Include','Define','Macro','PreCondit','Type','StorageClass','Structure','Typedef' },
+    keywords = { 'Keyword','Statement','Conditional','Repeat','Label','PreProc','Include','Define','Macro','PreCondit' },
     functions = { 'Function' },
     strings = { 'String','SpecialChar' },
     variables = { 'Identifier' },
+    types = { 'Type','StorageClass','Structure','Typedef' },
+    operators = { 'Operator' },
+    numbers = { 'Number' },
+    booleans = { 'Boolean' },
+    constants = { 'Constant' },
+    punctuation = { 'Delimiter' },
   }
   for key, groups in pairs(map) do
     local flags = flags_from(styles[key])
@@ -145,6 +168,15 @@ function M.setup(opts)
     rainbow = 'neg.groups.plugins.rainbow',
     headline = 'neg.groups.plugins.headline',
     indent = 'neg.groups.plugins.indent',
+    which_key = 'neg.groups.plugins.which_key',
+    nvim_tree = 'neg.groups.plugins.nvim_tree',
+    neo_tree = 'neg.groups.plugins.neo_tree',
+    dap = 'neg.groups.plugins.dap',
+    dapui = 'neg.groups.plugins.dapui',
+    trouble = 'neg.groups.plugins.trouble',
+    notify = 'neg.groups.plugins.notify',
+    treesitter_context = 'neg.groups.plugins.treesitter_context',
+    hop = 'neg.groups.plugins.hop',
   }) do
     if cfg.plugins[key] ~= false then safe_apply(mod) end
   end
@@ -154,6 +186,45 @@ function M.setup(opts)
   if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)
   apply_overrides(cfg.overrides)
+  if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg.diagnostics_virtual_bg_blend) end
+  define_commands()
+end
+
+-- User commands
+local commands_defined = false
+local function define_commands()
+  if commands_defined then return end
+  commands_defined = true
+  vim.api.nvim_create_user_command('NegToggleTransparent', function()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.transparent = not (cfg.transparent == true)
+    M.setup(newcfg)
+  end, { desc = 'neg.nvim: Toggle transparent backgrounds' })
+
+  vim.api.nvim_create_user_command('NegReload', function()
+    M.setup(M._config or default_config)
+  end, { desc = 'neg.nvim: Reload highlights with current config' })
+
+  vim.api.nvim_create_user_command('NegInfo', function()
+    local cfg = M._config or default_config
+    local ok_notify, _ = pcall(require, 'notify')
+    local msg = ('neg.nvim\ntransparent: %s\nterminal_colors: %s\nplugins: %s')
+      :format(tostring(cfg.transparent), tostring(cfg.terminal_colors), vim.inspect(cfg.plugins))
+    if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
+  end, { desc = 'neg.nvim: Show current config' })
 end
 
 return M
+local function apply_diagnostics_virtual_bg(blend)
+  local map = {
+    DiagnosticVirtualTextError = p.dred,
+    DiagnosticVirtualTextWarn  = p.dwarn,
+    DiagnosticVirtualTextInfo  = p.lbgn,
+    DiagnosticVirtualTextHint  = p.iden,
+    DiagnosticVirtualTextOk    = p.dadd,
+  }
+  for g, col in pairs(map) do
+    hi(0, g, { bg = col, blend = blend or 15 })
+  end
+end

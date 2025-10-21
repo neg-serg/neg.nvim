@@ -12,5 +12,8 @@ return {
   IblIndent={fg=p.col7, nocombine=true},
   IblWhitespace={fg=p.col7, nocombine=true},
   IblScope={fg=p.col10, nocombine=true},
-}
 
+  -- mini.indentscope
+  MiniIndentscopeSymbol={fg=p.col10, nocombine=true},
+  MiniIndentscopePrefix={nocombine=true},
+}
