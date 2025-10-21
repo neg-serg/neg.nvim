@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.41
+-- Version:     3.42
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -111,6 +111,7 @@ function M.setup(opts)
   apply(require('neg.groups.syntax'))
   apply(require('neg.groups.editor'))
   apply(require('neg.groups.diagnostics'))
+  apply(require('neg.groups.lsp'))
   apply(require('neg.groups.treesitter'))
 
   -- Plugins (toggleable)
