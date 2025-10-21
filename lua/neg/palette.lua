@@ -34,6 +34,7 @@ local colors = {
     dadd='#15b22d', -- diff add
     dchg='#00406d', -- diff change
     dred='#ce162b', -- diff red
+    dwarn='#e0af68', -- warning (yellow/orange)
 
     clin='#131e30', -- cursor line
     pmen='#6c7e96', -- pmenu color
