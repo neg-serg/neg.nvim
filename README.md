@@ -196,7 +196,7 @@ or provide a function that receives the palette:
 ```lua
 require('neg').setup({
   overrides = function(c)
-    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.dwarn } }
+    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.fg_warning } }
   end
 })
 ```
@@ -239,10 +239,10 @@ require('neg').setup({
 require('neg').setup({
   overrides = function(c)
     return {
-      DiagnosticVirtualTextError = { bg = c.dred, blend = 12 },
-      DiagnosticVirtualTextWarn  = { bg = c.dwarn, blend = 12 },
-      DiagnosticVirtualTextInfo  = { bg = c.lbgn, blend = 12 },
-      DiagnosticVirtualTextHint  = { bg = c.iden, blend = 12 },
+      DiagnosticVirtualTextError = { bg = c.fg_diff_delete, blend = 12 },
+      DiagnosticVirtualTextWarn  = { bg = c.fg_warning, blend = 12 },
+      DiagnosticVirtualTextInfo  = { bg = c.fg_preproc_light, blend = 12 },
+      DiagnosticVirtualTextHint  = { bg = c.fg_identifier, blend = 12 },
     }
   end,
 })
@@ -264,7 +264,7 @@ require('neg').setup({
 ```lua
 require('neg').setup({
   overrides = function(c)
-    return { LspInlayHint = { fg = c.comm } }
+    return { LspInlayHint = { fg = c.fg_comment } }
   end,
 })
 ```

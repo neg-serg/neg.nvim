@@ -1,12 +1,11 @@
 local p = require('neg.palette')
 
 return {
-  RainbowDelimiterRed={fg=p.br1},
-  RainbowDelimiterYellow={fg=p.br2},
-  RainbowDelimiterBlue={fg=p.br3},
-  RainbowDelimiterOrange={fg=p.br4},
-  RainbowDelimiterGreen={fg=p.br5},
-  RainbowDelimiterViolet={fg=p.br6},
-  RainbowDelimiterCyan={fg=p.br7},
+  RainbowDelimiterRed={fg=p.rainbow_1},
+  RainbowDelimiterYellow={fg=p.rainbow_2},
+  RainbowDelimiterBlue={fg=p.rainbow_3},
+  RainbowDelimiterOrange={fg=p.rainbow_4},
+  RainbowDelimiterGreen={fg=p.rainbow_5},
+  RainbowDelimiterViolet={fg=p.rainbow_6},
+  RainbowDelimiterCyan={fg=p.rainbow_7},
 }
-

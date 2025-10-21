@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.64
+-- Version:     3.65
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -101,11 +101,11 @@ local function apply_terminal_colors() U.apply_terminal_colors(p) end
 
 local function apply_diagnostics_virtual_bg(cfg)
   local map = {
-    DiagnosticVirtualTextError = p.dred,
-    DiagnosticVirtualTextWarn  = p.dwarn,
-    DiagnosticVirtualTextInfo  = p.lbgn,
-    DiagnosticVirtualTextHint  = p.iden,
-    DiagnosticVirtualTextOk    = p.dadd,
+    DiagnosticVirtualTextError = p.fg_diff_delete,
+    DiagnosticVirtualTextWarn  = p.fg_warning,
+    DiagnosticVirtualTextInfo  = p.fg_preproc_light,
+    DiagnosticVirtualTextHint  = p.fg_identifier,
+    DiagnosticVirtualTextOk    = p.fg_diff_add,
   }
   local mode = (cfg and cfg.diagnostics_virtual_bg_mode) or 'blend'
   local strength = (cfg and cfg.diagnostics_virtual_bg_strength) or 0.15
@@ -115,7 +115,7 @@ local function apply_diagnostics_virtual_bg(cfg)
     end
   elseif mode == 'alpha' then
     for g, col in pairs(map) do
-      local bg = U.alpha(col, p.bclr, strength)
+      local bg = U.alpha(col, p.bg_default, strength)
       hi(0, g, { bg = bg })
     end
   elseif mode == 'lighten' then

@@ -83,3 +83,61 @@ local colors = {
 }
 
 return colors
+-- Backwards-compatible descriptive aliases
+-- Base and backgrounds
+colors.fg_default = colors.norm
+colors.bg_default = colors.bclr
+colors.fg_dark = colors.dark
+colors.fg_dark_secondary = colors.drk2
+colors.fg_white = colors.whit
+colors.bg_cursorcolumn = colors.culc
+colors.fg_comment = colors.comm
+
+-- Syntax categories
+colors.fg_literal_1 = colors.lit1
+colors.fg_literal_2 = colors.lit2
+colors.fg_literal_3 = colors.lit3
+colors.fg_keyword_1 = colors.ops1
+colors.fg_keyword_2 = colors.ops2
+colors.fg_keyword_3 = colors.ops3
+colors.fg_keyword_4 = colors.ops4
+colors.fg_tag = colors.otag
+colors.fg_string = colors.lstr
+colors.fg_include = colors.incl
+colors.fg_delimiter = colors.dlim
+colors.fg_red_blood = colors.blod
+colors.fg_violet = colors.violet
+colors.bg_visual = colors.visu
+colors.fg_highlight = colors.high
+colors.fg_highlight_dark = colors.darkhigh
+colors.fg_variable = colors.var
+colors.fg_function = colors.func
+
+-- Diff/diagnostic
+colors.fg_diff_add = colors.dadd
+colors.fg_diff_change = colors.dchg
+colors.fg_diff_delete = colors.dred
+colors.fg_warning = colors.dwarn
+
+-- UI
+colors.bg_cursorline = colors.clin
+colors.fg_pmenu = colors.pmen
+colors.fg_search = colors.csel
+colors.fg_cmp_default = colors.cmpdef
+colors.fg_identifier = colors.iden
+colors.fg_preproc_light = colors.lbgn
+colors.fg_preproc_dark = colors.dbng
+
+-- Shades and rainbow
+colors.shade_01=colors.col1; colors.shade_02=colors.col2; colors.shade_03=colors.col3; colors.shade_04=colors.col4;
+colors.shade_05=colors.col5; colors.shade_06=colors.col6; colors.shade_07=colors.col7; colors.shade_08=colors.col8;
+colors.shade_09=colors.col9; colors.shade_10=colors.col10; colors.shade_11=colors.col11; colors.shade_12=colors.col12;
+colors.shade_13=colors.col13; colors.shade_14=colors.col14; colors.shade_15=colors.col15; colors.shade_16=colors.col16;
+colors.shade_17=colors.col17; colors.shade_18=colors.col18; colors.shade_19=colors.col19; colors.shade_20=colors.col20;
+colors.shade_21=colors.col21; colors.shade_22=colors.col22; colors.shade_23=colors.col23; colors.shade_24=colors.col24;
+
+colors.rainbow_1=colors.br1; colors.rainbow_2=colors.br2; colors.rainbow_3=colors.br3; colors.rainbow_4=colors.br4;
+colors.rainbow_5=colors.br5; colors.rainbow_6=colors.br6; colors.rainbow_7=colors.br7;
+
+-- Selection
+colors.bg_selection_dim = colors.dnorm

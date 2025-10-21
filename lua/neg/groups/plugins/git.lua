@@ -2,25 +2,25 @@ local p = require('neg.palette')
 
 return {
   -- Git signs (gitgutter)
-  GitGutterAdd={fg=p.ops2},
-  GitGutterChangeDelete={fg=p.blod},
-  GitGutterChange={fg=p.incl},
-  GitGutterDelete={fg=p.blod},
+  GitGutterAdd={fg=p.fg_keyword_2},
+  GitGutterChangeDelete={fg=p.fg_red_blood},
+  GitGutterChange={fg=p.fg_include},
+  GitGutterDelete={fg=p.fg_red_blood},
 
   -- Diff
-  DiffAdd={bg='#123425', fg=p.dadd},
-  diffAdded={fg=p.ops4},
+  DiffAdd={bg='#123425', fg=p.fg_diff_add},
+  diffAdded={fg=p.fg_keyword_4},
   DiffAdded={link='String'},
-  DiffChange={bg='#122c34', fg=p.dchg},
-  diffChanged={fg=p.ops2},
-  DiffDelete={bg=p.blod, fg=p.dred},
-  diffLine={fg=p.lbgn},
-  diffNewFile={fg=p.dbng},
-  diffOldFile={fg=p.dbng},
-  diffOldLine={fg=p.dbng},
-  diffRemoved={fg=p.blod},
+  DiffChange={bg='#122c34', fg=p.fg_diff_change},
+  diffChanged={fg=p.fg_keyword_2},
+  DiffDelete={bg=p.fg_red_blood, fg=p.fg_diff_delete},
+  diffLine={fg=p.fg_preproc_light},
+  diffNewFile={fg=p.fg_preproc_dark},
+  diffOldFile={fg=p.fg_preproc_dark},
+  diffOldLine={fg=p.fg_preproc_dark},
+  diffRemoved={fg=p.fg_red_blood},
   DiffRemoved={link='Constant'},
-  DiffText={bg='NONE', fg=p.whit},
+  DiffText={bg='NONE', fg=p.fg_white},
 
   -- Merge conflicts
   ConflictMarkerBegin={bg='#2f7366'},
@@ -29,4 +29,3 @@ return {
   ConflictMarkerOurs={bg='#2e5049'},
   ConflictMarkerTheirs={bg='#344f69'},
 }
-

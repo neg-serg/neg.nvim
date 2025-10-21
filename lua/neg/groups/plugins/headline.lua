@@ -1,9 +1,8 @@
 local p = require('neg.palette')
 
 return {
-  Headline1={bg=p.visu},
-  Headline2={bg=p.visu},
-  CodeBlock={bg=p.visu},
-  Dash={bg=p.visu,bold=true},
+  Headline1={bg=p.bg_visual},
+  Headline2={bg=p.bg_visual},
+  CodeBlock={bg=p.bg_visual},
+  Dash={bg=p.bg_visual,bold=true},
 }
-

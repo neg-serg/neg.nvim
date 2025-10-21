@@ -42,14 +42,14 @@ end
 
 function M.apply_terminal_colors(p)
   local colors = {
-    p.bclr,   -- 0: black
-    p.dred,   -- 1: red
-    p.dadd,   -- 2: green
-    p.dwarn,  -- 3: yellow
-    p.incl,   -- 4: blue
-    p.violet, -- 5: magenta
-    p.lit2,   -- 6: cyan
-    p.whit,   -- 7: white
+    p.bg_default,   -- 0: black
+    p.fg_diff_delete,   -- 1: red
+    p.fg_diff_add,   -- 2: green
+    p.fg_warning,  -- 3: yellow
+    p.fg_include,   -- 4: blue
+    p.fg_violet, -- 5: magenta
+    p.fg_literal_2,   -- 6: cyan
+    p.fg_white,   -- 7: white
   }
   for i = 0, 7 do
     vim.g['terminal_color_'..i] = colors[i+1]
