@@ -84,7 +84,10 @@ function M.apply_transparent(cfg)
         'LazyNormal','LazyBorder',
         'MasonNormal','MasonBorder',
         'NeoTreeFloatNormal','NeoTreeFloatBorder',
-        'LspInfoBorder'
+        'LspInfoBorder',
+        -- Additional plugin floats
+        'SagaNormal','SagaBorder',
+        'OverseerNormal','OverseerBorder'
       })
     end
     if cfg.sidebar then

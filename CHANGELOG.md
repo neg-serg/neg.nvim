@@ -18,6 +18,12 @@ All notable changes to this project are documented here.
 
 
 
+
+## [3.76] - 2025-10-21
+- lspsaga: add detailed component groups (Finder, Code Action, Rename, Hover/Signature titles, Diagnostics, Outline, Winbar, Beacon/Spinner).
+- Transparent floats: include SagaNormal/SagaBorder and OverseerNormal/OverseerBorder.
+- Docs: README expanded lspsaga coverage.
+
 ## [3.75] - 2025-10-21
 - Plugins: more integrations
   - lspsaga.nvim (SagaNormal/Border/Title)

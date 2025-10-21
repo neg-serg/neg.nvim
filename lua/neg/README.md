@@ -1,0 +1,564 @@
+# neg
+
+Modern Neovim colorscheme partially based on Jason W Ryan's miromiro:
+https://www.vim.org/scripts/script.php?script_id=3815
+
+Highlights are organized by modules (core, LSP/Tree‑sitter, plugins) with a
+clean setup API, plugin toggles, and a simple validator used in CI.
+
+## Features
+
+- Modular highlight groups: core UI, syntax, diagnostics, LSP, Tree‑sitter
+- Plugin integrations (toggleable): telescope, cmp, gitsigns, indent‑blankline/ibl,
+  mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
+  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian
+- Setup options: transparent backgrounds, terminal ANSI colors, extended style
+  categories (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
+- Diagnostics with optional virtual text background (blend)
+- Overrides via table or function (receives palette)
+- Validator script and GitHub Actions workflow
+
+See the full history in CHANGELOG.md.
+
+## Installation
+
+lazy.nvim
+
+```lua
+{
+  'neg-serg/neg.nvim',
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require('neg').setup({
+      -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing'
+      preset = nil,
+      -- Transparency: boolean for global, or table for zones
+      -- transparent = true,
+      transparent = { float = false, sidebar = false, statusline = false },
+      terminal_colors = true,
+      diagnostics_virtual_bg = false,
+      diagnostics_virtual_bg_blend = 15,
+      styles = {
+        comments = 'italic',
+        keywords = 'none',
+        functions = 'none',
+        strings = 'none',
+        variables = 'none',
+        types = 'none',
+        operators = 'none',
+        numbers = 'none',
+        booleans = 'none',
+        constants = 'none',
+        punctuation = 'none',
+      },
+      plugins = {
+        cmp = true,
+        telescope = true,
+        git = true,
+        gitsigns = true,
+        noice = true,
+        obsidian = true,
+        rainbow = true,
+        headline = true,
+        indent = true,
+        which_key = true,
+        nvim_tree = false,
+        neo_tree = true,
+        dap = true,
+        dapui = true,
+        trouble = true,
+        notify = true,
+        treesitter_context = true,
+        hop = true,
+      },
+      overrides = function(colors)
+        return {
+          NormalFloat = { bg = 'NONE' },
+          CursorLine = { underline = true },
+        }
+      end,
+    })
+    vim.cmd.colorscheme('neg')
+  end,
+}
+```
+
+vim‑plug
+
+```vim
+Plug 'neg-serg/neg.nvim'
+lua << EOF
+require('neg').setup({})
+EOF
+colorscheme neg
+```
+
+## Options
+
+All options are optional. Defaults are shown below.
+
+```lua
+require('neg').setup({
+  transparent = false,                  -- boolean or { float, sidebar, statusline }
+  -- transparent = { float = false, sidebar = false, statusline = false },
+  terminal_colors = true,              -- set 16 ANSI terminal colors
+  preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
+
+  styles = {
+    comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
+    keywords = 'none',
+    functions = 'none',
+    strings = 'none',
+    variables = 'none',
+    types = 'none',
+    operators = 'none',
+    numbers = 'none',
+    booleans = 'none',
+    constants = 'none',
+    punctuation = 'none',
+  },
+
+  plugins = {                          -- set to false to disable integration
+    cmp = true,
+    telescope = true,
+    git = true,
+    gitsigns = true,
+    bufferline = true,
+    noice = true,
+    obsidian = true,
+    rainbow = true,
+    headline = true,
+    indent = true,                     -- indent-blankline/ibl + mini.indentscope
+    which_key = true,
+    nvim_tree = false,                 -- disabled by default if using neo-tree
+    neo_tree = true,
+    dap = true,
+    dapui = true,
+    trouble = true,
+    notify = true,
+    treesitter_context = true,
+    hop = true,
+    -- additional supported plugins
+    alpha = true,
+    mini_statusline = true,
+    mini_tabline = true,
+    todo_comments = true,
+    navic = true,
+    lspsaga = true,
+    neotest = true,
+    harpoon = true,
+    treesitter_playground = true,
+    startify = true,
+    overseer = true,
+  },
+
+  overrides = nil,                     -- table or function(colors) -> table
+
+  diagnostics_virtual_bg = false,      -- virtual text with soft background
+  diagnostics_virtual_bg_blend = 15,   -- used when mode = 'blend' (0..100; larger = more transparent)
+  diagnostics_virtual_bg_mode = 'blend',   -- 'blend' | 'alpha' | 'lighten' | 'darken'
+  diagnostics_virtual_bg_strength = 0.15,  -- strength for alpha/lighten/darken (0..1)
+})
+```
+
+## Migration: Palette Names (old → new)
+
+The palette now exposes descriptive aliases without the `fg_` prefix. Old short names remain for compatibility, but new names are recommended for overrides and custom recipes.
+
+- Base/backgrounds
+  - `norm` → `default_color`
+  - `bclr` → `bg_default`
+  - `dark` → `dark_color`
+  - `drk2` → `dark_secondary_color`
+  - `whit` → `white_color`
+  - `culc` → `bg_cursorcolumn`
+  - `comm` → `comment_color`
+
+- Syntax/categories
+  - `lit1` → `literal1_color`
+  - `lit2` → `literal2_color`
+  - `lit3` → `literal3_color`
+  - `ops1` → `keyword1_color`
+  - `ops2` → `keyword2_color`
+  - `ops3` → `keyword3_color`
+  - `ops4` → `keyword4_color`
+  - `otag` → `tag_color`
+  - `lstr` → `string_color`
+  - `incl` → `include_color`
+  - `dlim` → `delimiter_color`
+  - `blod` → `red_blood_color`
+  - `violet` → `violet_color`
+  - `high` → `highlight_color`
+  - `darkhigh` → `highlight_dark_color`
+  - `var` → `variable_color`
+  - `func` → `function_color`
+
+- Diff/diagnostics
+  - `dadd` → `diff_add_color`
+  - `dchg` → `diff_change_color`
+  - `dred` → `diff_delete_color`
+  - `dwarn` → `warning_color`
+
+- UI and misc
+  - `visu` → `bg_visual`
+  - `clin` → `bg_cursorline`
+  - `pmen` → `pmenu_color`
+  - `csel` → `search_color`
+  - `cmpdef` → `cmp_default_color`
+  - `iden` → `identifier_color`
+  - `lbgn` → `preproc_light_color`
+  - `dbng` → `preproc_dark_color`
+  - `dnorm` → `bg_selection_dim`
+
+- Shades/rainbow
+  - `col1..col24` → `shade_01..shade_24`
+  - `br1..br7` → `rainbow_1..rainbow_7`
+
+Prefix note: `fg_*` aliases (e.g. `fg_warning`, `fg_diff_delete`) remain for backward compatibility and map 1:1 to the new names (e.g. `warning_color`, `diff_delete_color`). Prefer the descriptive names going forward.
+
+## Presets
+
+Built-in style presets you can use via `preset` option or `:NegPreset`:
+
+- soft: default, subtle accents, italic comments
+- hard: higher contrast accents; makes keywords/functions/types/constants/booleans/numbers bold, `Title` bold
+- pro: no italics anywhere (disables italics for comments, inlay hints, code lens, and markup italics)
+- writing: Markdown-first; bold headings/strong, italic emphasis
+
+Usage examples:
+
+```lua
+require('neg').setup({ preset = 'hard' })
+-- or on the fly:
+-- :NegPreset hard
+-- :NegPreset none  -- clear preset
+```
+
+## Commands
+
+- :NegToggleTransparent — toggle transparency and re‑apply the theme
+- :NegToggleTransparentZone {float|sidebar|statusline} — toggle transparency for a specific zone
+- :NegPreset {soft|hard|pro|writing|none} — apply a style preset (or clear with 'none')
+- :NegReload — re‑apply highlights using the current config
+- :NegInfo — show a short summary of current options, including diagnostics virtual background (enabled/mode/strength/blend)
+- :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — set diagnostics virtual text background mode (or turn off/on)
+- :NegDiagBgStrength {0..1} — set strength for alpha/lighten/darken modes
+- :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
+
+## Overrides
+
+You can override any highlight groups:
+
+```lua
+require('neg').setup({
+  overrides = {
+    Normal = { fg = '#c0c0c0' },
+    NormalFloat = { bg = 'NONE' },
+  }
+})
+```
+
+or provide a function that receives the palette:
+
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.warning_color } }
+  end
+})
+```
+
+### Common override recipes
+
+- No italics anywhere (alternative to `preset = 'pro'`):
+
+```lua
+require('neg').setup({
+  overrides = function()
+    return {
+      Comment = { italic = false },
+      LspInlayHint = { italic = false },
+      LspCodeLens = { italic = false },
+      ['@markup.italic'] = { italic = false },
+    }
+  end,
+})
+```
+
+- Transparent floats and sidebars (alternative to `transparent = { ... }`):
+
+```lua
+require('neg').setup({
+  overrides = {
+    NormalFloat = { bg = 'NONE' },
+    Pmenu = { bg = 'NONE' },
+    FloatBorder = { bg = 'NONE' },
+    NvimTreeNormal = { bg = 'NONE' },
+    NeoTreeNormal = { bg = 'NONE' },
+    TroubleNormal = { bg = 'NONE' },
+  }
+})
+```
+
+- Softer/more visible virtual text background (per severity):
+
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticVirtualTextError = { bg = c.diff_delete_color, blend = 12 },
+      DiagnosticVirtualTextWarn  = { bg = c.warning_color, blend = 12 },
+      DiagnosticVirtualTextInfo  = { bg = c.preproc_light_color, blend = 12 },
+      DiagnosticVirtualTextHint  = { bg = c.identifier_color, blend = 12 },
+    }
+  end,
+})
+```
+
+- Stronger line numbers and separators:
+
+```lua
+require('neg').setup({
+  overrides = {
+    CursorLineNr = { bold = true },
+    WinSeparator = { fg = '#1c2430' },
+  }
+})
+```
+
+- LSP inlay hints color tweak:
+
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return { LspInlayHint = { fg = c.comment_color } }
+  end,
+})
+```
+
+- gitsigns color tweak:
+
+```lua
+require('neg').setup({
+  overrides = function()
+    return {
+      GitSignsAdd = { fg = '#2ecc71' },
+      GitSignsChange = { fg = '#3498db' },
+      GitSignsDelete = { fg = '#e74c3c' },
+    }
+  end,
+})
+```
+
+## Plugins Coverage
+
+### Color utility recipes (alpha/lighten/darken)
+
+You can use the color helpers from `neg.util` to derive colors on the fly in your overrides. This is helpful for subtle backgrounds, undercurls or tuned floats.
+
+- Subtle diagnostic backgrounds via alpha blending on top of your theme background:
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticVirtualTextError = { bg = U.alpha(c.diff_delete_color, c.bg_default, 0.16) },
+      DiagnosticVirtualTextWarn  = { bg = U.alpha(c.warning_color,      c.bg_default, 0.14) },
+      DiagnosticVirtualTextInfo  = { bg = U.alpha(c.preproc_light_color, c.bg_default, 0.12) },
+      DiagnosticVirtualTextHint  = { bg = U.alpha(c.identifier_color,   c.bg_default, 0.12) },
+    }
+  end,
+})
+```
+
+- Lighten/darken for selection or floats:
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      Visual = { bg = U.darken(c.bg_default, 6) },     -- darker selection
+      NormalFloat = { bg = U.lighten('#111d26', 8) },  -- soften float background
+    }
+  end,
+})
+```
+
+- Fine‑tuned undercurl hues (slightly darker than the base):
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticUnderlineError = { undercurl = true, sp = U.darken(c.diff_delete_color, 8) },
+      DiagnosticUnderlineWarn  = { undercurl = true, sp = U.darken(c.warning_color, 6) },
+    }
+  end,
+})
+```
+
+- telescope.nvim, nvim-cmp
+- gitsigns.nvim, gitgutter (basic), diff
+- indent‑blankline/ibl, mini.indentscope
+- mini.statusline, mini.tabline
+- which‑key.nvim
+- neo‑tree, nvim‑tree
+- bufferline.nvim
+- lualine.nvim (theme = 'neg')
+- nvim‑dap, dap‑ui
+- trouble.nvim
+- nvim‑notify
+- treesitter‑context
+- hop.nvim, rainbow‑delimiters
+- obsidian.nvim
+- alpha‑nvim
+- startify
+- todo‑comments.nvim
+- lspsaga.nvim
+- overseer.nvim
+- neotest
+- harpoon
+- nvim‑navic
+- treesitter‑playground
+
+### Detailed Plugin Coverage
+
+- telescope.nvim
+  - Groups: `TelescopeMatching`, `TelescopeSelection`, `TelescopeBorder`, `TelescopePreviewBorder`, `TelescopePromptBorder`, `TelescopeResultsBorder`, `TelescopePathSeparator`
+  - Transparent float zone also covers: `TelescopeNormal`, `TelescopePreviewNormal`, `TelescopePromptNormal`, `TelescopeResultsNormal`, and the corresponding `*Border`
+- mason.nvim
+  - Transparent float zone also covers: `MasonNormal`, `MasonBorder`
+- lazy.nvim
+  - Transparent float zone also covers: `LazyNormal`, `LazyBorder`
+- nvim-cmp
+  - Groups: `CmpItemKind*` (extended kinds: Text/Class/Module/Field/Constructor/Enum/Unit/Value/EnumMember/Constant/Struct/Event/Operator/TypeParameter/Snippet/Color/File/Reference/Folder)
+  - Transparent float zone also covers: `CmpDocumentation`, `CmpDocumentationBorder`
+- gitsigns.nvim
+  - Groups: `GitSignsAdd`, `GitSignsAddNr`, `GitSignsAddLn`, `GitSignsChange`, `GitSignsChangeNr`, `GitSignsChangeLn`, `GitSignsDelete`, `GitSignsDeleteNr`, `GitSignsDeleteLn`, `GitSignsTopdelete`, `GitSignsChangedelete`, `GitSignsUntracked`, `GitSignsCurrentLineBlame`
+- gitgutter/diff
+  - Groups: `GitGutterAdd`, `GitGutterChangeDelete`, `GitGutterChange`, `GitGutterDelete`, `DiffAdd`, `DiffChange`, `DiffDelete`, `DiffText`, `DiffAdded`, `DiffRemoved`, `diffAdded`, `diffChanged`, `diffRemoved`, `diffLine`, `diffNewFile`, `diffOldFile`, `diffOldLine`
+- indent‑blankline/ibl/mini.indentscope
+  - Groups: `IndentBlanklineChar`, `IndentBlanklineSpaceChar`, `IndentBlanklineSpaceCharBlankline`, `IndentBlanklineContextChar`, `IndentBlanklineContextStart`, `IblIndent`, `IblWhitespace`, `IblScope`, `MiniIndentscopeSymbol`, `MiniIndentscopePrefix`
+- which‑key.nvim
+  - Groups: `WhichKey`, `WhichKeyGroup`, `WhichKeyDesc`, `WhichKeySeparator`, `WhichKeyFloat`, `WhichKeyBorder`, `WhichKeyValue`
+- neo‑tree
+  - Groups: `NeoTreeNormal`, `NeoTreeNormalNC`, `NeoTreeRootName`, `NeoTreeDirectoryIcon`, `NeoTreeDirectoryName`, `NeoTreeCursorLine`, `NeoTreeGitAdded`, `NeoTreeGitModified`, `NeoTreeGitDeleted`, `NeoTreeDimText`
+  - Transparent float zone also covers: `NeoTreeFloatNormal`, `NeoTreeFloatBorder`
+- nvim‑tree
+  - Groups: `NvimTreeNormal`, `NvimTreeNormalNC`, `NvimTreeFolderIcon`, `NvimTreeFolderName`, `NvimTreeOpenedFolderName`, `NvimTreeRootFolder`, `NvimTreeIndentMarker`, `NvimTreeCursorLine`, `NvimTreeGitDirty`, `NvimTreeGitNew`, `NvimTreeGitDeleted`
+- symbols-outline.nvim
+  - Transparent sidebar zone also covers: `SymbolsOutlineNormal`
+- aerial.nvim
+  - Transparent sidebar zone also covers: `AerialNormal`
+- nvim‑dap
+  - Groups: `DebugBreakpoint`, `DebugBreakpointCondition`, `DebugBreakpointRejected`, `DebugStopped`, `DebugLogPoint`, `DebugPC`
+- dap‑ui
+  - Groups: `DapUIFloatNormal`, `DapUIFloatBorder`, `DapUIVariable`, `DapUIDecoration`, `DapUIScope`, `DapUIType`, `DapUIValue`, `DapUILineNumber`, `DapUIBreakpointsPath`, `DapUIBreakpointsLine`, `DapUIBreakpointsCurrentLine`, `DapUIBreakpointsDisabledLine`, `DapUIPlayPause`, `DapUIRestart`, `DapUIStop`, `DapUIUnavailable`, `DapUIWinSelect`
+- trouble.nvim
+  - Groups: `TroubleNormal`, `TroubleText`, `TroubleCount`, `TroubleFoldIcon`, `TroubleLocation`, `TroubleFilename`, `TroubleIndent`, `TroubleSignError`, `TroubleSignWarning`, `TroubleSignInformation`, `TroubleSignHint`
+- nvim‑notify
+  - Groups: `NotifyBackground`, plus `Notify{ERROR|WARN|INFO|DEBUG|TRACE}{Border|Icon|Title}`
+- treesitter‑context
+  - Groups: `TreesitterContext`, `TreesitterContextLineNumber`, `TreesitterContextSeparator`
+- hop.nvim
+  - Groups: `HopNextKey`, `HopNextKey1`, `HopNextKey2`, `HopUnmatched`
+- rainbow‑delimiters
+  - Groups: `RainbowDelimiterRed`, `RainbowDelimiterYellow`, `RainbowDelimiterBlue`, `RainbowDelimiterOrange`, `RainbowDelimiterGreen`, `RainbowDelimiterViolet`, `RainbowDelimiterCyan`
+- obsidian.nvim
+- alpha‑nvim
+- startify / startify
+- todo‑comments.nvim
+- lspsaga.nvim
+- overseer.nvim
+- lspsaga.nvim
+- overseer.nvim
+- neotest
+- harpoon
+- nvim‑navic
+- navbuddy
+- treesitter‑playground
+  - Groups: `ObsidianExtLinkIcon`, `ObsidianRefText`, `ObsidianBullet`, `ObsidianImportant`, `ObsidianTilde`, `ObsidianRightArrow`, `ObsidianDone`, `ObsidianTodo`, `ObsidianHighlightText`, `ObsidianBlockID`, `ObsidianTag`
+- headline.nvim
+  - Groups: `Headline1`, `Headline2`, `CodeBlock`, `Dash`
+- noice.nvim
+  - Groups: `NoiceCursor`, `NoiceCmdLine`, popup/cmdline menu (`NoiceCmdlinePopup`, `NoiceCmdlinePopupBorder`, `NoicePopup`, `NoicePopupBorder`, `NoicePopupmenu`, `NoicePopupmenuBorder`); transparent float zone also covers `NoicePopup`, `NoicePopupmenu`, `NoiceCmdlinePopup`
+- dressing.nvim
+  - Transparent float zone also covers: `DressingInput`, `DressingInputBorder`, `DressingSelect`, `DressingSelectBorder`
+- fzf-lua
+  - Transparent float zone also covers: `FzfLuaNormal`, `FzfLuaBorder`
+
+
+## Troubleshooting
+
+- Theme looks mixed or not applied sometimes
+  - Ensure only one colorscheme is active. If using multiple themes, remove extra `colorscheme` calls.
+  - With lazy.nvim, set a high `priority` (e.g. 1000) and `lazy = false` for this plugin.
+  - Run `:colorscheme neg` after your UI plugins load if something overrides highlights late.
+- Transparency seems not applied
+  - Terminal must support transparency (or set GUI background). `transparent` sets highlight backgrounds to `NONE`, it does not change the terminal background.
+  - For specific areas, use `transparent = { float = true, sidebar = true, statusline = true }` or the command `:NegToggleTransparentZone`.
+  - Check your overrides — they have the last word. Use `:NegInfo` to inspect active options.
+- Overriding a linked group has no effect
+  - When a group `link`s to another, its own attrs are ignored. Provide attributes in your `overrides` to break the link (Neovim will clear the link when attrs are set).
+  - Example: `NormalFloat = { bg = 'NONE' }` will override any previous link.
+- Colors look off
+  - Add `:set termguicolors` to your config and keep `terminal_colors = true` (or tune them in overrides).
+- Treesitter/LSP highlight mismatch
+  - Use `:Inspect` on a token to see active captures. Some captures differ between Neovim 0.9/0.10 and parsers.
+  - This colorscheme links common modern captures; update Neovim/parsers if something is missing.
+- Diagnostics are too strong/too soft
+  - Disable colored virtual backgrounds with `diagnostics_virtual_bg = false` or tune `diagnostics_virtual_bg_blend`.
+  - Or override individual severities.
+- Italics not visible
+  - Your terminal font might not support italics. Try a GUI (Neovide) or a font that supports italics.
+- Light background?
+  - This is a dark theme. `set background=light` is not supported at the moment.
+
+## FAQ
+
+- How do I use it with `:colorscheme`?
+  - The plugin provides `colors/neg.lua`. Use `:colorscheme neg` after `require('neg').setup(...)`.
+- How do I disable a specific plugin integration?
+  - Set its flag to `false` under `plugins`.
+- Can I customize the palette?
+  - Use `overrides` for highlight groups and `require('neg.palette')` if you need palette colors. Direct palette overrides are not exposed yet.
+- How do I toggle presets/transparency on the fly?
+  - Use `:NegPreset soft|hard|pro|writing|none` and `:NegToggleTransparent`/`:NegToggleTransparentZone {float|sidebar|statusline}`.
+- A plugin's group is not covered — what do I do?
+  - Add an `overrides` entry for that group. PRs to add more integrations are welcome.
+
+## Validator & CI
+
+- Locally: `./scripts/validate.sh`
+- Strict mode (treat WARN as errors): `NEG_VALIDATE_STRICT=1 ./scripts/validate.sh`
+- GitHub Actions: `.github/workflows/validate.yml`
+- Optional contrast check: `NEG_VALIDATE_CONTRAST=1 NEG_VALIDATE_CONTRAST_MIN=3.0 ./scripts/validate.sh`
+  - Reports warnings if contrast ratio (fg vs bg) is below the threshold.
+  - Tip: enable only when tuning colors; strict mode will fail on warnings.
+- Verbose summary: `NEG_VALIDATE_VERBOSE=1 ./scripts/validate.sh` prints a short coverage line.
+
+## Demo shots
+
+## Python
+![shot1](https://i.imgur.com/vge1c3X.png)
+![shot2](https://i.imgur.com/6mFaXPX.png)
+
+## sh
+![shot3](https://i.imgur.com/wvX0Q0o.png)
+
+## Zsh
+![shot4](https://i.imgur.com/ImCHl7I.png)
+
+## C
+![shot5](https://i.imgur.com/oF275OQ.png)
+
+## Rust
+![shot6](https://i.imgur.com/cacYu8g.png)
+- bufferline.nvim
+  - Groups: `BufferLine*` (fill, background, selected/visible buffers, tabs, separators, modified/duplicate markers, indicators, close buttons)
+- lualine.nvim
+  - Theme: `require('lualine').setup({ options = { theme = 'neg' } })`
