@@ -54,6 +54,7 @@ local function load_tables()
     'neg.groups.plugins.mini_statusline',
     'neg.groups.plugins.mini_tabline',
     'neg.groups.plugins.navic',
+    'neg.groups.plugins.navbuddy',
     'neg.groups.plugins.lspsaga',
     'neg.groups.plugins.neo_tree',
     'neg.groups.plugins.noice',

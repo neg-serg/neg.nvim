@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.76
+-- Version:     3.77
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -51,6 +51,7 @@ local default_config = {
     todo_comments = true,
     navic = true,
     lspsaga = true,
+    navbuddy = true,
     neotest = true,
     harpoon = true,
     treesitter_playground = true,
@@ -211,6 +212,7 @@ function M.setup(opts)
     todo_comments = 'neg.groups.plugins.todo_comments',
     navic = 'neg.groups.plugins.navic',
     lspsaga = 'neg.groups.plugins.lspsaga',
+    navbuddy = 'neg.groups.plugins.navbuddy',
     neotest = 'neg.groups.plugins.neotest',
     harpoon = 'neg.groups.plugins.harpoon',
     treesitter_playground = 'neg.groups.plugins.treesitter_playground',

@@ -87,7 +87,8 @@ function M.apply_transparent(cfg)
         'LspInfoBorder',
         -- Additional plugin floats
         'SagaNormal','SagaBorder',
-        'OverseerNormal','OverseerBorder'
+        'OverseerNormal','OverseerBorder',
+        'NavbuddyNormal','NavbuddyBorder','NavbuddyFloatNormal','NavbuddyFloatBorder','NavbuddyPreviewNormal','NavbuddyPreviewBorder'
       })
     end
     if cfg.sidebar then

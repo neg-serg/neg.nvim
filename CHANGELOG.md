@@ -19,6 +19,14 @@ All notable changes to this project are documented here.
 
 
 
+
+## [3.77] - 2025-10-21
+- Plugins: navbuddy (float + preview windows, cursorline, scope).
+- noice: cmdline/popup/popupmenu variants (+ borders).
+- cmp: extended CmpItemKind* coloring for many kinds.
+- Transparent floats: added Navbuddy* float/preview groups.
+- Docs: README updated for navbuddy, noice variants, cmp kinds.
+
 ## [3.76] - 2025-10-21
 - lspsaga: add detailed component groups (Finder, Code Action, Rename, Hover/Signature titles, Diagnostics, Outline, Winbar, Beacon/Spinner).
 - Transparent floats: include SagaNormal/SagaBorder and OverseerNormal/OverseerBorder.
