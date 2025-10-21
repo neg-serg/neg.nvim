@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.43
+-- Version:     3.44
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -39,6 +39,7 @@ end
 
 local default_config = {
   transparent = false,
+  terminal_colors = true,
   styles = {
     comments = 'italic',
     keywords = 'none',
@@ -67,6 +68,23 @@ local function apply_transparent()
     'Pmenu'
   }
   for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
+end
+
+local function apply_terminal_colors()
+  local colors = {
+    p.bclr,   -- 0: black
+    p.dred,   -- 1: red
+    p.dadd,   -- 2: green
+    p.dwarn,  -- 3: yellow
+    p.incl,   -- 4: blue
+    p.violet, -- 5: magenta
+    p.lit2,   -- 6: cyan
+    p.whit,   -- 7: white
+  }
+  for i = 0, 7 do
+    vim.g['terminal_color_'..i] = colors[i+1]
+    vim.g['terminal_color_'..(i+8)] = colors[i+1]
+  end
 end
 
 local function apply_styles(styles)
@@ -133,6 +151,7 @@ function M.setup(opts)
 
   -- Post-processing
   if cfg.transparent then apply_transparent() end
+  if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)
   apply_overrides(cfg.overrides)
 end
