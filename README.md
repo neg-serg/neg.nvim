@@ -94,6 +94,24 @@ EOF
 colorscheme neg
 ```
 
+## Presets
+
+Built-in style presets you can use via `preset` option or `:NegPreset`:
+
+- soft: default, subtle accents, italic comments
+- hard: higher contrast accents; makes keywords/functions/types/constants/booleans/numbers bold, `Title` bold
+- pro: no italics anywhere (disables italics for comments, inlay hints, code lens, and markup italics)
+- writing: Markdown-first; bold headings/strong, italic emphasis
+
+Usage examples:
+
+```lua
+require('neg').setup({ preset = 'hard' })
+-- or on the fly:
+-- :NegPreset hard
+-- :NegPreset none  -- clear preset
+```
+
 ## Commands
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
