@@ -99,7 +99,12 @@ local function apply_overrides(overrides)
 end
 
 function M.setup(opts)
-  local cfg = vim.tbl_deep_extend('force', default_config, opts or {})
+  local cfg
+  if type(opts) == 'table' and next(opts) ~= nil then
+    cfg = vim.tbl_deep_extend('force', default_config, opts)
+  else
+    cfg = M._config or default_config
+  end
   M._config = cfg
 
   -- Core groups
