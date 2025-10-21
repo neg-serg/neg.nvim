@@ -171,8 +171,12 @@ function M.run()
 end
 
 function M.exit()
-  local errs = M.run()
-  local code = type(errs) == 'table' and errs[1] or errs
+  local errors, warnings = M.run()
+  local strict = (vim and vim.env and vim.env.NEG_VALIDATE_STRICT) or os.getenv('NEG_VALIDATE_STRICT')
+  local s = tostring(strict or ''):lower()
+  local strict_on = (s == '1' or s == 'true' or s == 'yes')
+  local code = errors
+  if strict_on and warnings > 0 then code = errors + warnings end
   if vim and vim.cmd then
     if code > 0 then vim.cmd('cquit 1') else vim.cmd('qall') end
   else
@@ -181,4 +185,3 @@ function M.exit()
 end
 
 return M
-
