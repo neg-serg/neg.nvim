@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        neovim: [ 'stable', 'v0.10.0', 'v0.9.5' ]
+        neovim: [ 'stable', 'v0.10.0', 'v0.9.5', 'v0.8.3' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
