@@ -196,6 +196,88 @@ require('neg').setup({
 })
 ```
 
+### Common override recipes
+
+- No italics anywhere (alternative to `preset = 'pro'`):
+
+```lua
+require('neg').setup({
+  overrides = function()
+    return {
+      Comment = { italic = false },
+      LspInlayHint = { italic = false },
+      LspCodeLens = { italic = false },
+      ['@markup.italic'] = { italic = false },
+    }
+  end,
+})
+```
+
+- Transparent floats and sidebars (alternative to `transparent = { ... }`):
+
+```lua
+require('neg').setup({
+  overrides = {
+    NormalFloat = { bg = 'NONE' },
+    Pmenu = { bg = 'NONE' },
+    FloatBorder = { bg = 'NONE' },
+    NvimTreeNormal = { bg = 'NONE' },
+    NeoTreeNormal = { bg = 'NONE' },
+    TroubleNormal = { bg = 'NONE' },
+  }
+})
+```
+
+- Softer/more visible virtual text background (per severity):
+
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticVirtualTextError = { bg = c.dred, blend = 12 },
+      DiagnosticVirtualTextWarn  = { bg = c.dwarn, blend = 12 },
+      DiagnosticVirtualTextInfo  = { bg = c.lbgn, blend = 12 },
+      DiagnosticVirtualTextHint  = { bg = c.iden, blend = 12 },
+    }
+  end,
+})
+```
+
+- Stronger line numbers and separators:
+
+```lua
+require('neg').setup({
+  overrides = {
+    CursorLineNr = { bold = true },
+    WinSeparator = { fg = '#1c2430' },
+  }
+})
+```
+
+- LSP inlay hints color tweak:
+
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return { LspInlayHint = { fg = c.comm } }
+  end,
+})
+```
+
+- gitsigns color tweak:
+
+```lua
+require('neg').setup({
+  overrides = function()
+    return {
+      GitSignsAdd = { fg = '#2ecc71' },
+      GitSignsChange = { fg = '#3498db' },
+      GitSignsDelete = { fg = '#e74c3c' },
+    }
+  end,
+})
+```
+
 ## Plugins Coverage
 
 - telescope.nvim, nvim-cmp
