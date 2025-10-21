@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.61
+-- Version:     3.62
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -146,10 +146,13 @@ function M.setup(opts)
   else
     cfg = M._config or default_config
   end
+  local force_apply = false
+  if type(opts) == 'table' and opts.force ~= nil then force_apply = opts.force and true or false end
+  if cfg.force ~= nil then cfg.force = nil end
   M._config = cfg
 
   -- Idempotent apply: skip if no changes and no function overrides
-  if M._applied_key and type(cfg.overrides) ~= 'function' then
+  if not force_apply and M._applied_key and type(cfg.overrides) ~= 'function' then
     local key = U.config_signature(cfg)
     if vim.deep_equal(key, M._applied_key) then return end
   end

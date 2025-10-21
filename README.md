@@ -286,6 +286,8 @@ require('neg').setup({
 - indent‑blankline/ibl, mini.indentscope
 - which‑key.nvim
 - neo‑tree, nvim‑tree
+- bufferline.nvim
+- lualine.nvim (theme = 'neg')
 - nvim‑dap, dap‑ui
 - trouble.nvim
 - nvim‑notify
@@ -396,3 +398,7 @@ require('neg').setup({
 
 ## Rust
 ![shot6](https://i.imgur.com/cacYu8g.png)
+- bufferline.nvim
+  - Groups: `BufferLine*` (fill, background, selected/visible buffers, tabs, separators, modified/duplicate markers, indicators, close buttons)
+- lualine.nvim
+  - Theme: `require('lualine').setup({ options = { theme = 'neg' } })`

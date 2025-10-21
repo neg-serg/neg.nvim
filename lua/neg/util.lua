@@ -89,8 +89,11 @@ local function sig_copy(v)
 end
 
 function M.config_signature(cfg)
-  return sig_copy(cfg)
+  local copy = sig_copy(cfg)
+  if type(copy) == 'table' then
+    copy.force = nil
+  end
+  return copy
 end
 
 return M
-

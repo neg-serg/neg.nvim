@@ -8,13 +8,17 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        neovim: [ 'stable', 'v0.10.0', 'v0.9.5' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Neovim
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y neovim
+      - name: Setup Neovim ${{ matrix.neovim }}
+        uses: MunifTanjim/setup-neovim@v1
+        with:
+          neovim-version: ${{ matrix.neovim }}
       - name: Run validator
         env:
           NEG_VALIDATE_STRICT: '1'
