@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.58
+-- Version:     3.59
 -- Last Change: 21-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -7,6 +7,7 @@
 local M = {}
 local hi = vim.api.nvim_set_hl
 local p = require('neg.palette')
+local U = require('neg.util')
 
 local function apply(tbl)
   for name, style in pairs(tbl) do hi(0, name, style) end
@@ -17,25 +18,7 @@ local function safe_apply(modname)
   if ok and type(tbl) == 'table' then apply(tbl) end
 end
 
-local function flags_from(v)
-  local f = {}
-  if type(v) == 'string' then
-    local s = v:lower()
-    if s == 'none' or s == 'off' then
-      f.italic=false; f.bold=false; f.underline=false; f.undercurl=false
-    else
-      if s:find('italic', 1, true) then f.italic=true end
-      if s:find('bold', 1, true) then f.bold=true end
-      if s:find('underline', 1, true) then f.underline=true end
-      if s:find('undercurl', 1, true) then f.undercurl=true end
-    end
-  elseif type(v) == 'table' then
-    for k, val in pairs(v) do if type(val) == 'boolean' then f[k]=val end end
-  elseif type(v) == 'boolean' then
-    f.italic = v
-  end
-  return f
-end
+local flags_from = U.flags_from
 
 local default_config = {
   transparent = false,
@@ -79,63 +62,7 @@ local default_config = {
   diagnostics_virtual_bg_blend = 15,
 }
 
-local function apply_transparent(cfg)
-  local function set_bg(groups)
-    for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
-  end
-  if cfg == true then
-    set_bg({
-      'Normal','NormalNC','NormalFloat','SignColumn','FoldColumn',
-      'StatusLine','StatusLineNC','TabLine','TabLineFill','TabLineSel',
-      'Pmenu','FloatBorder','FloatTitle','WinSeparator'
-    })
-    return
-  end
-  if type(cfg) == 'table' then
-    if cfg.float then
-      set_bg({
-        'NormalFloat','Pmenu','FloatBorder','FloatTitle',
-        -- which-key
-        'WhichKeyFloat','WhichKeyBorder',
-        -- nvim-cmp docs
-        'CmpDocumentation','CmpDocumentationBorder',
-        -- dap-ui floats
-        'DapUIFloatNormal','DapUIFloatBorder',
-        -- notify
-        'NotifyBackground',
-        -- telescope
-        'TelescopeNormal','TelescopePreviewNormal','TelescopePromptNormal','TelescopeResultsNormal',
-        'TelescopeBorder','TelescopePreviewBorder','TelescopePromptBorder','TelescopeResultsBorder',
-        -- noice
-        'NoicePopup','NoicePopupmenu','NoiceCmdlinePopup',
-        -- fzf-lua
-        'FzfLuaNormal','FzfLuaBorder',
-        -- dressing.nvim
-        'DressingInput','DressingBorder','DressingSelect',
-        -- LSP info/float
-        'LspFloatWinNormal','LspFloatWinBorder','LspInfoBorder'
-      })
-    end
-    if cfg.sidebar then
-      set_bg({
-        'NvimTreeNormal','NvimTreeNormalNC',
-        'NeoTreeNormal','NeoTreeNormalNC',
-        'TroubleNormal',
-        -- outlines
-        'OutlineNormal','AerialNormal',
-        -- package managers / tools
-        'MasonNormal','LazyNormal',
-        -- dap-ui panels
-        'DapUINormal',
-        -- spectre
-        'SpectrePanel'
-      })
-    end
-    if cfg.statusline then
-      set_bg({ 'StatusLine','StatusLineNC','WinBar','WinBarNC','TabLine','TabLineFill','TabLineSel' })
-    end
-  end
-end
+local apply_transparent = function(cfg) return U.apply_transparent(cfg) end
 
 local function apply_preset(preset, cfg)
   if not preset or preset == '' then return end
@@ -167,22 +94,7 @@ local function apply_preset(preset, cfg)
   end
 end
 
-local function apply_terminal_colors()
-  local colors = {
-    p.bclr,   -- 0: black
-    p.dred,   -- 1: red
-    p.dadd,   -- 2: green
-    p.dwarn,  -- 3: yellow
-    p.incl,   -- 4: blue
-    p.violet, -- 5: magenta
-    p.lit2,   -- 6: cyan
-    p.whit,   -- 7: white
-  }
-  for i = 0, 7 do
-    vim.g['terminal_color_'..i] = colors[i+1]
-    vim.g['terminal_color_'..(i+8)] = colors[i+1]
-  end
-end
+local function apply_terminal_colors() U.apply_terminal_colors(p) end
 
 local function apply_diagnostics_virtual_bg(blend)
   local map = {
@@ -224,15 +136,7 @@ local function apply_styles(styles)
   end
 end
 
-local function apply_overrides(overrides)
-  if not overrides then return end
-  local tbl = overrides
-  if type(overrides) == 'function' then
-    local ok, res = pcall(overrides, p)
-    if ok and type(res) == 'table' then tbl = res else return end
-  end
-  if type(tbl) == 'table' then apply(tbl) end
-end
+local function apply_overrides(overrides) U.apply_overrides(overrides, p) end
 
 function M.setup(opts)
   local cfg
@@ -242,6 +146,12 @@ function M.setup(opts)
     cfg = M._config or default_config
   end
   M._config = cfg
+
+  -- Idempotent apply: skip if no changes and no function overrides
+  if M._applied_key and type(cfg.overrides) ~= 'function' then
+    local key = U.config_signature(cfg)
+    if vim.deep_equal(key, M._applied_key) then return end
+  end
 
   -- Core groups
   apply(require('neg.groups.syntax'))
@@ -282,6 +192,7 @@ function M.setup(opts)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg.diagnostics_virtual_bg_blend) end
   define_commands()
+  M._applied_key = U.config_signature(cfg)
 end
 
 -- User commands
