@@ -386,3 +386,7 @@ All notable changes to this project are documented here.
 - Command: `:NegPunctFamily {on|off|toggle}` to switch at runtime.
 - Docs: README updated (Options + Commands).
 - Meta: bump version.
+## [4.23] - 2025-10-22
+- Numbers ramp: add presets — `ramp-soft` (very subtle), `ramp` (balanced, default), `ramp-strong` (higher contrast). Usable via `number_colors` option and `:NegNumberColors` command.
+- Docs: README updated (options + command).
+- Meta: bump version.

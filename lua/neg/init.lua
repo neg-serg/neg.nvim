@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.22
+-- Version:     4.23
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -31,8 +31,9 @@ local flags_from = U.flags_from
     -- Operators coloring: 'families' (different subtle hues per family),
     -- 'mono' (single color), or 'mono+' (single color with a slightly stronger accent)
     operator_colors = 'families',
-    -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
-    number_colors = 'ramp',
+  -- Number coloring: 'mono' (single hue) or ramp presets for subtle single‑hue variants:
+  -- 'ramp' (balanced), 'ramp-soft', 'ramp-balanced', 'ramp-strong'
+  number_colors = 'ramp',
     -- UI options
     ui = {
       -- When true, define extra baseline UI groups missing in stock setup
@@ -524,13 +525,24 @@ local function apply_operator_colors(mode)
 end
 
 local function apply_number_colors(mode)
-  if mode ~= 'ramp' then return end
+  mode = tostring(mode or ''):lower()
+  if mode == 'mono' or mode == '' then return end
+  if not mode:match('^ramp') then return end
   local base = p.keyword1_color
+  local hex_l, bin_l, oct_d = 6, 3, 6 -- balanced default
+  if mode == 'ramp-soft' or mode == 'ramp:soft' then
+    hex_l, bin_l, oct_d = 4, 2, 4
+  elseif mode == 'ramp-strong' or mode == 'ramp:strong' then
+    hex_l, bin_l, oct_d = 10, 5, 10
+  else
+    -- ramp / ramp-balanced / ramp:balanced
+    hex_l, bin_l, oct_d = 6, 3, 6
+  end
   local ramp = {
-    integer = base,                         -- baseline
-    hex     = U.lighten(base, 6),           -- slightly lighter
-    octal   = U.darken(base, 6),            -- slightly darker
-    binary  = U.lighten(base, 3),           -- subtle lift
+    integer = base,
+    hex     = U.lighten(base, hex_l),
+    octal   = U.darken(base,  oct_d),
+    binary  = U.lighten(base, bin_l),
   }
   hi(0, '@number.integer', { fg = ramp.integer })
   hi(0, '@number.hex',     { fg = ramp.hex })
@@ -1021,19 +1033,27 @@ define_commands = function()
   })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()
-    local allowed = { mono = true, ramp = true }
+    local allowed = {
+      mono = true, ramp = true,
+      ['ramp-soft'] = true, ['ramp:soft'] = true,
+      ['ramp-balanced'] = true, ['ramp:balanced'] = true,
+      ['ramp-strong'] = true, ['ramp:strong'] = true,
+    }
     if not allowed[mode] then
-      print("neg.nvim: unknown mode '" .. mode .. "'. Use: mono|ramp")
+      print("neg.nvim: unknown mode '" .. mode .. "'. Use: mono|ramp|ramp-soft|ramp-strong")
       return
     end
+    if mode == 'ramp:soft' then mode = 'ramp-soft' end
+    if mode == 'ramp:balanced' then mode = 'ramp' end
+    if mode == 'ramp:strong' then mode = 'ramp-strong' end
     local cfg = M._config or default_config
     local newcfg = vim.deepcopy(cfg)
     newcfg.number_colors = mode
     M.setup(newcfg)
   end, {
     nargs = 1,
-    complete = function() return { 'mono', 'ramp' } end,
-    desc = 'neg.nvim: Set number colors mode (mono|ramp)'
+    complete = function() return { 'mono', 'ramp', 'ramp-soft', 'ramp-strong' } end,
+    desc = 'neg.nvim: Set number colors (mono|ramp|ramp-soft|ramp-strong)'
   })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)

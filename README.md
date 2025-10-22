@@ -107,7 +107,7 @@ require('neg').setup({
   terminal_colors = true,              -- set 16 ANSI terminal colors
   preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation' | nil
   operator_colors = 'families',        -- 'families' for subtle per-family hues, 'mono' for single operator color, or 'mono+' for a slightly stronger single accent
-  number_colors = 'ramp',              -- default 'ramp' (subtle variants), or 'mono' for single hue
+  number_colors = 'ramp',              -- numbers coloring: 'mono' or ramp presets 'ramp' (balanced, default) | 'ramp-soft' | 'ramp-strong'
   ui = {
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
@@ -276,7 +276,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagSoft — quick softer virtual text background (blend ≈ 20)
 - :NegDiagStrong — quick stronger virtual text background (blend ≈ 10)
 - :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
-- :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
+- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
