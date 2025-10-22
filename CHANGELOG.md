@@ -349,3 +349,7 @@ All notable changes to this project are documented here.
 - UI: add `ui.mode_accent` (default false) — mode-aware accents for `CursorLine` and `StatusLine` based on Vim mode (Normal/Insert/Visual). Implemented via `ModeChanged`/`WinEnter` autocmds with palette-derived hues.
 - Docs: README updated (UI options).
 - Meta: bump version.
+## [4.15] - 2025-10-22
+- Command: add `:NegModeAccent {on|off|toggle}` to switch mode-aware accents at runtime.
+- Docs: README updated (commands).
+- Meta: bump version.

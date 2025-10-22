@@ -270,6 +270,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
 - :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
+- :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 
 ## Overrides
 

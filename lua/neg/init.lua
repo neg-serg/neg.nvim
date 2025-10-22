@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.14
+-- Version:     4.15
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -733,6 +733,27 @@ define_commands = function()
     desc = 'neg.nvim: Set diagnostics bg blend (0..100) when mode=blend'
   })
 
+  vim.api.nvim_create_user_command('NegModeAccent', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.mode_accent = true
+    elseif arg == 'off' then
+      newcfg.ui.mode_accent = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.mode_accent = not (cfg.ui and cfg.ui.mode_accent == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set mode-aware CursorLine/StatusLine accents (on|off|toggle)'
+  })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()
     local allowed = { mono = true, ramp = true }
