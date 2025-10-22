@@ -29,19 +29,26 @@ return {
   ['@number.float']={link='@float'},
   ['@string.special.symbol']={link='@symbol'},
   ['@string.regexp']={link='@string.regex'},
+  ['@variable.builtin']={ fg = p.identifier_color, italic = true },
+  ['@type.definition']={ link = '@type' },
+  -- explicit anchors for linked captures above
+  ['@float']={ fg = p.literal3_color },
+  ['@symbol']={ fg = p.literal2_color },
+  ['@string.regex']={ fg = p.string_color },
 
   -- Additional common captures
   ['@attribute']={ fg = p.identifier_color },
   ['@constructor']={ link='@function' },
   ['@constant.builtin']={ link='@constant' },
   ['@function.builtin']={ link='@function' },
+  ['@function.macro']={ fg = p.function_color },
   ['@property']={ fg = p.identifier_color },
   ['@field']={ fg = p.identifier_color },
-  ['@punctuation.bracket']={link='Delimiter'},
-  ['@punctuation.delimiter']={link='Delimiter'},
-  ['@string.escape']={link='SpecialChar'},
-  ['@string.special.url']={link='Underlined'},
-  ['@character']={link='String'},
+  ['@punctuation.bracket']={ fg = p.delimiter_color },
+  ['@punctuation.delimiter']={ fg = p.delimiter_color },
+  ['@string.escape']={ fg = p.literal2_color },
+  ['@string.special.url']={ underline = true, fg = p.keyword4_color },
+  ['@character']={ fg = p.string_color },
 
   -- Legacy @text.* → modern @markup.*
   ['@text.strong']={link='@markup.strong'},
@@ -58,7 +65,19 @@ return {
   ['@text.literal']={link='@markup.raw'},
   ['@text.literal.block']={link='@markup.raw.block'},
   ['@string.special']={link='@markup.link.label'},
-  ['@punctuation.special']={link='@markup.list'},
+  ['@punctuation.special']={ fg = p.delimiter_color },
+
+  -- Markup base styles (TS-only)
+  ['@markup.strong']={ bold = true },
+  ['@markup.italic']={ italic = true },
+  ['@markup.underline']={ underline = true },
+  ['@markup.strikethrough']={ strikethrough = true },
+  ['@markup.heading']={ bold = true },
+  ['@markup.quote']={ fg = p.comment_color, italic = true },
+  ['@markup.link.url']={ underline = true, fg = p.keyword4_color },
+  ['@markup.link.label']={ underline = true },
+  ['@markup.raw']={ fg = p.string_color },
+  ['@markup.raw.block']={ fg = p.string_color },
 
   -- Helix captures
   ['@function.method']={link='@method'},
@@ -75,6 +94,9 @@ return {
   ['@text.note']={link='@comment.note'},
 
   -- Diff groups
+  ['@diff.plus']={ fg = p.diff_add_color },
+  ['@diff.minus']={ fg = p.diff_delete_color },
+  ['@diff.delta']={ fg = p.diff_change_color },
   ['@text.diff.add']={link='@diff.plus'},
   ['@text.diff.delete']={link='@diff.minus'},
   ['@text.diff.change']={link='@diff.delta'},
@@ -89,6 +111,22 @@ return {
   ['@keyword.repeat']={link='@repeat'},
   ['@keyword.operator']={link='@operator'},
   ['@keyword.return']={link='@keyword'},
+
+  -- Preprocessor/keywords (explicit TS targets)
+  ['@preproc']={ fg = p.preproc_light_color },
+  ['@define']={ fg = p.preproc_dark_color },
+  ['@include']={ fg = p.include_color },
+  ['@macro']={ link='@function.macro' },
+  ['@conditional']={ fg = p.keyword1_color },
+  ['@repeat']={ fg = p.keyword1_color },
+  ['@label']={ fg = p.keyword3_color },
+  ['@exception']={ fg = p.red_blood_color },
+  ['@storageclass']={ fg = p.keyword1_color },
+
+  -- HTML/XML-like tags
+  ['@tag']={ fg = p.tag_color },
+  ['@tag.delimiter']={ fg = p.keyword2_color },
+  ['@tag.attribute']={ fg = p.identifier_color },
 
   -- LSP semantic tokens
   ['@lsp.type.class']={link='@type'},
