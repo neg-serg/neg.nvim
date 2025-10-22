@@ -1,3 +1,6 @@
+<!-- This file mirrors lua/neg/README.ru.md to expose a root-level Russian guide. -->
+<!-- Source of truth is the root file; the in-tree copy is for runtime packaging. -->
+
 # neg (русская документация)
 
 Современная цветовая схема для Neovim с модульной структурой, расширенной поддержкой Tree‑sitter и удобными опциями для UX.
@@ -24,11 +27,19 @@ require('neg').setup({
     auto_transparent_panels = true,  -- легкая подложка для float/panel в прозрачном терминале
     diff_focus = true,               -- более явные фоны Diff* в режиме :diff
     light_signs = false,             -- смягчить иконки SignColumn (DiagnosticSign*/GitSigns*) без смены оттенков
+    diag_pattern = 'none',           -- паттерны для диагностик: 'none' | 'minimal' | 'strong'
+    lexeme_cues = 'off',            -- подсказки для лексем: 'off' | 'minimal' | 'strong'
+    thick_cursor = false,           -- усиленный курсор/строка для TUI
+    outlines = false,               -- рамки активных/неактивных окон через winhighlight
+    reading_mode = false,           -- почти монохромный режим чтения
+    search_visibility = 'default',  -- видимость поиска: 'default' | 'soft' | 'strong'
+    screenreader_friendly = false,  -- уменьшить динамику акцентов для скринридера
     accessibility = {
-      deuteranopia = false,          -- дружественный режим для дальтонизма: «добавления» более сине‑голубые
-      strong_undercurl = false,      -- более заметные подчеркивания (undercurl/underline) у диагностик
-      strong_tui_cursor = false,     -- более заметный курсор/выделение в TUI
-      achromatopsia = false,         -- монохром/высокий контраст; минимальная зависимость от оттенков
+      deuteranopia = false,        -- дружественный режим для дальтонизма: «добавления» более сине‑голубые
+      strong_undercurl = false,    -- более заметные подчеркивания (undercurl/underline) у диагностик
+      strong_tui_cursor = false,   -- более заметный курсор/выделение в TUI
+      achromatopsia = false,       -- монохром/высокий контраст; минимальная зависимость от оттенков
+      hc = 'off',                  -- контраст для achromatopsia: 'off' | 'soft' | 'strong'
     },
   },
 })
@@ -68,6 +79,13 @@ vim.cmd.colorscheme('neg')
   - `ui.auto_transparent_panels` — подложка float/Pmenu при прозрачном терминале
   - `ui.diff_focus` — усилить фоны Diff* в :diff
   - `ui.light_signs` — сделать SignColumn менее шумным (смягчить яркость без смены оттенков)
+  - `ui.diag_pattern` — паттерны для диагностик: 'none' | 'minimal' | 'strong'
+  - `ui.lexeme_cues` — подсказки для лексем: 'off' | 'minimal' | 'strong'
+  - `ui.thick_cursor` — усиленный курсор/строка для TUI
+  - `ui.outlines` — рамки активных/неактивных окон через winhighlight
+  - `ui.reading_mode` — почти монохромный режим чтения
+  - `ui.search_visibility` — видимость поиска: 'default' | 'soft' | 'strong'
+  - `ui.screenreader_friendly` — уменьшить динамику акцентов для скринридера
   - `ui.accessibility.*` — независимые тумблеры доступности (см. выше)
 
 ## Быстрые команды
@@ -137,3 +155,4 @@ require('neg').setup({
 -- Для более выразительных диагностик:
 -- :NegDiagStrong
 ```
+
