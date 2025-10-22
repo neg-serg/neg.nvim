@@ -2,6 +2,24 @@ local p = require('neg.palette')
 
 -- Treesitter + LSP semantic token links
 return {
+  -- Core language captures: set explicit styles to avoid relying on builtins
+  ['@keyword']={ fg = p.keyword2_color },
+  ['@keyword.function']={ fg = p.keyword1_color },
+  ['@keyword.operator']={ fg = p.keyword2_color },
+  ['@type']={ fg = p.keyword2_color },
+  ['@type.builtin']={ fg = p.keyword3_color },
+  ['@function']={ fg = p.function_color },
+  ['@function.call']={ link = '@function' },
+  ['@method']={ link = '@function' },
+  ['@method.call']={ link = '@function' },
+  ['@constant']={ fg = p.literal2_color },
+  ['@string']={ fg = p.string_color },
+  ['@number']={ fg = p.keyword1_color },
+  ['@boolean']={ fg = p.literal3_color },
+  ['@operator']={ fg = p.keyword2_color },
+  ['@namespace']={ fg = p.identifier_color },
+  ['@parameter']={ fg = p.identifier_color },
+  ['@variable']={ fg = p.variable_color },
   ['@variable']={fg=p.variable_color},
   ['@variable.parameter']={link='@parameter'},
   ['@variable.member']={link='@field'},
@@ -11,12 +29,12 @@ return {
   ['@string.regexp']={link='@string.regex'},
 
   -- Additional common captures
-  ['@attribute']={link='Identifier'},
-  ['@constructor']={link='Function'},
-  ['@constant.builtin']={link='Constant'},
-  ['@function.builtin']={link='Function'},
-  ['@property']={link='Identifier'},
-  ['@field']={link='Identifier'},
+  ['@attribute']={ fg = p.identifier_color },
+  ['@constructor']={ link='@function' },
+  ['@constant.builtin']={ link='@constant' },
+  ['@function.builtin']={ link='@function' },
+  ['@property']={ fg = p.identifier_color },
+  ['@field']={ fg = p.identifier_color },
   ['@punctuation.bracket']={link='Delimiter'},
   ['@punctuation.delimiter']={link='Delimiter'},
   ['@string.escape']={link='SpecialChar'},

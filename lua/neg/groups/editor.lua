@@ -12,7 +12,9 @@ return {
   ModeMsg={bg='NONE', fg=p.keyword3_color},
   MoreMsg={bg='NONE', fg=p.keyword3_color},
   NonText={bg=nil, fg=p.keyword2_color},
-  Normal={bg=nil, fg=p.default_color},
+  -- Use explicit background when not in transparent mode; apply_transparent() can override to NONE
+  Normal={bg=p.bg_default, fg=p.default_color},
+  NormalNC={link='Normal'},
   NormalFloat={bg='#111d26', fg=p.default_color},
   FloatTitle={fg=p.keyword3_color, bold=true},
   WinBar={fg=p.keyword3_color},
@@ -24,6 +26,7 @@ return {
   Search={bg='NONE', fg=p.search_color, italic=true},
   IncSearch={bg=p.dark_color, fg=p.search_color, italic=true,underline=true},
   CurSearch={bg=p.dark_color, fg=p.search_color, italic=true, bold=true},
+  -- Keep statusline neutral by default; statusline plugins will recolor.
   StatusLine={bg='NONE', fg=p.function_color},
   StatusLineNC={bg='NONE', fg='NONE'},
   Title={bg=nil, fg=p.literal3_color},

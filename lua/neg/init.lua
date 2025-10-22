@@ -8,6 +8,10 @@ local M = {}
 local hi = vim.api.nvim_set_hl
 local p = require('neg.palette')
 local U = require('neg.util')
+-- Forward declaration so M.setup can call it
+local define_commands
+local commands_defined = false
+local autocmds_defined = false
 
 local function apply(tbl)
   for name, style in pairs(tbl) do hi(0, name, style) end
@@ -243,12 +247,37 @@ function M.setup(opts)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
+  if not autocmds_defined then
+    autocmds_defined = true
+    -- Re-apply once after plugins/UI are ready, to defeat late overrides
+    pcall(function()
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'VeryLazy',
+        once = true,
+        callback = function()
+          if vim.g.colors_name == 'neg' then M.setup({ force = true }) end
+        end,
+      })
+      -- If someone calls :colorscheme neg again, ensure we apply with current config
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        callback = function(args)
+          if args.match == 'neg' then M.setup({ force = true }) end
+        end,
+      })
+      -- Ensure final pass at VimEnter when everything is loaded
+      vim.api.nvim_create_autocmd('VimEnter', {
+        once = true,
+        callback = function()
+          if vim.g.colors_name == 'neg' then M.setup({ force = true }) end
+        end,
+      })
+    end)
+  end
   M._applied_key = U.config_signature(cfg)
 end
 
 -- User commands
-local commands_defined = false
-local function define_commands()
+define_commands = function()
   if commands_defined then return end
   commands_defined = true
   vim.api.nvim_create_user_command('NegToggleTransparent', function()
