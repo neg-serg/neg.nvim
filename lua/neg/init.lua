@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.05
+-- Version:     4.06
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -31,7 +31,7 @@ local flags_from = U.flags_from
   -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
   operator_colors = 'families',
   -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
-  number_colors = 'mono',
+  number_colors = 'ramp',
   styles = {
     comments = 'italic',
     keywords = 'none',

@@ -107,7 +107,7 @@ require('neg').setup({
   terminal_colors = true,              -- set 16 ANSI terminal colors
   preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
   operator_colors = 'families',        -- 'families' for subtle per-family hues, or 'mono' for single operator color
-  number_colors = 'mono',              -- 'mono' for single hue, or 'ramp' for subtle integer/hex/octal/binary variants
+  number_colors = 'ramp',              -- default 'ramp' (subtle variants), or 'mono' for single hue
 
   styles = {
     comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
