@@ -272,6 +272,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — set diagnostics virtual text background mode (or turn off/on)
 - :NegDiagBgStrength {0..1} — set strength for alpha/lighten/darken modes
 - :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
+- :NegDiagSoft — quick softer virtual text background (blend ≈ 20)
+- :NegDiagStrong — quick stronger virtual text background (blend ≈ 10)
 - :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine

@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.19
+-- Version:     4.20
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -930,6 +930,24 @@ define_commands = function()
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
   })
+
+  vim.api.nvim_create_user_command('NegDiagSoft', function()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.diagnostics_virtual_bg = true
+    newcfg.diagnostics_virtual_bg_mode = 'blend'
+    newcfg.diagnostics_virtual_bg_blend = 20
+    M.setup(newcfg)
+  end, { desc = 'neg.nvim: Softer diagnostic virtual text backgrounds (blend ~20)' })
+
+  vim.api.nvim_create_user_command('NegDiagStrong', function()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.diagnostics_virtual_bg = true
+    newcfg.diagnostics_virtual_bg_mode = 'blend'
+    newcfg.diagnostics_virtual_bg_blend = 10
+    M.setup(newcfg)
+  end, { desc = 'neg.nvim: Stronger diagnostic virtual text backgrounds (blend ~10)' })
 
   vim.api.nvim_create_user_command('NegLightSigns', function(opts)
     local arg = (opts.args or ''):lower()

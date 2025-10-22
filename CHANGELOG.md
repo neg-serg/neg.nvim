@@ -373,3 +373,7 @@ All notable changes to this project are documented here.
 - Command: `:NegLightSigns {on|off|toggle}` to switch at runtime.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
+## [4.20] - 2025-10-22
+- Diagnostics: add quick commands `:NegDiagSoft` and `:NegDiagStrong` to set softer/stronger virtual text backgrounds (blend ≈ 20 / 10) without tweaking individual settings.
+- Docs: README updated (Commands).
+- Meta: bump version.
