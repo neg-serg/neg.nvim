@@ -22,7 +22,6 @@ return {
   ['@namespace']={ fg = p.identifier_color },
   ['@parameter']={ fg = p.identifier_color },
   ['@variable']={ fg = p.variable_color },
-  ['@variable']={fg=p.variable_color},
   ['@variable.parameter']={link='@parameter'},
   ['@variable.member']={link='@field'},
   ['@module']={link='@namespace'},
@@ -38,6 +37,7 @@ return {
 
   -- Additional common captures
   ['@attribute']={ fg = p.identifier_color },
+  ['@attribute.builtin']={ link='@attribute' },
   ['@constructor']={ link='@function' },
   ['@constant.builtin']={ link='@constant' },
   ['@function.builtin']={ link='@function' },
@@ -49,9 +49,16 @@ return {
   ['@string.escape']={ fg = p.literal2_color },
   ['@string.special.url']={ underline = true, fg = p.keyword4_color },
   ['@character']={ fg = p.string_color },
+  ['@character.special']={ link = '@character' },
+  -- number specializations
+  ['@number.integer']={ link = '@number' },
+  ['@number.hex']={ link = '@number' },
+  ['@number.octal']={ link = '@number' },
+  ['@number.binary']={ link = '@number' },
 
   -- Additional markup helpers
   ['@string.special']={link='@markup.link.label'},
+  ['@string.special.path']={link='@string.special'},
   ['@punctuation.special']={ fg = p.delimiter_color },
 
   -- Markup base styles (TS-only)
@@ -60,11 +67,23 @@ return {
   ['@markup.underline']={ underline = true },
   ['@markup.strikethrough']={ strikethrough = true },
   ['@markup.heading']={ bold = true },
+  ['@markup.heading.1']={ link='@markup.heading' },
+  ['@markup.heading.2']={ link='@markup.heading' },
+  ['@markup.heading.3']={ link='@markup.heading' },
+  ['@markup.heading.4']={ link='@markup.heading' },
+  ['@markup.heading.5']={ link='@markup.heading' },
+  ['@markup.heading.6']={ link='@markup.heading' },
   ['@markup.quote']={ fg = p.comment_color, italic = true },
+  ['@markup.link']={ underline = true },
   ['@markup.link.url']={ underline = true, fg = p.keyword4_color },
   ['@markup.link.label']={ underline = true },
   ['@markup.raw']={ fg = p.string_color },
   ['@markup.raw.block']={ fg = p.string_color },
+  ['@markup.raw.inline']={ link='@markup.raw' },
+  ['@markup.list']={ fg = p.comment_color },
+  ['@markup.list.checked']={ fg = p.identifier_color },
+  ['@markup.list.unchecked']={ fg = p.comment_color },
+  ['@markup.list.numbered']={ fg = p.comment_color },
 
   -- Helix captures
   ['@function.method']={link='@method'},
@@ -75,6 +94,7 @@ return {
   ['@comment.warning']={ fg = p.warning_color },
   ['@comment.error']={ fg = p.diff_delete_color },
   ['@comment.note']={ fg = p.identifier_color },
+  ['@comment.documentation']={ fg = p.comment_color, italic = true },
 
   -- Diff groups
   ['@diff.plus']={ fg = p.diff_add_color },
@@ -97,16 +117,20 @@ return {
   ['@define']={ fg = p.preproc_dark_color },
   ['@include']={ fg = p.include_color },
   ['@macro']={ link='@function.macro' },
+  ['@constant.macro']={ link='@macro' },
   ['@conditional']={ fg = p.keyword1_color },
   ['@repeat']={ fg = p.keyword1_color },
   ['@label']={ fg = p.keyword3_color },
   ['@exception']={ fg = p.red_blood_color },
   ['@storageclass']={ fg = p.keyword1_color },
+  ['@type.qualifier']={ link='@keyword' },
+  ['@type.parameter']={ link='@type' },
 
   -- HTML/XML-like tags
   ['@tag']={ fg = p.tag_color },
   ['@tag.delimiter']={ fg = p.keyword2_color },
   ['@tag.attribute']={ fg = p.identifier_color },
+  ['@module.builtin']={ link='@module' },
 
   -- LSP semantic tokens
   ['@lsp.type.class']={link='@type'},
