@@ -14,6 +14,15 @@ All notable changes to this project are documented here.
 - Validator: removed `neg.groups.syntax` from module lists.
 - Validator: drop legacy Vim `syntax` groups from builtin target list; only UI/core groups are recognized as built-in.
 - Treesitter: removed legacy `@text.*` alias links; use `@markup.*` and `@comment.*` captures.
+- Treesitter: extended coverage for additional captures:
+  - numbers: `@number.{integer,hex,octal,binary}`
+  - constants/macros: `@constant.macro`
+  - types: `@type.{parameter,qualifier}`
+  - attributes/modules: `@attribute.builtin`, `@module.builtin`
+  - characters: `@character.special`
+  - markup: `@markup.heading.{1..6}`, `@markup.link`, `@markup.raw.inline`, `@markup.list{,.checked,.unchecked,.numbered}`
+  - strings/comments: `@string.special.path`, `@comment.documentation`
+- Styles: style flags now apply to the new captures above.
 - Migration tip: if you still depend on legacy Vim syntax groups, define them in your config or link them to the corresponding `@` captures.
 
 
