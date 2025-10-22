@@ -12,6 +12,7 @@ local allowed_keys = {
 
 -- Common builtin highlight targets present in Neovim
 local builtin_targets = {
+  -- UI/core groups only; legacy Vim 'syntax' groups removed
   Normal=true, NormalNC=true, NormalFloat=true,
   SignColumn=true, FoldColumn=true, LineNr=true,
   CursorLine=true, CursorColumn=true, CursorLineNr=true,
@@ -22,12 +23,7 @@ local builtin_targets = {
   VertSplit=true, Folded=true, SpecialKey=true, NonText=true,
   SpellBad=true, SpellCap=true, SpellLocal=true, SpellRare=true,
   TabLine=true, TabLineFill=true, TabLineSel=true,
-  String=true, Constant=true, Identifier=true, Statement=true, Keyword=true,
-  Function=true, Conditional=true, Repeat=true, Label=true, Operator=true,
-  PreProc=true, Include=true, Define=true, Macro=true, PreCondit=true,
-  Type=true, StorageClass=true, Structure=true, Typedef=true, Special=true,
-  SpecialChar=true, SpecialComment=true, Underlined=true, Ignore=true,
-  Delimiter=true, Todo=true, FloatBorder=true, WinSeparator=true,
+  Underlined=true, FloatBorder=true, WinSeparator=true,
 }
 
 local function load_tables()
