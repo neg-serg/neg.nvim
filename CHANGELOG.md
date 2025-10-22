@@ -317,3 +317,13 @@ All notable changes to this project are documented here.
 - Treesitter: add option `treesitter.extras = true` (default) to enable subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links). Moved these into `neg.groups.treesitter_extras` and apply conditionally.
 - Validator: include `neg.groups.treesitter_extras` in module scan.
 - Meta: bump version.
+
+## [4.09] - 2025-10-22
+- Treesitter extras: add more subtle captures/links:
+  - Markup: `@markup.link.text` → `@markup.link.label`
+  - Punctuation families: `@punctuation.parenthesis`/`@punctuation.brace` → `@punctuation.bracket`
+  - Types: `@type.enum`/`@type.union`/`@type.interface` → `@type`
+  - Strings: `@string.documentation` (italic, comment tone)
+  - Constants: `@constant.builtin.{boolean,numeric}` → `@boolean`/`@number`
+  - LSP typemod: `@lsp.typemod.enumMember.static` → `@constant`
+- Meta: bump version.

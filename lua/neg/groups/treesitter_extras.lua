@@ -17,6 +17,7 @@ return {
   ['@markup.math']={ fg = p.literal2_color },
   ['@markup.environment']={ fg = p.preproc_dark_color },
   ['@markup.environment.name']={ fg = p.tag_color },
+  ['@markup.link.text']={ link = '@markup.link.label' },
 
   -- LSP types
   ['@lsp.type.decorator']={link='@function.macro'},
@@ -32,8 +33,24 @@ return {
   ['@lsp.typemod.method.declaration']={link='@method'},
   ['@lsp.typemod.property.static']={link='@property'},
   ['@lsp.typemod.function.static']={link='@function'},
+  ['@lsp.typemod.enumMember.static']={link='@constant'},
   ['@lsp.typemod.enumMember.readonly']={link='@constant'},
   ['@lsp.typemod.type.abstract']={link='@type'},
   ['@lsp.typemod.class.abstract']={link='@type'},
-}
 
+  -- Punctuation families
+  ['@punctuation.parenthesis']={ link = '@punctuation.bracket' },
+  ['@punctuation.brace']={ link = '@punctuation.bracket' },
+
+  -- Types extensions
+  ['@type.enum']={ link = '@type' },
+  ['@type.union']={ link = '@type' },
+  ['@type.interface']={ link = '@type' },
+
+  -- String documentation (docstrings)
+  ['@string.documentation']={ fg = p.comment_color, italic = true },
+
+  -- Builtin constant refinements
+  ['@constant.builtin.boolean']={ link = '@boolean' },
+  ['@constant.builtin.numeric']={ link = '@number' },
+}
