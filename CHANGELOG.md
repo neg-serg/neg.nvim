@@ -327,3 +327,7 @@ All notable changes to this project are documented here.
   - Constants: `@constant.builtin.{boolean,numeric}` → `@boolean`/`@number`
   - LSP typemod: `@lsp.typemod.enumMember.static` → `@constant`
 - Meta: bump version.
+## [4.10] - 2025-10-22
+- Preset: add `accessibility` profile with higher contrast, minimal italics, stronger separators and line numbers; disables soft diagnostic virtual backgrounds.
+- Docs: README updated (presets list and examples).
+- Meta: bump version.

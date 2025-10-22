@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.09
+-- Version:     4.10
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -154,6 +154,27 @@ local function apply_preset(preset, cfg)
       if base.sp then spec.sp = base.sp end
       hi(0, g, spec)
     end
+  elseif preset == 'accessibility' then
+    -- higher contrast, minimal italics, stronger lines/numbers
+    s.comments = 'none'
+    -- disable soft virtual backgrounds for diagnostics for clarity
+    if cfg then cfg.diagnostics_virtual_bg = false end
+    -- Lines and numbers
+    hi(0, 'LineNr', { fg = p.white_color, bold = true, italic = false })
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('CursorLineNr')) or {}
+      local spec = { fg = p.white_color, bold = true, italic = false }
+      if base.bg then spec.bg = base.bg end
+      hi(0, 'CursorLineNr', spec)
+    end
+    -- Stronger separators/borders
+    hi(0, 'VertSplit', { fg = p.border_color })
+    hi(0, 'WinSeparator', { fg = p.border_color })
+    -- Clear, slightly darker line/column backgrounds
+    hi(0, 'CursorLine', { bg = U.darken(p.bg_default, 8) })
+    hi(0, 'ColorColumn', { bg = U.darken(p.bg_default, 12) })
+    -- Selection more visible (no bold noise)
+    hi(0, 'Visual', { bg = U.darken(p.bg_default, 16) })
   end
 end
 
@@ -483,9 +504,9 @@ define_commands = function()
 
   vim.api.nvim_create_user_command('NegPreset', function(opts)
     local preset = (opts.args or ''):lower()
-    local allowed = { soft=true, hard=true, pro=true, writing=true, none=true }
+    local allowed = { soft=true, hard=true, pro=true, writing=true, accessibility=true, none=true }
     if not allowed[preset] then
-      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|none")
+      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|accessibility|none")
       return
     end
     local cfg = M._config or default_config
@@ -496,9 +517,9 @@ define_commands = function()
   end, {
     nargs = 1,
     complete = function()
-      return { 'soft', 'hard', 'pro', 'writing', 'none' }
+      return { 'soft', 'hard', 'pro', 'writing', 'accessibility', 'none' }
     end,
-    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|none)'
+    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|accessibility|none)'
   })
 
   vim.api.nvim_create_user_command('NegDiagBgMode', function(opts)
