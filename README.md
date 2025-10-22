@@ -111,6 +111,7 @@ require('neg').setup({
   ui = {
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
+    mode_accent = false,               -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)

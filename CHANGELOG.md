@@ -345,3 +345,7 @@ All notable changes to this project are documented here.
 - UI: add `ui.dim_inactive` (default false) — dims non‑current windows via `NormalNC`/`WinBarNC` and maps `LineNr` to a dim variant using window‑local `winhighlight` (on `WinEnter/WinLeave`).
 - Docs: README updated (UI options).
 - Meta: bump version.
+## [4.14] - 2025-10-22
+- UI: add `ui.mode_accent` (default false) — mode-aware accents for `CursorLine` and `StatusLine` based on Vim mode (Normal/Insert/Visual). Implemented via `ModeChanged`/`WinEnter` autocmds with palette-derived hues.
+- Docs: README updated (UI options).
+- Meta: bump version.

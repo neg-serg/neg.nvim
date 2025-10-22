@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.13
+-- Version:     4.14
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -39,6 +39,8 @@ local flags_from = U.flags_from
       core_enhancements = true,
       -- Dim inactive windows (NormalNC/WinBarNC) and line numbers via winhighlight mapping
       dim_inactive = false,
+      -- Mode-aware accents for CursorLine/StatusLine by Vim mode (Normal/Insert/Visual)
+      mode_accent = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -223,6 +225,60 @@ local function apply_preset(preset, cfg)
 end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
+
+local function apply_mode_accent(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.mode_accent == true
+  local ok_api = (vim and vim.api and vim.api.nvim_create_autocmd)
+  local grp = ok_api and vim.api.nvim_create_augroup('NegModeAccent', { clear = true }) or nil
+  local function set_for_mode(mode)
+    mode = tostring(mode or '')
+    local function cursorline_bg()
+      if mode:match('^i') then
+        return (U.alpha and U.alpha(p.include_color, p.bg_default, 0.14)) or U.lighten(p.bg_default, 6)
+      elseif mode:match('^v') or mode == 'V' or mode == '\22' then -- visual/line/block
+        return (U.alpha and U.alpha(p.tag_color, p.bg_default, 0.14)) or U.darken(p.bg_default, 10)
+      else
+        return U.darken(p.bg_default, 8)
+      end
+    end
+    local function statusline_fg()
+      if mode:match('^i') then return p.include_color
+      elseif mode:match('^v') or mode == 'V' or mode == '\22' then return p.tag_color
+      else return p.function_color end
+    end
+    local base_cl = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
+    local cl_spec = { bg = cursorline_bg() }
+    if base_cl.fg then cl_spec.fg = base_cl.fg end
+    if base_cl.sp then cl_spec.sp = base_cl.sp end
+    hi(0, 'CursorLine', cl_spec)
+    local base_sl = (U.get_hl_colors and U.get_hl_colors('StatusLine')) or {}
+    local sl_spec = { fg = statusline_fg(), bg = base_sl.bg or 'NONE' }
+    hi(0, 'StatusLine', sl_spec)
+  end
+  if enable and ok_api then
+    -- Set initial based on current mode
+    local cur = (vim.api.nvim_get_mode and vim.api.nvim_get_mode().mode) or ''
+    set_for_mode(cur)
+    vim.api.nvim_create_autocmd('ModeChanged', {
+      group = grp,
+      callback = function()
+        local m = (vim.v and vim.v.event and vim.v.event.new_mode) or ''
+        set_for_mode(m)
+      end,
+    })
+    vim.api.nvim_create_autocmd('WinEnter', { group = grp, callback = function()
+      local m = (vim.api.nvim_get_mode and vim.api.nvim_get_mode().mode) or ''
+      set_for_mode(m)
+    end })
+  elseif ok_api then
+    -- Disabled: clear group and restore StatusLine fg to default function color; do not force CursorLine
+    vim.api.nvim_create_augroup('NegModeAccent', { clear = true })
+    local base_sl = (U.get_hl_colors and U.get_hl_colors('StatusLine')) or {}
+    local spec = { fg = p.function_color, bg = base_sl.bg or 'NONE' }
+    hi(0, 'StatusLine', spec)
+  end
+end
 
 local function apply_dim_inactive(cfg)
   local ui = cfg and cfg.ui or {}
@@ -500,6 +556,7 @@ function M.setup(opts)
   apply_operator_colors(cfg.operator_colors)
   apply_number_colors(cfg.number_colors)
   apply_dim_inactive(cfg)
+  apply_mode_accent(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
