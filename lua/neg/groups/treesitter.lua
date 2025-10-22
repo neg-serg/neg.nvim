@@ -3,7 +3,8 @@ local p = require('neg.palette')
 -- Treesitter + LSP semantic token links
 return {
   -- Core language captures: set explicit styles to avoid relying on builtins
-  ['@comment']={ link = 'Comment' },
+  -- TS-only comments styling (do not depend on legacy Comment group)
+  ['@comment']={ fg = p.comment_color, italic = true },
   ['@keyword']={ fg = p.keyword2_color },
   ['@keyword.function']={ fg = p.keyword1_color },
   ['@keyword.operator']={ fg = p.keyword2_color },
@@ -64,6 +65,10 @@ return {
   ['@function.method.call']={link='@method.call'},
 
   -- Comment severities
+  ['@comment.todo']={link='DiagnosticInfo'},
+  ['@comment.warning']={link='DiagnosticWarn'},
+  ['@comment.error']={link='DiagnosticError'},
+  ['@comment.note']={link='DiagnosticHint'},
   ['@text.todo']={link='@comment.todo'},
   ['@text.danger']={link='@comment.error'},
   ['@text.warning']={link='@comment.warning'},
