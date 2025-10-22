@@ -368,3 +368,8 @@ All notable changes to this project are documented here.
 - Implementation: global highlights toggled via autocmds; previous colors preserved and restored when leaving diff.
 - Docs: README updated (UI options).
 - Meta: bump version.
+## [4.19] - 2025-10-22
+- UI: add `ui.light_signs` (default false) — softens sign icons (`DiagnosticSign*`, `GitSigns*`) by blending their hue with background to reduce noise while keeping semantics.
+- Command: `:NegLightSigns {on|off|toggle}` to switch at runtime.
+- Docs: README updated (UI options + Commands).
+- Meta: bump version.

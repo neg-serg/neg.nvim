@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.18
+-- Version:     4.19
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -47,6 +47,8 @@ local flags_from = U.flags_from
       auto_transparent_panels = true,
       -- Diff focus: stronger Diff* backgrounds when any window is in :diff mode
       diff_focus = true,
+      -- Light signs: soften sign icons (DiagnosticSign*, GitSigns*) without changing their hue
+      light_signs = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -388,6 +390,46 @@ local function apply_diff_focus(cfg)
   })
 end
 
+local function apply_light_signs(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.light_signs == true
+  if not enable then
+    if M._light_signs and M._light_signs.base then
+      for name, prev in pairs(M._light_signs.base) do
+        local spec = {}
+        if prev.fg then spec.fg = prev.fg end
+        if prev.bg then spec.bg = prev.bg end
+        if prev.sp then spec.sp = prev.sp end
+        hi(0, name, spec)
+      end
+    end
+    M._light_signs = nil
+    return
+  end
+  local map = {
+    DiagnosticSignError = p.diff_delete_color,
+    DiagnosticSignWarn  = p.warning_color,
+    DiagnosticSignInfo  = p.preproc_light_color,
+    DiagnosticSignHint  = p.identifier_color,
+    DiagnosticSignOk    = p.diff_add_color,
+    GitSignsAdd         = p.diff_add_color,
+    GitSignsChange      = p.diff_change_color,
+    GitSignsDelete      = p.diff_delete_color,
+    GitSignsTopdelete   = p.diff_delete_color,
+    GitSignsChangedelete= p.diff_change_color,
+    GitSignsUntracked   = p.identifier_color,
+  }
+  M._light_signs = { base = {} }
+  local strength = 0.45
+  for g, col in pairs(map) do
+    if not M._light_signs.base[g] then
+      M._light_signs.base[g] = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+    end
+    local fg = (U.alpha and U.alpha(col, p.bg_default, strength)) or col
+    hi(0, g, { fg = fg })
+  end
+end
+
 local function apply_dim_inactive(cfg)
   local ui = cfg and cfg.ui or {}
   local enable = ui and ui.dim_inactive == true
@@ -668,6 +710,7 @@ function M.setup(opts)
   apply_soft_borders(cfg)
   apply_auto_transparent_panels(cfg)
   apply_diff_focus(cfg)
+  apply_light_signs(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -886,6 +929,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegLightSigns', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.light_signs = true
+    elseif arg == 'off' then
+      newcfg.ui.light_signs = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.light_signs = not (cfg.ui and cfg.ui.light_signs == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set light signs (DiagnosticSign*/GitSigns*) (on|off|toggle)'
   })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()

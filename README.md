@@ -115,6 +115,7 @@ require('neg').setup({
     soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
+    light_signs = false,               -- soften sign icons (DiagnosticSign*, GitSigns*) without changing hue
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
@@ -275,6 +276,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
+- :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 
 ## Overrides
 
