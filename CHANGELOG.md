@@ -390,3 +390,11 @@ All notable changes to this project are documented here.
 - Numbers ramp: add presets — `ramp-soft` (very subtle), `ramp` (balanced, default), `ramp-strong` (higher contrast). Usable via `number_colors` option and `:NegNumberColors` command.
 - Docs: README updated (options + command).
 - Meta: bump version.
+## [4.24] - 2025-10-22
+- Accessibility options:
+  - `ui.accessibility.deuteranopia` — shifts additions (ok/plus) toward blue for red/green deficiency; warnings remain orange.
+  - `ui.accessibility.strong_undercurl` — makes diagnostic undercurls more visible (adds underline fallback).
+  - `ui.accessibility.strong_tui_cursor` — stronger `Cursor`/`TermCursor` and `Visual` for TUI.
+- Command: `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor} {on|off|toggle}`.
+- Docs: README updated (UI options + Commands).
+- Meta: bump version.

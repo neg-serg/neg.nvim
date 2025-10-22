@@ -116,6 +116,11 @@ require('neg').setup({
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
     light_signs = false,               -- soften sign icons (DiagnosticSign*, GitSigns*) without changing hue
+    accessibility = {                  -- independent toggles
+      deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
+      strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
+      strong_tui_cursor = false,       -- stronger Cursor/TermCursor/Visual for TUI
+    },
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
@@ -281,6 +286,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
+- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features
+  - features: deuteranopia | strong_undercurl | strong_tui_cursor
 
 ## Overrides
 

@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.23
+-- Version:     4.24
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -51,6 +51,12 @@ local flags_from = U.flags_from
       diff_focus = true,
       -- Light signs: soften sign icons (DiagnosticSign*, GitSigns*) without changing their hue
       light_signs = false,
+      -- Accessibility options (independent toggles)
+      accessibility = {
+        deuteranopia = false,      -- shift additions to blue‑ish hue; keep warnings distinct
+        strong_undercurl = false,  -- stronger/more visible diagnostic undercurls
+        strong_tui_cursor = false, -- stronger Cursor/TermCursor/Visual for TUI
+      },
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -449,6 +455,39 @@ local function apply_light_signs(cfg)
   end
 end
 
+local function apply_accessibility_opts(cfg)
+  local ui = cfg and cfg.ui or {}
+  local acc = ui and ui.accessibility or {}
+  -- Deuteranopia-friendly: make additions blue-ish, keep deletes red and warnings orange
+  if acc.deuteranopia then
+    local add = p.include_color
+    local add_bg = (U.alpha and U.alpha(add, p.bg_default, 0.18)) or add
+    for _, g in ipairs({ '@diff.plus' }) do hi(0, g, { fg = add }) end
+    hi(0, 'DiffAdd', { fg = add, bg = add_bg })
+    for _, g in ipairs({ 'GitSignsAdd','GitGutterAdd','DiagnosticOk','DiagnosticSignOk','DiagnosticVirtualTextOk' }) do hi(0, g, { fg = add }) end
+  end
+  -- Stronger undercurls for diagnostics
+  if acc.strong_undercurl then
+    local map = {
+      { 'DiagnosticUnderlineError', p.diff_delete_color },
+      { 'DiagnosticUnderlineWarn',  p.warning_color },
+      { 'DiagnosticUnderlineInfo',  p.preproc_light_color },
+      { 'DiagnosticUnderlineHint',  p.identifier_color },
+      { 'DiagnosticUnderlineOk',    p.diff_add_color },
+    }
+    for _, entry in ipairs(map) do
+      local name, col = entry[1], entry[2]
+      hi(0, name, { undercurl = true, underline = true, sp = col })
+    end
+  end
+  -- Stronger TUI cursor/selection
+  if acc.strong_tui_cursor then
+    hi(0, 'Cursor', { reverse = true, bold = true })
+    hi(0, 'TermCursor', { reverse = true, bold = true })
+    hi(0, 'Visual', { bg = U.darken(p.bg_default, 18) })
+  end
+end
+
 local function apply_dim_inactive(cfg)
   local ui = cfg and cfg.ui or {}
   local enable = ui and ui.dim_inactive == true
@@ -750,6 +789,7 @@ function M.setup(opts)
   apply_diff_focus(cfg)
   apply_light_signs(cfg)
   apply_punct_family(cfg)
+  apply_accessibility_opts(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -1030,6 +1070,41 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set punctuation family differentiation (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegAccessibility', function(opts)
+    local arg = (opts.args or ''):lower()
+    local parts = {}
+    for w in arg:gmatch("%S+") do parts[#parts+1] = w end
+    local feature = parts[1]
+    local state = (parts[2] or 'toggle')
+    local features = { deuteranopia=true, strong_undercurl=true, strong_tui_cursor=true }
+    if not features[feature or ''] then
+      print("neg.nvim: unknown feature '" .. tostring(feature) .. "'. Use: deuteranopia|strong_undercurl|strong_tui_cursor [on|off|toggle]")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.accessibility = vim.tbl_deep_extend('force', { deuteranopia=false, strong_undercurl=false, strong_tui_cursor=false }, newcfg.ui.accessibility or {})
+    local cur = newcfg.ui.accessibility[feature] == true
+    if state == 'on' then newcfg.ui.accessibility[feature] = true
+    elseif state == 'off' then newcfg.ui.accessibility[feature] = false
+    elseif state == 'toggle' or state == '' then newcfg.ui.accessibility[feature] = not cur
+    else
+      print("neg.nvim: unknown arg '" .. state .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '*',
+    complete = function(_, line)
+      local toks = {}
+      for w in line:gmatch('%S+') do toks[#toks+1] = w end
+      if #toks <= 2 then return { 'deuteranopia', 'strong_undercurl', 'strong_tui_cursor' } end
+      return { 'on', 'off', 'toggle' }
+    end,
+    desc = 'neg.nvim: Accessibility toggles: deuteranopia|strong_undercurl|strong_tui_cursor [on|off|toggle]'
   })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()
