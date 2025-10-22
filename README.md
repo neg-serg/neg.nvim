@@ -289,8 +289,14 @@ require('neg').setup({ preset = 'hard' })
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
--- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features
-  - features: deuteranopia | strong_undercurl | strong_tui_cursor | achromatopsia
+- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia)
+- :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
+- :NegLexemeCues {off|minimal|strong} — set lexeme cues
+- :NegThickCursor {on|off|toggle} — thicker CursorLine/CursorLineNr
+- :NegOutlines {on|off|toggle} — window outlines
+- :NegReadingMode {on|off|toggle} — near-monochrome reading mode
+- :NegSearchVisibility {default|soft|strong} — search/cursearch visibility
+- :NegHc {off|soft|strong} — high-contrast pack presets
 
 ## Overrides
 

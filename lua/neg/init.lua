@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.28
+-- Version:     4.29
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -57,7 +57,22 @@ local flags_from = U.flags_from
         strong_undercurl = false,  -- stronger/more visible diagnostic undercurls
         strong_tui_cursor = false, -- stronger Cursor/TermCursor/Visual for TUI
         achromatopsia = false,     -- monochrome/high-contrast assist: reduce reliance on hue
+        hc = 'off',                -- high-contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
       },
+      -- Diagnostics pattern presets: 'none' | 'minimal' | 'strong'
+      diag_pattern = 'none',
+      -- Lexeme cues: 'off' | 'minimal' | 'strong' (underline for functions; underline+bold for types)
+      lexeme_cues = 'off',
+      -- Thick cursor/selection in TUI
+      thick_cursor = false,
+      -- Window/float outlines (active vs inactive)
+      outlines = false,
+      -- Reading mode: near-monochrome syntax with clearer structure
+      reading_mode = false,
+      -- Search visibility preset: 'default' | 'soft' | 'strong'
+      search_visibility = 'default',
+      -- Screenreader friendly: reduce dynamic accents and colored backgrounds
+      screenreader_friendly = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -529,6 +544,170 @@ local function apply_accessibility_opts(cfg)
     -- 5) Comments without italics
     hi(0, '@comment', { fg = p.comment_color, italic = false })
   end
+  -- High-contrast pack for achromatopsia (applies regardless, but intended to pair with it)
+  if acc.hc and acc.hc ~= 'off' then
+    local soft = (acc.hc == 'soft')
+    local function tweak(bg_delta)
+      return soft and bg_delta or (bg_delta * 1.6)
+    end
+    hi(0, 'Visual',      { bg = U.darken(p.bg_default, tweak(14)) })
+    hi(0, 'ColorColumn', { bg = U.darken(p.bg_default, tweak(18)) })
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('StatusLine')) or {}
+      hi(0, 'StatusLine', { fg = p.white_color, bg = base.bg or 'NONE', bold = true })
+    end
+    hi(0, 'NormalFloat', { bg = U.darken(p.bg_float or p.bg_default, tweak(10)) })
+    hi(0, 'Pmenu',       { bg = U.darken(p.bg_default, tweak(8)) })
+    hi(0, 'FloatBorder', { fg = p.border_color })
+  end
+end
+
+local function apply_diag_pattern(cfg)
+  local ui = cfg and cfg.ui or {}
+  local mode = (ui and ui.diag_pattern) or 'none'
+  if mode == 'none' then return end
+  -- Minimal: underline warn/info; Strong: error undercurl+underline + bold VText
+  if mode == 'minimal' or mode == 'strong' then
+    hi(0, 'DiagnosticUnderlineWarn', { underline = true, undercurl = false, sp = p.warning_color })
+    hi(0, 'DiagnosticUnderlineInfo', { underline = true, undercurl = false, sp = p.preproc_light_color })
+    hi(0, 'DiagnosticUnderlineHint', { underline = true, undercurl = false, sp = p.identifier_color })
+  end
+  if mode == 'strong' then
+    hi(0, 'DiagnosticUnderlineError', { underline = true, undercurl = true, sp = p.diff_delete_color })
+    for _, g in ipairs({ 'DiagnosticVirtualTextError','DiagnosticVirtualTextWarn','DiagnosticVirtualTextInfo','DiagnosticVirtualTextHint' }) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      local spec = { bold = true }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, g, spec)
+    end
+  end
+end
+
+local function apply_lexeme_cues(cfg)
+  local ui = cfg and cfg.ui or {}
+  local mode = (ui and ui.lexeme_cues) or 'off'
+  if mode == 'off' then return end
+  if mode == 'minimal' or mode == 'strong' then
+    for _, g in ipairs({ '@function','@method' }) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      local spec = { underline = true }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      hi(0, g, spec)
+    end
+  end
+  if mode == 'strong' then
+    for _, g in ipairs({ '@type','@type.builtin','@type.definition' }) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      local spec = { underline = true, bold = true }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      hi(0, g, spec)
+    end
+  end
+end
+
+local function apply_thick_cursor(cfg)
+  local ui = cfg and cfg.ui or {}
+  if not (ui and ui.thick_cursor) then return end
+  hi(0, 'CursorLine', { bg = U.darken(p.bg_default, 14) })
+  do
+    local base = (U.get_hl_colors and U.get_hl_colors('CursorLineNr')) or {}
+    local spec = { bold = true }
+    if base.fg then spec.fg = base.fg end
+    if base.bg then spec.bg = base.bg end
+    hi(0, 'CursorLineNr', spec)
+  end
+  hi(0, 'Cursor', { reverse = true, bold = true })
+  hi(0, 'TermCursor', { reverse = true, bold = true })
+end
+
+local function apply_outlines(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.outlines
+  local ok = (vim and vim.api and vim.api.nvim_create_autocmd)
+  if not ok then return end
+  local grp = vim.api.nvim_create_augroup('NegOutlines', { clear = true })
+  if not enable then
+    vim.api.nvim_create_autocmd({ 'WinEnter','BufWinEnter' }, { group = grp, callback = function()
+      pcall(vim.api.nvim_set_option_value, 'winhighlight', '', { scope = 'local' })
+    end })
+    return
+  end
+  hi(0, 'NegWinSepActive',   { fg = p.border_color })
+  hi(0, 'NegWinSepInactive', { fg = U.darken(p.bg_default, 12) })
+  vim.api.nvim_create_autocmd('WinEnter', { group = grp, callback = function()
+    local prev = vim.wo.winhighlight or ''
+    local mapped = 'WinSeparator:NegWinSepActive'
+    if prev ~= '' then
+      if not prev:match('WinSeparator:') then prev = prev .. (prev:sub(-1) == ',' and '' or ',') .. mapped
+      else prev = prev:gsub('WinSeparator:[^,]+', mapped) end
+    else prev = mapped end
+    pcall(vim.api.nvim_set_option_value, 'winhighlight', prev, { scope = 'local' })
+  end })
+  vim.api.nvim_create_autocmd('WinLeave', { group = grp, callback = function()
+    local prev = vim.wo.winhighlight or ''
+    local mapped = 'WinSeparator:NegWinSepInactive'
+    if prev ~= '' then
+      if not prev:match('WinSeparator:') then prev = prev .. (prev:sub(-1) == ',' and '' or ',') .. mapped
+      else prev = prev:gsub('WinSeparator:[^,]+', mapped) end
+    else prev = mapped end
+    pcall(vim.api.nvim_set_option_value, 'winhighlight', prev, { scope = 'local' })
+  end })
+end
+
+local function apply_reading_mode(cfg)
+  local ui = cfg and cfg.ui or {}
+  if not (ui and ui.reading_mode) then return end
+  -- Near-monochrome syntax (leave UI accents)
+  for _, g in ipairs({ '@keyword','@function','@method','@type','@type.builtin','@type.definition','@string','@number','@boolean','@operator','@constant','@variable','@property','@field','@namespace','@tag','@punctuation.bracket','@punctuation.delimiter','@punctuation.special' }) do
+    hi(0, g, { fg = p.default_color })
+  end
+  hi(0, 'Whitespace', { fg = U.lighten(p.comment_color, 12) })
+  hi(0, 'Visual', { bg = U.darken(p.bg_default, 10) })
+  hi(0, 'ColorColumn', { bg = U.darken(p.bg_default, 14) })
+end
+
+local function apply_search_visibility(cfg)
+  local ui = cfg and cfg.ui or {}
+  local mode = (ui and ui.search_visibility) or 'default'
+  if mode == 'default' then return end
+  if mode == 'soft' then
+    local b = (U.get_hl_colors and U.get_hl_colors('Search')) or {}
+    hi(0, 'Search', { underline = true, italic = false, fg = b.fg or p.search_color, bg = 'NONE' })
+    local c = (U.get_hl_colors and U.get_hl_colors('CurSearch')) or {}
+    hi(0, 'CurSearch', { bold = true, underline = true, fg = c.fg or p.search_color, bg = c.bg })
+  elseif mode == 'strong' then
+    local b = (U.get_hl_colors and U.get_hl_colors('Search')) or {}
+    hi(0, 'Search', { underline = true, italic = false, fg = b.fg or p.search_color, bg = 'NONE' })
+    local c = (U.get_hl_colors and U.get_hl_colors('CurSearch')) or {}
+    hi(0, 'CurSearch', { bold = true, underline = true, fg = p.white_color, bg = U.darken(p.bg_default, 18) })
+  end
+end
+
+local function apply_screenreader(cfg)
+  local ui = cfg and cfg.ui or {}
+  if not (ui and ui.screenreader_friendly) then return end
+  -- Minimize dynamic accents: reset StatusLine/CursorLine to stable, disable strong diff focus backgrounds
+  do
+    local base = (U.get_hl_colors and U.get_hl_colors('StatusLine')) or {}
+    hi(0, 'StatusLine', { fg = p.function_color, bg = base.bg or 'NONE' })
+    local cl = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
+    hi(0, 'CursorLine', { bg = cl.bg or U.darken(p.bg_default, 8) })
+  end
+  -- Clear diff focus strengthening if any
+  if M._diff_strong and M._diff_base then
+    for name, prev in pairs(M._diff_base) do
+      local spec = {}
+      if prev.fg then spec.fg = prev.fg end
+      if prev.bg then spec.bg = prev.bg end
+      if prev.sp then spec.sp = prev.sp end
+      hi(0, name, spec)
+    end
+    M._diff_strong, M._diff_base = false, nil
+  end
 end
 
 local function apply_dim_inactive(cfg)
@@ -833,6 +1012,13 @@ function M.setup(opts)
   apply_light_signs(cfg)
   apply_punct_family(cfg)
   apply_accessibility_opts(cfg)
+  apply_diag_pattern(cfg)
+  apply_lexeme_cues(cfg)
+  apply_thick_cursor(cfg)
+  apply_outlines(cfg)
+  apply_reading_mode(cfg)
+  apply_search_visibility(cfg)
+  apply_screenreader(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -1149,6 +1335,96 @@ define_commands = function()
     end,
     desc = 'neg.nvim: Accessibility toggles: deuteranopia|strong_undercurl|strong_tui_cursor [on|off|toggle]'
   })
+
+  vim.api.nvim_create_user_command('NegDiagPattern', function(opts)
+    local m = (opts.args or ''):lower()
+    local allowed = { none=true, minimal=true, strong=true }
+    if not allowed[m] then
+      print("neg.nvim: unknown mode '" .. m .. "'. Use: none|minimal|strong")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.diag_pattern = m
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'none','minimal','strong' } end, desc = 'neg.nvim: Set diagnostics pattern preset' })
+
+  vim.api.nvim_create_user_command('NegLexemeCues', function(opts)
+    local m = (opts.args or ''):lower()
+    local allowed = { off=true, minimal=true, strong=true }
+    if not allowed[m] then
+      print("neg.nvim: unknown mode '" .. m .. "'. Use: off|minimal|strong")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.lexeme_cues = m
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'off','minimal','strong' } end, desc = 'neg.nvim: Set lexeme cues strength' })
+
+  vim.api.nvim_create_user_command('NegThickCursor', function(opts)
+    local a = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if a == 'on' then newcfg.ui.thick_cursor = true
+    elseif a == 'off' then newcfg.ui.thick_cursor = false
+    else newcfg.ui.thick_cursor = not (cfg.ui and cfg.ui.thick_cursor == true) end
+    M.setup(newcfg)
+  end, { nargs = '?', complete = function() return { 'on','off','toggle' } end, desc = 'neg.nvim: Toggle/Set thick cursor mode' })
+
+  vim.api.nvim_create_user_command('NegOutlines', function(opts)
+    local a = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if a == 'on' then newcfg.ui.outlines = true
+    elseif a == 'off' then newcfg.ui.outlines = false
+    else newcfg.ui.outlines = not (cfg.ui and cfg.ui.outlines == true) end
+    M.setup(newcfg)
+  end, { nargs = '?', complete = function() return { 'on','off','toggle' } end, desc = 'neg.nvim: Toggle/Set UI outlines' })
+
+  vim.api.nvim_create_user_command('NegReadingMode', function(opts)
+    local a = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if a == 'on' then newcfg.ui.reading_mode = true
+    elseif a == 'off' then newcfg.ui.reading_mode = false
+    else newcfg.ui.reading_mode = not (cfg.ui and cfg.ui.reading_mode == true) end
+    M.setup(newcfg)
+  end, { nargs = '?', complete = function() return { 'on','off','toggle' } end, desc = 'neg.nvim: Toggle/Set reading mode' })
+
+  vim.api.nvim_create_user_command('NegSearchVisibility', function(opts)
+    local m = (opts.args or ''):lower()
+    local allowed = { default=true, soft=true, strong=true }
+    if not allowed[m] then
+      print("neg.nvim: unknown mode '" .. m .. "'. Use: default|soft|strong")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.search_visibility = m
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'default','soft','strong' } end, desc = 'neg.nvim: Set search visibility preset' })
+
+  vim.api.nvim_create_user_command('NegHc', function(opts)
+    local m = (opts.args or ''):lower()
+    local allowed = { off=true, soft=true, strong=true }
+    if not allowed[m] then
+      print("neg.nvim: unknown mode '" .. m .. "'. Use: off|soft|strong")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.accessibility = vim.tbl_deep_extend('force', { hc='off' }, newcfg.ui.accessibility or {})
+    newcfg.ui.accessibility.hc = m
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'off','soft','strong' } end, desc = 'neg.nvim: Set high-contrast pack (achromatopsia extension)' })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()
     local allowed = {

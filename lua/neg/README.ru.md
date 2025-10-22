@@ -91,6 +91,13 @@ vim.cmd.colorscheme('neg')
   - `:NegLightSigns {on|off|toggle}` — лёгкие знаки в SignColumn
   - `:NegPunctFamily {on|off|toggle}` — различение семейства скобок
   - `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}`
+  - `:NegDiagPattern {none|minimal|strong}` — паттерны для диагностик
+  - `:NegLexemeCues {off|minimal|strong}` — визуальные подсказки для функций/типов
+  - `:NegThickCursor {on|off|toggle}` — «толстый» курсор/строка
+  - `:NegOutlines {on|off|toggle}` — рамки активных окон/панелей
+  - `:NegReadingMode {on|off|toggle}` — режим чтения (почти монохром)
+  - `:NegSearchVisibility {default|soft|strong}` — видимость поиска/текущего совпадения
+  - `:NegHc {off|soft|strong}` — контраст для achromatopsia
 
 ## Рекомендованные сочетания
 

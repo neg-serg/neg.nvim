@@ -413,3 +413,15 @@ All notable changes to this project are documented here.
 - Command: `:NegAccessibility achromatopsia {on|off|toggle}`.
 - Docs: README/README.ru updated (options + command).
 - Meta: bump version.
+## [4.29] - 2025-10-22
+- Accessibility pack extensions:
+  - High-contrast presets for achromatopsia: `:NegHc {off|soft|strong}`; tune `Visual`/`ColorColumn`/`StatusLine`/`NormalFloat`/`Pmenu`.
+  - Pattern-first diagnostics: `ui.diag_pattern = 'none'|'minimal'|'strong'` + `:NegDiagPattern` command.
+  - Lexeme cues: underline for functions; underline+bold for types (`ui.lexeme_cues`, `:NegLexemeCues`).
+  - Thick cursor: `ui.thick_cursor`/`:NegThickCursor` — более заметная текущая строка и курсор.
+  - UI outlines: `ui.outlines`/`:NegOutlines` — рамки активных окон через winhighlight.
+  - Reading mode: `ui.reading_mode`/`:NegReadingMode` — почти монохромный синтаксис.
+  - Search visibility: `ui.search_visibility`/`:NegSearchVisibility` — мягкий/сильный пресет.
+  - Screenreader friendly: `ui.screenreader_friendly` — снижает динамические акценты.
+- Docs: README/README.ru updated (options + commands).
+- Meta: bump version.
