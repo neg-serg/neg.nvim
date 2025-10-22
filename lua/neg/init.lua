@@ -41,6 +41,14 @@ local default_config = {
     constants = 'none',
     punctuation = 'none',
   },
+  -- Optional fine-grained markup preferences
+  -- Set to false to disable, or provide a table to override defaults.
+  -- Example:
+  -- markup = {
+  --   headings = { h1 = '#ff8800', h2 = '#ffaa00' },
+  --   lists = { checked = '#00aa88' },
+  -- }
+  markup = nil,
   plugins = {
     cmp = true,
     telescope = true,
@@ -135,6 +143,42 @@ local function apply_preset(preset, cfg)
 end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
+
+local function apply_markup_prefs(cfg)
+  local m = cfg and cfg.markup
+  if m == false then return end
+  m = m or {}
+  -- Headings colors (levels 1..6)
+  do
+    local h = m.headings or {}
+    local map = {
+      h1 = h.h1 or p.literal3_color,
+      h2 = h.h2 or p.include_color,
+      h3 = h.h3 or p.keyword3_color,
+      h4 = h.h4 or p.keyword2_color,
+      h5 = h.h5 or p.identifier_color,
+      h6 = h.h6 or p.preproc_light_color,
+    }
+    for i = 1, 6 do
+      local fg = map['h'..i]
+      if type(fg) == 'string' and fg ~= '' then
+        hi(0, '@markup.heading.'..i, { fg = fg, bold = true })
+      end
+    end
+  end
+  -- Lists
+  do
+    local l = m.lists or {}
+    local base = l.base or p.comment_color
+    local checked = l.checked or p.identifier_color
+    local unchecked = l.unchecked or p.comment_color
+    local numbered = l.numbered or p.comment_color
+    hi(0, '@markup.list', { fg = base })
+    hi(0, '@markup.list.checked', { fg = checked })
+    hi(0, '@markup.list.unchecked', { fg = unchecked })
+    hi(0, '@markup.list.numbered', { fg = numbered })
+  end
+end
 
 local function apply_diagnostics_virtual_bg(cfg)
   local map = {
@@ -283,6 +327,7 @@ function M.setup(opts)
   if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)
   apply_preset(cfg.preset, cfg)
+  apply_markup_prefs(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
