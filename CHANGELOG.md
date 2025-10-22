@@ -398,3 +398,7 @@ All notable changes to this project are documented here.
 - Command: `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor} {on|off|toggle}`.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
+## [4.25] - 2025-10-22
+- UI: enable `ui.mode_accent` by default to provide mode-aware accents for `CursorLine`/`StatusLine` (Normal/Insert/Visual). Command `:NegModeAccent {on|off|toggle}` remains available to control it at runtime.
+- Docs: README updated (default changed to true).
+- Meta: bump version.

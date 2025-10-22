@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.24
+-- Version:     4.25
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -42,7 +42,7 @@ local flags_from = U.flags_from
       -- Dim inactive windows (NormalNC/WinBarNC) and line numbers via winhighlight mapping
       dim_inactive = false,
       -- Mode-aware accents for CursorLine/StatusLine by Vim mode (Normal/Insert/Visual)
-      mode_accent = false,
+      mode_accent = true,
       -- Soft borders: lighten WinSeparator/FloatBorder to reduce visual noise
       soft_borders = false,
       -- Auto-tune float/panel backgrounds when terminal background is transparent

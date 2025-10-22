@@ -111,7 +111,7 @@ require('neg').setup({
   ui = {
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
-    mode_accent = false,               -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
+    mode_accent = true,                -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
     soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
