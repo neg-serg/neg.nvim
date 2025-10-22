@@ -151,16 +151,18 @@ local function apply_markup_prefs(cfg)
   -- Headings colors (levels 1..6)
   do
     local h = m.headings or {}
-    local map = {
-      h1 = h.h1 or p.literal3_color,
-      h2 = h.h2 or p.include_color,
-      h3 = h.h3 or p.keyword3_color,
-      h4 = h.h4 or p.keyword2_color,
-      h5 = h.h5 or p.identifier_color,
-      h6 = h.h6 or p.preproc_light_color,
+    -- Build a cohesive single-hue ramp from include_color
+    local base = p.include_color
+    local ramp = {
+      U.lighten(base, 25), -- h1 brightest
+      U.lighten(base, 15), -- h2
+      base,                -- h3
+      U.darken(base, 10),  -- h4
+      U.darken(base, 20),  -- h5
+      U.darken(base, 30),  -- h6 darkest
     }
     for i = 1, 6 do
-      local fg = map['h'..i]
+      local fg = h['h'..i] or ramp[i]
       if type(fg) == 'string' and fg ~= '' then
         hi(0, '@markup.heading.'..i, { fg = fg, bold = true })
       end
