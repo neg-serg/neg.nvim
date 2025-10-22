@@ -107,6 +107,7 @@ require('neg').setup({
   terminal_colors = true,              -- set 16 ANSI terminal colors
   preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
   operator_colors = 'families',        -- 'families' for subtle per-family hues, or 'mono' for single operator color
+  number_colors = 'mono',              -- 'mono' for single hue, or 'ramp' for subtle integer/hex/octal/binary variants
 
   styles = {
     comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
@@ -257,6 +258,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagBgStrength {0..1} — set strength for alpha/lighten/darken modes
 - :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
 - :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
+- :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
 
 ## Overrides
 

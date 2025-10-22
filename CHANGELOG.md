@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 - Command: add `:NegOperatorColors {families|mono}` to switch operator coloring at runtime.
 - Meta: bump version.
 
+## [4.05] - 2025-10-22
+- Style/harmony: tune links — URLs now use `include_color` with underline to stay readable without shouting.
+- Numbers: add optional subtle single‑hue ramp via `number_colors = 'ramp'` (default stays `mono`).
+- Command: add `:NegNumberColors {mono|ramp}` to toggle number ramp at runtime.
+- Meta: bump version.
+
 ## [4.03] - 2025-10-22
 - LSP typemods: add safe links for declaration/static/readonly across common types —
   `@lsp.typemod.class.declaration`/`@lsp.typemod.type.declaration` → `@type`,

@@ -122,7 +122,8 @@ return {
   ['@markup.heading.6']={ link='@markup.heading' },
   ['@markup.quote']={ fg = p.comment_color, italic = true },
   ['@markup.link']={ underline = true },
-  ['@markup.link.url']={ underline = true, fg = p.keyword4_color },
+  -- URLs are underlined and use include_color to avoid oversaturation
+  ['@markup.link.url']={ underline = true, fg = p.include_color },
   ['@markup.link.label']={ underline = true },
   ['@markup.raw']={ fg = p.string_color },
   ['@markup.raw.block']={ fg = p.string_color },

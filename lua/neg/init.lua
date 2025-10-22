@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.04
+-- Version:     4.05
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -27,9 +27,11 @@ local flags_from = U.flags_from
   local default_config = {
     transparent = false,
     terminal_colors = true,
-    preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
-    -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
-    operator_colors = 'families',
+  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
+  -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
+  operator_colors = 'families',
+  -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
+  number_colors = 'mono',
   styles = {
     comments = 'italic',
     keywords = 'none',
@@ -160,6 +162,21 @@ local function apply_operator_colors(mode)
       hi(0, g, { link = '@operator' })
     end
   end
+end
+
+local function apply_number_colors(mode)
+  if mode ~= 'ramp' then return end
+  local base = p.keyword1_color
+  local ramp = {
+    integer = base,                         -- baseline
+    hex     = U.lighten(base, 6),           -- slightly lighter
+    octal   = U.darken(base, 6),            -- slightly darker
+    binary  = U.lighten(base, 3),           -- subtle lift
+  }
+  hi(0, '@number.integer', { fg = ramp.integer })
+  hi(0, '@number.hex',     { fg = ramp.hex })
+  hi(0, '@number.octal',   { fg = ramp.octal })
+  hi(0, '@number.binary',  { fg = ramp.binary })
 end
 
 local function apply_markup_prefs(cfg)
@@ -349,6 +366,7 @@ function M.setup(opts)
   apply_preset(cfg.preset, cfg)
   apply_markup_prefs(cfg)
   apply_operator_colors(cfg.operator_colors)
+  apply_number_colors(cfg.number_colors)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -523,6 +541,23 @@ define_commands = function()
   end, {
     nargs = 1,
     desc = 'neg.nvim: Set diagnostics bg blend (0..100) when mode=blend'
+  })
+
+  vim.api.nvim_create_user_command('NegNumberColors', function(opts)
+    local mode = (opts.args or ''):lower()
+    local allowed = { mono = true, ramp = true }
+    if not allowed[mode] then
+      print("neg.nvim: unknown mode '" .. mode .. "'. Use: mono|ramp")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.number_colors = mode
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    complete = function() return { 'mono', 'ramp' } end,
+    desc = 'neg.nvim: Set number colors mode (mono|ramp)'
   })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
