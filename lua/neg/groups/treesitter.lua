@@ -50,20 +50,7 @@ return {
   ['@string.special.url']={ underline = true, fg = p.keyword4_color },
   ['@character']={ fg = p.string_color },
 
-  -- Legacy @text.* → modern @markup.*
-  ['@text.strong']={link='@markup.strong'},
-  ['@text.emphasis']={link='@markup.italic'},
-  ['@text.underline']={link='@markup.underline'},
-  ['@text.strike']={link='@markup.strikethrough'},
-  ['@text.title']={link='@markup.heading'},
-  ['@text.quote']={link='@markup.quote'},
-  ['@text.uri']={link='@markup.link.url'},
-  ['@text.math']={link='@markup.math'},
-  ['@text.environment']={link='@markup.environment'},
-  ['@text.environment.name']={link='@markup.environment.name'},
-  ['@text.reference']={link='@markup.link'},
-  ['@text.literal']={link='@markup.raw'},
-  ['@text.literal.block']={link='@markup.raw.block'},
+  -- Additional markup helpers
   ['@string.special']={link='@markup.link.label'},
   ['@punctuation.special']={ fg = p.delimiter_color },
 
@@ -88,18 +75,11 @@ return {
   ['@comment.warning']={ fg = p.warning_color },
   ['@comment.error']={ fg = p.diff_delete_color },
   ['@comment.note']={ fg = p.identifier_color },
-  ['@text.todo']={link='@comment.todo'},
-  ['@text.danger']={link='@comment.error'},
-  ['@text.warning']={link='@comment.warning'},
-  ['@text.note']={link='@comment.note'},
 
   -- Diff groups
   ['@diff.plus']={ fg = p.diff_add_color },
   ['@diff.minus']={ fg = p.diff_delete_color },
   ['@diff.delta']={ fg = p.diff_change_color },
-  ['@text.diff.add']={link='@diff.plus'},
-  ['@text.diff.delete']={link='@diff.minus'},
-  ['@text.diff.change']={link='@diff.delta'},
 
   -- Keyword families
   ['@keyword.directive']={link='@preproc'},
