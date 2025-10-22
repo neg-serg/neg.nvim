@@ -108,6 +108,9 @@ require('neg').setup({
   preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
   operator_colors = 'families',        -- 'families' for subtle per-family hues, or 'mono' for single operator color
   number_colors = 'ramp',              -- default 'ramp' (subtle variants), or 'mono' for single hue
+  ui = {
+    core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
+  },
 
   styles = {
     comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos

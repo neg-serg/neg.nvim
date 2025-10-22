@@ -16,6 +16,12 @@ All notable changes to this project are documented here.
 - Numbers: change default `number_colors` to `ramp` (was `mono`).
 - Meta: bump version.
 
+## [4.07] - 2025-10-22
+- UI: add option `ui.core_enhancements = true` (default) to define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, LineNrAbove/Below, Question). Set to `false` to skip applying them.
+- Internal: moved these groups to `neg.groups.editor_extras` and apply conditionally.
+- Validator: include `neg.groups.editor_extras` in module scan.
+- Meta: bump version.
+
 ## [4.03] - 2025-10-22
 - LSP typemods: add safe links for declaration/static/readonly across common types —
   `@lsp.typemod.class.declaration`/`@lsp.typemod.type.declaration` → `@type`,

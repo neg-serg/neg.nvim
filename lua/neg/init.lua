@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.06
+-- Version:     4.07
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -27,11 +27,17 @@ local flags_from = U.flags_from
   local default_config = {
     transparent = false,
     terminal_colors = true,
-  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
-  -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
-  operator_colors = 'families',
-  -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
-  number_colors = 'ramp',
+    preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
+    -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
+    operator_colors = 'families',
+    -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
+    number_colors = 'ramp',
+    -- UI options
+    ui = {
+      -- When true, define extra baseline UI groups missing in stock setup
+      -- (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, LineNrAbove/Below, Question)
+      core_enhancements = true,
+    },
   styles = {
     comments = 'italic',
     keywords = 'none',
@@ -318,6 +324,10 @@ function M.setup(opts)
 
   -- Core groups
   apply(require('neg.groups.editor'))
+  -- Optional baseline UI enhancements
+  if not (cfg.ui and cfg.ui.core_enhancements == false) then
+    safe_apply('neg.groups.editor_extras')
+  end
   apply(require('neg.groups.diagnostics'))
   apply(require('neg.groups.lsp'))
   apply(require('neg.groups.treesitter'))

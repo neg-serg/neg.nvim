@@ -30,6 +30,7 @@ local function load_tables()
   local mods = {
     -- core
     'neg.groups.editor',
+    'neg.groups.editor_extras',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
     -- plugins (extended)
@@ -76,6 +77,7 @@ local function load_modules()
   local mods = {
     -- core
     'neg.groups.editor',
+    'neg.groups.editor_extras',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
     -- plugins (extended)
