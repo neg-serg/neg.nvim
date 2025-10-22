@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.16
+-- Version:     4.17
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -43,6 +43,8 @@ local flags_from = U.flags_from
       mode_accent = false,
       -- Soft borders: lighten WinSeparator/FloatBorder to reduce visual noise
       soft_borders = false,
+      -- Auto-tune float/panel backgrounds when terminal background is transparent
+      auto_transparent_panels = true,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -295,6 +297,23 @@ local function apply_soft_borders(cfg)
     -- Restore default linking to VertSplit
     hi(0, 'WinSeparator', { link = 'VertSplit' })
     hi(0, 'FloatBorder',  { link = 'VertSplit' })
+  end
+end
+
+local function apply_auto_transparent_panels(cfg)
+  local ui = cfg and cfg.ui or {}
+  if not (ui and ui.auto_transparent_panels) then return end
+  -- Skip if transparent floats are explicitly enabled; they already use NONE
+  local t = cfg and cfg.transparent
+  if t == true or (type(t) == 'table' and t.float) then return end
+  local base = (U.get_hl_colors and U.get_hl_colors('Normal')) or {}
+  local bg = base.bg
+  if not bg or bg == '' or bg == 'NONE' then
+    -- Terminal background is transparent; give floats/panels a subtle backdrop
+    local float_bg = U.lighten(p.bg_default, 8)
+    local panel_bg = U.lighten(p.bg_default, 6)
+    hi(0, 'NormalFloat', { bg = float_bg })
+    hi(0, 'Pmenu', { bg = panel_bg })
   end
 end
 
@@ -576,6 +595,7 @@ function M.setup(opts)
   apply_dim_inactive(cfg)
   apply_mode_accent(cfg)
   apply_soft_borders(cfg)
+  apply_auto_transparent_panels(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()

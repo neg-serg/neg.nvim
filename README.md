@@ -113,6 +113,7 @@ require('neg').setup({
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
     mode_accent = false,               -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
     soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
+    auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)

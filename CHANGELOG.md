@@ -358,3 +358,8 @@ All notable changes to this project are documented here.
 - Command: `:NegSoftBorders {on|off|toggle}` to switch at runtime.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
+## [4.17] - 2025-10-22
+- UI: auto-tune float/panel backgrounds for transparent terminals — when `Normal` bg is transparent and float transparency is off, set subtle backdrops for `NormalFloat`/`Pmenu`.
+- Option: `ui.auto_transparent_panels = true` (default) controls this behavior.
+- Docs: README updated (UI options).
+- Meta: bump version.
