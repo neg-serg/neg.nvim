@@ -59,7 +59,13 @@ end
 
 function M.apply_transparent(cfg)
   local function set_bg(groups)
-    for _, g in ipairs(groups) do hi(0, g, { bg='NONE' }) end
+    for _, g in ipairs(groups) do
+      local base = (M.get_hl_colors and M.get_hl_colors(g)) or {}
+      local spec = { bg='NONE' }
+      if base.fg then spec.fg = base.fg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, g, spec)
+    end
   end
   if cfg == true then
     set_bg({
@@ -168,6 +174,41 @@ function M.config_signature(cfg)
     copy.force = nil
   end
   return copy
+end
+
+-- Read current highlight colors for a group (fg/bg/sp) without following links
+-- Returns hex strings like '#rrggbb' or nils if unavailable.
+function M.get_hl_colors(name)
+  local fg, bg, sp
+  local ok, res
+  -- Neovim >= 0.9
+  if type(vim.api.nvim_get_hl) == 'function' then
+    ok, res = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+    if ok and type(res) == 'table' then
+      local function as_hex(v)
+        if type(v) == 'number' then return string.format('#%06x', v) end
+        if type(v) == 'string' then return v end
+        return nil
+      end
+      fg = as_hex(res.fg)
+      bg = as_hex(res.bg)
+      sp = as_hex(res.sp)
+    end
+  end
+  -- Fallback for Neovim < 0.9
+  if not fg and not bg and not sp and type(vim.api.nvim_get_hl_by_name) == 'function' then
+    ok, res = pcall(vim.api.nvim_get_hl_by_name, name, true)
+    if ok and type(res) == 'table' then
+      local function as_hex(v)
+        if type(v) == 'number' then return string.format('#%06x', v) end
+        return nil
+      end
+      fg = as_hex(res.foreground)
+      bg = as_hex(res.background)
+      sp = as_hex(res.special)
+    end
+  end
+  return { fg = fg, bg = bg, sp = sp }
 end
 
 return M

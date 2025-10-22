@@ -97,20 +97,40 @@ local function apply_preset(preset, cfg)
     s.constants = s.constants ~= 'none' and s.constants or 'bold'
     s.booleans = s.booleans ~= 'none' and s.booleans or 'bold'
     s.numbers = s.numbers ~= 'none' and s.numbers or 'bold'
-    hi(0, 'Title', { bold = true })
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('Title')) or {}
+      local spec = { bold = true }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, 'Title', spec)
+    end
   elseif preset == 'pro' then
     -- no italics anywhere
     s.comments = 'none'
     -- try to neutralize commonly italic things
-    hi(0, 'LspInlayHint', { italic = false })
-    hi(0, 'LspCodeLens', { italic = false })
-    hi(0, '@markup.italic', { italic = false })
+    for _, g in ipairs({ 'LspInlayHint','LspCodeLens','@markup.italic' }) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      local spec = { italic = false }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, g, spec)
+    end
   elseif preset == 'writing' then
     -- emphasize markdown/markup
-    hi(0, 'Title', { bold = true })
-    hi(0, '@markup.heading', { bold = true })
-    hi(0, '@markup.strong', { bold = true })
-    hi(0, '@markup.italic', { italic = true })
+    for g, spec in pairs({
+      ['Title'] = { bold = true },
+      ['@markup.heading'] = { bold = true },
+      ['@markup.strong'] = { bold = true },
+      ['@markup.italic'] = { italic = true },
+    }) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, g, spec)
+    end
   end
 end
 
@@ -126,24 +146,32 @@ local function apply_diagnostics_virtual_bg(cfg)
   }
   local mode = (cfg and cfg.diagnostics_virtual_bg_mode) or 'blend'
   local strength = (cfg and cfg.diagnostics_virtual_bg_strength) or 0.15
+  local function apply_bg(g, col, extra)
+    local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+    local spec = { bg = col }
+    if base.fg then spec.fg = base.fg end
+    if base.sp then spec.sp = base.sp end
+    if type(extra) == 'table' then for k, v in pairs(extra) do spec[k] = v end end
+    hi(0, g, spec)
+  end
   if mode == 'blend' then
     for g, col in pairs(map) do
-      hi(0, g, { bg = col, blend = cfg and cfg.diagnostics_virtual_bg_blend or 15 })
+      apply_bg(g, col, { blend = cfg and cfg.diagnostics_virtual_bg_blend or 15 })
     end
   elseif mode == 'alpha' then
     for g, col in pairs(map) do
       local bg = U.alpha(col, p.bg_default, strength)
-      hi(0, g, { bg = bg })
+      apply_bg(g, bg)
     end
   elseif mode == 'lighten' then
     for g, col in pairs(map) do
       local bg = U.lighten(col, strength * 100)
-      hi(0, g, { bg = bg })
+      apply_bg(g, bg)
     end
   elseif mode == 'darken' then
     for g, col in pairs(map) do
       local bg = U.darken(col, strength * 100)
-      hi(0, g, { bg = bg })
+      apply_bg(g, bg)
     end
   end
 end
@@ -165,7 +193,15 @@ local function apply_styles(styles)
   for key, groups in pairs(map) do
     local flags = flags_from(styles[key])
     if next(flags) ~= nil then
-      for _, g in ipairs(groups) do hi(0, g, flags) end
+      for _, g in ipairs(groups) do
+        local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+        local spec = {}
+        if base.fg then spec.fg = base.fg end
+        if base.bg then spec.bg = base.bg end
+        if base.sp then spec.sp = base.sp end
+        for k, v in pairs(flags) do spec[k] = v end
+        hi(0, g, spec)
+      end
     end
   end
   -- Plugin-adjacent styles (best-effort)
