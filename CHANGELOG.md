@@ -12,6 +12,7 @@ All notable changes to this project are documented here.
   - `FlashLabel` (noice) → `@comment.todo`
 - UI: removed `Todo` group; use `@comment.todo` instead.
 - Validator: removed `neg.groups.syntax` from module lists.
+- Validator: drop legacy Vim `syntax` groups from builtin target list; only UI/core groups are recognized as built-in.
 - Migration tip: if you still depend on legacy Vim syntax groups, define them in your config or link them to the corresponding `@` captures.
 
 
