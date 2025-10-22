@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     3.82
+-- Version:     4.04
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -24,10 +24,12 @@ end
 
 local flags_from = U.flags_from
 
-local default_config = {
-  transparent = false,
-  terminal_colors = true,
-  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
+  local default_config = {
+    transparent = false,
+    terminal_colors = true,
+    preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
+    -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
+    operator_colors = 'families',
   styles = {
     comments = 'italic',
     keywords = 'none',
@@ -143,6 +145,22 @@ local function apply_preset(preset, cfg)
 end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
+
+local function apply_operator_colors(mode)
+  if mode == 'mono' then
+    local groups = {
+      '@operator.assignment','@operator.assignment.compound','@operator.assignment.augmented',
+      '@operator.comparison','@operator.comparison.equality','@operator.comparison.relational',
+      '@operator.arithmetic','@operator.arithmetic.add','@operator.arithmetic.sub','@operator.arithmetic.mul','@operator.arithmetic.div','@operator.arithmetic.mod','@operator.arithmetic.pow',
+      '@operator.logical','@operator.logical.and','@operator.logical.or','@operator.logical.not','@operator.logical.xor',
+      '@operator.bitwise','@operator.bitwise.and','@operator.bitwise.or','@operator.bitwise.xor','@operator.bitwise.shift','@operator.bitwise.not','@operator.bitwise.left_shift','@operator.bitwise.right_shift',
+      '@operator.ternary','@operator.unary','@operator.increment','@operator.decrement','@operator.range','@operator.spread','@operator.pipe','@operator.arrow','@operator.coalesce',
+    }
+    for _, g in ipairs(groups) do
+      hi(0, g, { link = '@operator' })
+    end
+  end
+end
 
 local function apply_markup_prefs(cfg)
   local m = cfg and cfg.markup
@@ -330,6 +348,7 @@ function M.setup(opts)
   apply_styles(cfg.styles)
   apply_preset(cfg.preset, cfg)
   apply_markup_prefs(cfg)
+  apply_operator_colors(cfg.operator_colors)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -504,6 +523,23 @@ define_commands = function()
   end, {
     nargs = 1,
     desc = 'neg.nvim: Set diagnostics bg blend (0..100) when mode=blend'
+  })
+
+  vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
+    local mode = (opts.args or ''):lower()
+    local allowed = { families = true, mono = true }
+    if not allowed[mode] then
+      print("neg.nvim: unknown mode '" .. mode .. "'. Use: families|mono")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.operator_colors = mode
+    M.setup(newcfg)
+  end, {
+    nargs = 1,
+    complete = function() return { 'families', 'mono' } end,
+    desc = 'neg.nvim: Set operator colors mode (families|mono)'
   })
 end
 

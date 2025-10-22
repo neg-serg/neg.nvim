@@ -7,20 +7,16 @@ return {
   GitGutterChange={fg=p.include_color},
   GitGutterDelete={fg=p.red_blood_color},
 
-  -- Diff
-  DiffAdd={bg='#123425', fg=p.diff_add_color},
+  -- Diff (filetype diff / plugins)
   diffAdded={fg=p.keyword4_color},
   DiffAdded={link='@string'},
-  DiffChange={bg='#122c34', fg=p.diff_change_color},
   diffChanged={fg=p.keyword2_color},
-  DiffDelete={bg=p.red_blood_color, fg=p.diff_delete_color},
   diffLine={fg=p.preproc_light_color},
   diffNewFile={fg=p.preproc_dark_color},
   diffOldFile={fg=p.preproc_dark_color},
   diffOldLine={fg=p.preproc_dark_color},
   diffRemoved={fg=p.red_blood_color},
   DiffRemoved={link='@constant'},
-  DiffText={bg='NONE', fg=p.white_color},
 
   -- Merge conflicts
   ConflictMarkerBegin={bg='#2f7366'},

@@ -2,6 +2,64 @@
 
 All notable changes to this project are documented here.
 
+## [4.04] - 2025-10-22
+- Command: add `:NegOperatorColors {families|mono}` to switch operator coloring at runtime.
+- Meta: bump version.
+
+## [4.03] - 2025-10-22
+- LSP typemods: add safe links for declaration/static/readonly across common types —
+  `@lsp.typemod.class.declaration`/`@lsp.typemod.type.declaration` → `@type`,
+  `@lsp.typemod.property.declaration` → `@property`, `@lsp.typemod.enumMember.declaration` → `@constant`,
+  `@lsp.typemod.function.static` → `@function`, `@lsp.typemod.enumMember.readonly` → `@constant`.
+- Meta: bump version.
+
+## [4.02] - 2025-10-22
+- LSP tokens: add `@lsp.type.decorator` → `@function.macro`, `@lsp.type.annotation` → `@attribute`.
+- LSP typemods: add a few common links without new colors — `@lsp.typemod.function.declaration` → `@function`, `@lsp.typemod.method.declaration` → `@method`, `@lsp.typemod.property.static` → `@property`, `@lsp.typemod.type.abstract`/`@lsp.typemod.class.abstract` → `@type`.
+- Meta: bump version.
+
+## [4.01] - 2025-10-22
+- Config: add `operator_colors = 'families' | 'mono'` (default: `families`) to toggle per‑family vs single operator color.
+- Treesitter: per‑family operator hues (assignment/comparison/arithmetic/logical/bitwise/etc.).
+- Treesitter: boolean/nil/null/string template links — `@boolean.true`/`@boolean.false` → `@boolean`, `@nil`/`@null` → `@constant.builtin`, `@string.template` → `@string`.
+- Palette: new convenience aliases (`bg_float`, `bg_panel`, `border_color`, `success_color`, `error_color`, `info_color`, `hint_color`, `accent_primary`, `accent_secondary`, `accent_tertiary`).
+- UI: `NormalFloat` now uses `bg_float`.
+- Docs: README updated for operator colors and palette additions.
+
+## [4.00] - 2025-10-22
+- Major release marking the removal of legacy Vim 'syntax' groups (breaking change introduced in 3.82). Theme now relies on Tree‑sitter captures and Neovim UI groups.
+- Includes 3.83 enhancements: configurable markup (headings/list styles), extended Treesitter coverage (math/environment, logic, operator families, string templates, boolean/nil/null links), and core UI tweaks (Whitespace, EndOfBuffer, LineNrAbove/Below, Question, VisualNOS, Float shadows, Pmenu match highlights, cursor groups), plus moving Diff* groups to core editor.
+- New option: `operator_colors = 'families' | 'mono'` to choose between subtle per-family operator hues or a single unified operator color (default: `families`).
+ - Palette: add convenience aliases — `bg_float`, `bg_panel`, `border_color`,
+   `success_color`, `error_color`, `info_color`, `hint_color`,
+   `accent_primary`, `accent_secondary`, `accent_tertiary`. `NormalFloat` now uses `bg_float`.
+- No additional breaking changes beyond the 3.82 deprecation.
+
+## [3.83] - 2025-10-22
+- Markup: configurable headings and list styles via `setup({ markup = ... })`.
+- Markup: cohesive single‑hue ramp for headings by default (derived from `include_color`), overrideable per level (`h1..h6`).
+- Styles: apply style flags to more Treesitter captures; preserves existing fg/bg/sp while adding style bits.
+- Treesitter: extended capture coverage (numbers: integer/hex/octal/binary; constants.macro; types.parameter/qualifier; characters.special; markup: headings/link/raw.inline/list variants).
+ - Treesitter: add markup captures `@markup.math` (now uses `literal2_color`), `@markup.environment`, `@markup.environment.name` with neutral palette.
+- Docs: README updated with new `markup` options and examples.
+- Meta: bump version and header in `init.lua`.
+ - Core UI (editor):
+   - Base: add `Whitespace` (subdued from `comment_color`), `EndOfBuffer` (hide tildes via `bg_default`), `LineNrAbove`/`LineNrBelow` (link to `LineNr`), `Question` (muted blue‑green), `VisualNOS` (like `Visual` but without bold).
+   - Neovim 0.10+: add `FloatShadow`/`FloatShadowThrough` with soft shading close to `bg_default`.
+   - Pmenu: add `PmenuMatch`/`PmenuMatchSel` (underline matches; use search hue without over‑saturation).
+   - Cursor: define `Cursor`, `lCursor`, `CursorIM` consistent with `TermCursor` (reverse).
+ - Diff: move `DiffAdd`/`DiffChange`/`DiffDelete`/`DiffText` from git plugin module into core editor module so diffs stay readable even when `plugins.git` is disabled.
+ - Treesitter (logic/strings/operators):
+   - Link `@boolean.true`/`@boolean.false` → `@boolean`.
+   - Link `@nil`/`@null` → `@constant.builtin`.
+   - Add `@string.template` → `@string` (punctuation already covered by `@punctuation.special`).
+   - Add comprehensive operator subcaptures → `@operator` (uniform color; ready for future per‑family tweaks):
+     `assignment{,.compound,.augmented}`, `comparison{,.equality,.relational}`,
+     `arithmetic{,.add,.sub,.mul,.div,.mod,.pow}`, `logical{,.and,.or,.not,.xor}`,
+     `bitwise{,.and,.or,.xor,.shift,.not,.left_shift,.right_shift}`,
+     `ternary`, `unary`, `increment`, `decrement`, `range`, `spread`, `pipe`, `arrow`, `coalesce`.
+   - Per‑family hues: assignment (keyword4), comparison (keyword3), arithmetic (keyword1), logical (keyword2), bitwise/range/spread/pipe (delimiter), ternary/coalesce (keyword3), unary (keyword4), increment/decrement/arrow (keyword1).
+
 ## [3.82] - 2025-10-22
 - Breaking: fully removed legacy Vim 'syntax' highlight groups. Theme now relies exclusively on Treesitter `@` captures and Neovim UI groups.
 - Removed module `neg.groups.syntax` and dropped its application from setup.

@@ -33,6 +33,8 @@ lazy.nvim
     require('neg').setup({
       -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing'
       preset = nil,
+      -- Operators coloring (default: families): 'families' | 'mono'
+      operator_colors = 'families',
       -- Transparency: boolean for global, or table for zones
       -- transparent = true,
       transparent = { float = false, sidebar = false, statusline = false },
@@ -104,6 +106,7 @@ require('neg').setup({
   -- transparent = { float = false, sidebar = false, statusline = false },
   terminal_colors = true,              -- set 16 ANSI terminal colors
   preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | nil
+  operator_colors = 'families',        -- 'families' for subtle per-family hues, or 'mono' for single operator color
 
   styles = {
     comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
@@ -217,6 +220,14 @@ The palette now exposes descriptive aliases without the `fg_` prefix. Old short 
 
 Prefix note: `fg_*` aliases (e.g. `fg_warning`, `fg_diff_delete`) remain for backward compatibility and map 1:1 to the new names (e.g. `warning_color`, `diff_delete_color`). Prefer the descriptive names going forward.
 
+### Palette Additions
+
+Convenience aliases exposed for overrides and UI tuning:
+
+- Float/panels: `bg_float`, `bg_panel`, `border_color`
+- Severities: `success_color`, `error_color`, `info_color`, `hint_color`
+- Accents: `accent_primary`, `accent_secondary`, `accent_tertiary`
+
 ## Presets
 
 Built-in style presets you can use via `preset` option or `:NegPreset`:
@@ -245,6 +256,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — set diagnostics virtual text background mode (or turn off/on)
 - :NegDiagBgStrength {0..1} — set strength for alpha/lighten/darken modes
 - :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
+- :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
 
 ## Overrides
 

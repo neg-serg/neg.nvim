@@ -181,4 +181,21 @@ colors.rainbow_5=colors.br5; colors.rainbow_6=colors.br6; colors.rainbow_7=color
 -- Selection
 colors.bg_selection_dim = colors.dnorm
 
+-- Additional convenience aliases (non-breaking; map to existing hues)
+-- Float/panels/borders
+colors.bg_float = colors.shade_06
+colors.bg_panel = colors.shade_07
+colors.border_color = colors.shade_08
+
+-- Severities and statuses
+colors.error_color = colors.diff_delete_color
+colors.success_color = colors.diff_add_color
+colors.info_color = colors.preproc_light_color
+colors.hint_color = colors.identifier_color
+
+-- Accents (for UI flourishes)
+colors.accent_primary = colors.include_color
+colors.accent_secondary = colors.keyword3_color
+colors.accent_tertiary = colors.keyword1_color
+
 return colors

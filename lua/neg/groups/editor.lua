@@ -8,15 +8,22 @@ return {
   ErrorMsg= {bg='NONE', fg=p.default_color},
   Folded={bg=p.bg_visual, fg=p.highlight_color},
   LineNr={fg='#2c3641', bg=nil, italic=true},
+  LineNrAbove={link='LineNr'},
+  LineNrBelow={link='LineNr'},
   MatchParen={bg=p.highlight_color, fg=p.dark_color},
   ModeMsg={bg='NONE', fg=p.keyword3_color},
   MoreMsg={bg='NONE', fg=p.keyword3_color},
   NonText={bg=nil, fg=p.keyword2_color},
+  Whitespace={fg=p.comment_color},
+  EndOfBuffer={fg=p.bg_default},
   -- Use explicit background when not in transparent mode; apply_transparent() can override to NONE
   Normal={bg=p.bg_default, fg=p.default_color},
   NormalNC={link='Normal'},
-  NormalFloat={bg='#111d26', fg=p.default_color},
+  NormalFloat={bg=p.bg_float, fg=p.default_color},
   FloatTitle={fg=p.keyword3_color, bold=true},
+  -- 0.10+: floating window shadows
+  FloatShadow={bg=p.bg_default, blend=18},
+  FloatShadowThrough={bg=p.bg_default, blend=24},
   WinBar={fg=p.keyword3_color},
   WinBarNC={fg=p.comment_color},
   QuickFixLine={bg=p.bg_cursorline, fg=p.default_color, bold=true},
@@ -30,9 +37,11 @@ return {
   StatusLine={bg='NONE', fg=p.function_color},
   StatusLineNC={bg='NONE', fg='NONE'},
   Title={bg=nil, fg=p.literal3_color},
+  Question={fg=p.keyword2_color},
   Underlined={bg=nil, fg=p.keyword4_color},
   VertSplit={bg='NONE', fg=p.dark_color},
   Visual={bg=p.bg_selection_dim, fg='NONE', bold=true},
+  VisualNOS={bg=p.bg_selection_dim, fg='NONE'},
   WarningMsg={bg='NONE', fg=p.default_color},
   WildMenu={bg=p.dark_color, fg=p.include_color},
 
@@ -40,6 +49,9 @@ return {
   CursorColumn={bg=p.bg_cursorcolumn},
   CursorLine={},
   CursorLineNr={bg=p.bg_cursorline, fg=p.keyword3_color, italic=true, bold=true},
+  Cursor={reverse=true},
+  lCursor={reverse=true},
+  CursorIM={reverse=true},
   TermCursor={reverse=true},
   TermCursorNC={reverse=true},
   FoldColumn={bg='NONE', fg=p.comment_color},
@@ -52,6 +64,12 @@ return {
   FloatBorder={link='VertSplit'},
   WinSeparator={link='VertSplit'},
 
+  -- Diff (core Neovim groups)
+  DiffAdd={bg='#123425', fg=p.diff_add_color},
+  DiffChange={bg='#122c34', fg=p.diff_change_color},
+  DiffDelete={bg=p.red_blood_color, fg=p.diff_delete_color},
+  DiffText={bg='NONE', fg=p.white_color},
+
   -- Spell
   SpellBad={underline=true},
   SpellCap={underline=true},
@@ -63,6 +81,8 @@ return {
   PmenuSbar={bg=p.bg_cursorline, fg='NONE'},
   PmenuSel={bg=p.bg_cursorline, fg=p.keyword3_color},
   PmenuThumb={bg=p.keyword3_color, fg='NONE'},
+  PmenuMatch={fg=p.search_color, underline=true},
+  PmenuMatchSel={fg=p.search_color, underline=true},
 
   -- Tabline
   TabLineFill={bg=p.bg_default, fg=p.keyword2_color},
