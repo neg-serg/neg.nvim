@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.17
+-- Version:     4.18
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -45,6 +45,8 @@ local flags_from = U.flags_from
       soft_borders = false,
       -- Auto-tune float/panel backgrounds when terminal background is transparent
       auto_transparent_panels = true,
+      -- Diff focus: stronger Diff* backgrounds when any window is in :diff mode
+      diff_focus = true,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -315,6 +317,75 @@ local function apply_auto_transparent_panels(cfg)
     hi(0, 'NormalFloat', { bg = float_bg })
     hi(0, 'Pmenu', { bg = panel_bg })
   end
+end
+
+local function apply_diff_focus(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.diff_focus ~= false
+  if not enable then
+    -- restore baseline if previously strengthened
+    if M._diff_strong and M._diff_base then
+      for name, prev in pairs(M._diff_base) do
+        local spec = {}
+        if prev.fg then spec.fg = prev.fg end
+        if prev.bg then spec.bg = prev.bg end
+        if prev.sp then spec.sp = prev.sp end
+        hi(0, name, spec)
+      end
+    end
+    M._diff_strong, M._diff_base = false, nil
+    return
+  end
+  local ok_api = (vim and vim.api and vim.api.nvim_list_wins)
+  if not ok_api then return end
+  local function any_diff_win()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local ok, val = pcall(vim.api.nvim_win_get_option, win, 'diff')
+      if ok and val then return true end
+    end
+    return false
+  end
+  local function set_strong()
+    if not M._diff_base then
+      M._diff_base = {
+        DiffAdd    = (U.get_hl_colors and U.get_hl_colors('DiffAdd')) or {},
+        DiffChange = (U.get_hl_colors and U.get_hl_colors('DiffChange')) or {},
+        DiffDelete = (U.get_hl_colors and U.get_hl_colors('DiffDelete')) or {},
+        DiffText   = (U.get_hl_colors and U.get_hl_colors('DiffText')) or {},
+      }
+    end
+    local add_bg    = (U.alpha and U.alpha(p.diff_add_color,    p.bg_default, 0.22)) or p.diff_add_color
+    local change_bg = (U.alpha and U.alpha(p.diff_change_color, p.bg_default, 0.22)) or p.diff_change_color
+    local del_bg    = (U.alpha and U.alpha(p.diff_delete_color, p.bg_default, 0.20)) or p.diff_delete_color
+    local text_bg   = (U.alpha and U.alpha(p.include_color,     p.bg_default, 0.25)) or p.include_color
+    hi(0, 'DiffAdd',    { bg = add_bg,    fg = 'NONE' })
+    hi(0, 'DiffChange', { bg = change_bg, fg = 'NONE' })
+    hi(0, 'DiffDelete', { bg = del_bg,    fg = 'NONE' })
+    hi(0, 'DiffText',   { bg = text_bg,   fg = 'NONE', bold = true })
+    M._diff_strong = true
+  end
+  local function restore_if_needed()
+    if M._diff_strong and M._diff_base then
+      for name, prev in pairs(M._diff_base) do
+        local spec = {}
+        if prev.fg then spec.fg = prev.fg end
+        if prev.bg then spec.bg = prev.bg end
+        if prev.sp then spec.sp = prev.sp end
+        hi(0, name, spec)
+      end
+      M._diff_strong, M._diff_base = false, nil
+    end
+  end
+  -- initial
+  if any_diff_win() then set_strong() else restore_if_needed() end
+  local grp = vim.api.nvim_create_augroup('NegDiffFocus', { clear = true })
+  vim.api.nvim_create_autocmd({ 'WinEnter','WinClosed','BufWinEnter','OptionSet' }, {
+    group = grp,
+    pattern = { '*','diff' },
+    callback = function()
+      if any_diff_win() then set_strong() else restore_if_needed() end
+    end,
+  })
 end
 
 local function apply_dim_inactive(cfg)
@@ -596,6 +667,7 @@ function M.setup(opts)
   apply_mode_accent(cfg)
   apply_soft_borders(cfg)
   apply_auto_transparent_panels(cfg)
+  apply_diff_focus(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()

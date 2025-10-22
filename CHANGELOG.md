@@ -363,3 +363,8 @@ All notable changes to this project are documented here.
 - Option: `ui.auto_transparent_panels = true` (default) controls this behavior.
 - Docs: README updated (UI options).
 - Meta: bump version.
+## [4.18] - 2025-10-22
+- UI: add `ui.diff_focus` (default true) — strengthens `DiffAdd`/`DiffChange`/`DiffDelete`/`DiffText` backgrounds when any window is in `:diff` mode; restores baseline otherwise.
+- Implementation: global highlights toggled via autocmds; previous colors preserved and restored when leaving diff.
+- Docs: README updated (UI options).
+- Meta: bump version.
