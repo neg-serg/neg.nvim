@@ -341,3 +341,7 @@ All notable changes to this project are documented here.
 - Preset: add `presentation` profile — brighter accents with more visible `CursorLine`/`CursorLineNr`, and slightly emphasized search/title for demos and talks.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
+## [4.13] - 2025-10-22
+- UI: add `ui.dim_inactive` (default false) — dims non‑current windows via `NormalNC`/`WinBarNC` and maps `LineNr` to a dim variant using window‑local `winhighlight` (on `WinEnter/WinLeave`).
+- Docs: README updated (UI options).
+- Meta: bump version.

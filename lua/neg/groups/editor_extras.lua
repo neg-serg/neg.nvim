@@ -5,6 +5,8 @@ return {
   -- Line numbers above/below
   LineNrAbove={link='LineNr'},
   LineNrBelow={link='LineNr'},
+  -- Active/inactive line number helpers
+  NegLineNrDim={ fg=p.comment_color },
 
   -- Whitespace and end of buffer
   Whitespace={fg=p.comment_color},
@@ -27,4 +29,3 @@ return {
   lCursor={reverse=true},
   CursorIM={reverse=true},
 }
-

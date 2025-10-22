@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.12
+-- Version:     4.13
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -37,6 +37,8 @@ local flags_from = U.flags_from
       -- When true, define extra baseline UI groups missing in stock setup
       -- (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, LineNrAbove/Below, Question)
       core_enhancements = true,
+      -- Dim inactive windows (NormalNC/WinBarNC) and line numbers via winhighlight mapping
+      dim_inactive = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -221,6 +223,57 @@ local function apply_preset(preset, cfg)
 end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
+
+local function apply_dim_inactive(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.dim_inactive == true
+  local ok_api = (vim and vim.api and vim.api.nvim_create_autocmd)
+  -- Highlight tweaks
+  if enable then
+    -- Dim non-current window base and winbar
+    local nnc = { fg = p.comment_color }
+    local base = (U.get_hl_colors and U.get_hl_colors('Normal')) or {}
+    if base.bg then nnc.bg = U.darken(base.bg, 6) else nnc.bg = U.darken(p.bg_default, 6) end
+    hi(0, 'NormalNC', nnc)
+    hi(0, 'WinBarNC', { fg = p.comment_color })
+    -- Dimmed line numbers group
+    hi(0, 'NegLineNrDim', { fg = p.comment_color })
+  else
+    -- Restore default link for NormalNC if previously altered
+    hi(0, 'NormalNC', { link = 'Normal' })
+  end
+  if not ok_api then return end
+  -- Manage autocmds to map line numbers per window
+  local grp = vim.api.nvim_create_augroup('NegDimInactive', { clear = true })
+  if enable then
+    vim.api.nvim_create_autocmd({ 'WinEnter','BufWinEnter' }, {
+      group = grp,
+      callback = function()
+        pcall(vim.api.nvim_set_option_value, 'winhighlight', '', { scope = 'local' })
+      end,
+    })
+    vim.api.nvim_create_autocmd('WinLeave', {
+      group = grp,
+      callback = function()
+        local prev = vim.wo.winhighlight or ''
+        local mapped = 'LineNr:NegLineNrDim'
+        if prev ~= '' then
+          -- keep existing mappings, just ensure LineNr is mapped
+          if not prev:match('LineNr:') then prev = prev .. (prev:sub(-1) == ',' and '' or (prev == '' and '' or ',')) .. mapped
+          else prev = prev:gsub('LineNr:[^,]+', mapped) end
+          pcall(vim.api.nvim_set_option_value, 'winhighlight', prev, { scope = 'local' })
+        else
+          pcall(vim.api.nvim_set_option_value, 'winhighlight', mapped, { scope = 'local' })
+        end
+      end,
+    })
+  else
+    -- Clear mappings when disabled
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      pcall(vim.api.nvim_set_option_value, 'winhighlight', '', { scope = 'local', win = win })
+    end
+  end
+end
 
 local function apply_operator_colors(mode)
   if mode == 'mono' then
@@ -446,6 +499,7 @@ function M.setup(opts)
   apply_markup_prefs(cfg)
   apply_operator_colors(cfg.operator_colors)
   apply_number_colors(cfg.number_colors)
+  apply_dim_inactive(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
