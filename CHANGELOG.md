@@ -336,3 +336,8 @@ All notable changes to this project are documented here.
 - Preset: add `focus` profile — dims inactive windows (stronger NormalNC/WinBarNC) and softens separators (`VertSplit`/`WinSeparator`) to reduce visual noise.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
+
+## [4.12] - 2025-10-22
+- Preset: add `presentation` profile — brighter accents with more visible `CursorLine`/`CursorLineNr`, and slightly emphasized search/title for demos and talks.
+- Docs: README updated (presets list and examples).
+- Meta: bump version.

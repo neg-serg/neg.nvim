@@ -31,7 +31,7 @@ lazy.nvim
   priority = 1000,
   config = function()
     require('neg').setup({
-      -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus'
+      -- Pick a preset (optional): 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation'
       preset = nil,
       -- Operators coloring (default: families): 'families' | 'mono'
       operator_colors = 'families',
@@ -105,7 +105,7 @@ require('neg').setup({
   transparent = false,                  -- boolean or { float, sidebar, statusline }
   -- transparent = { float = false, sidebar = false, statusline = false },
   terminal_colors = true,              -- set 16 ANSI terminal colors
-  preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | nil
+  preset = nil,                        -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation' | nil
   operator_colors = 'families',        -- 'families' for subtle per-family hues, or 'mono' for single operator color
   number_colors = 'ramp',              -- default 'ramp' (subtle variants), or 'mono' for single hue
   ui = {
@@ -244,7 +244,8 @@ Built-in style presets you can use via `preset` option or `:NegPreset`:
 - pro: no italics anywhere (disables italics for comments, inlay hints, code lens, and markup italics)
 - writing: Markdown-first; bold headings/strong, italic emphasis
 - accessibility: higher contrast, minimal italics, stronger lines/separators and line numbers; disables soft diagnostic virtual backgrounds
- - focus: dim inactive windows (stronger NormalNC/WinBarNC), soften separators/borders for less visual noise
+- focus: dim inactive windows (stronger NormalNC/WinBarNC), soften separators/borders for less visual noise
+ - presentation: brighter accents with more visible `CursorLine`/`CursorLineNr` and emphasized search/title
 
 Usage examples:
 

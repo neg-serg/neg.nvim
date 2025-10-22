@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.11
+-- Version:     4.12
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -27,7 +27,7 @@ local flags_from = U.flags_from
   local default_config = {
     transparent = false,
     terminal_colors = true,
-  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus'
+  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'presentation'
     -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
     operator_colors = 'families',
     -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
@@ -187,6 +187,36 @@ local function apply_preset(preset, cfg)
     local soft_sep = U.darken(p.bg_default, 10)
     hi(0, 'VertSplit', { fg = soft_sep })
     hi(0, 'WinSeparator', { fg = soft_sep })
+  elseif preset == 'presentation' then
+    -- Brighter accents; emphasize cursor line and its number
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
+      local spec = { bg = U.darken(p.bg_default, 10) }
+      if base.bg and base.bg ~= '' and base.bg ~= 'NONE' then spec.bg = U.darken(base.bg, 6) end
+      hi(0, 'CursorLine', spec)
+    end
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('CursorLineNr')) or {}
+      local spec = { fg = p.keyword3_color, bold = true, italic = false }
+      if base.bg then spec.bg = base.bg end
+      hi(0, 'CursorLineNr', spec)
+    end
+    -- Slightly stronger Title and Search accents
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('Title')) or {}
+      local spec = { bold = true }
+      if base.fg then spec.fg = base.fg end
+      if base.bg then spec.bg = base.bg end
+      hi(0, 'Title', spec)
+    end
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('Search')) or {}
+      local spec = { italic = false, underline = true, fg = base.fg or p.search_color, bg = base.bg }
+      hi(0, 'Search', spec)
+      local base2 = (U.get_hl_colors and U.get_hl_colors('CurSearch')) or {}
+      local spec2 = { bold = true, italic = false, fg = base2.fg or p.search_color, bg = base2.bg }
+      hi(0, 'CurSearch', spec2)
+    end
   end
 end
 
@@ -516,9 +546,9 @@ define_commands = function()
 
   vim.api.nvim_create_user_command('NegPreset', function(opts)
     local preset = (opts.args or ''):lower()
-    local allowed = { soft=true, hard=true, pro=true, writing=true, accessibility=true, focus=true, none=true }
+    local allowed = { soft=true, hard=true, pro=true, writing=true, accessibility=true, focus=true, presentation=true, none=true }
     if not allowed[preset] then
-      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|accessibility|focus|none")
+      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|accessibility|focus|presentation|none")
       return
     end
     local cfg = M._config or default_config
@@ -529,9 +559,9 @@ define_commands = function()
   end, {
     nargs = 1,
     complete = function()
-      return { 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'none' }
+      return { 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'presentation', 'none' }
     end,
-    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|accessibility|focus|none)'
+    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|accessibility|focus|presentation|none)'
   })
 
   vim.api.nvim_create_user_command('NegDiagBgMode', function(opts)
