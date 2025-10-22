@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.15
+-- Version:     4.16
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -41,6 +41,8 @@ local flags_from = U.flags_from
       dim_inactive = false,
       -- Mode-aware accents for CursorLine/StatusLine by Vim mode (Normal/Insert/Visual)
       mode_accent = false,
+      -- Soft borders: lighten WinSeparator/FloatBorder to reduce visual noise
+      soft_borders = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -277,6 +279,22 @@ local function apply_mode_accent(cfg)
     local base_sl = (U.get_hl_colors and U.get_hl_colors('StatusLine')) or {}
     local spec = { fg = p.function_color, bg = base_sl.bg or 'NONE' }
     hi(0, 'StatusLine', spec)
+  end
+end
+
+local function apply_soft_borders(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.soft_borders == true
+  if enable then
+    local sep = U.darken(p.bg_default, 10)
+    local float_bg = (p.bg_float or p.bg_default)
+    local fsep = U.darken(float_bg, 8)
+    hi(0, 'WinSeparator', { fg = sep, bg = 'NONE' })
+    hi(0, 'FloatBorder',  { fg = fsep, bg = 'NONE' })
+  else
+    -- Restore default linking to VertSplit
+    hi(0, 'WinSeparator', { link = 'VertSplit' })
+    hi(0, 'FloatBorder',  { link = 'VertSplit' })
   end
 end
 
@@ -557,6 +575,7 @@ function M.setup(opts)
   apply_number_colors(cfg.number_colors)
   apply_dim_inactive(cfg)
   apply_mode_accent(cfg)
+  apply_soft_borders(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -753,6 +772,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set mode-aware CursorLine/StatusLine accents (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegSoftBorders', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.soft_borders = true
+    elseif arg == 'off' then
+      newcfg.ui.soft_borders = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.soft_borders = not (cfg.ui and cfg.ui.soft_borders == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
   })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()

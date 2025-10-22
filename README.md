@@ -112,6 +112,7 @@ require('neg').setup({
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
     mode_accent = false,               -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
+    soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
@@ -271,6 +272,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp} — switch number coloring mode at runtime
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
+- :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 
 ## Overrides
 

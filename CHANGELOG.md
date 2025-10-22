@@ -353,3 +353,8 @@ All notable changes to this project are documented here.
 - Command: add `:NegModeAccent {on|off|toggle}` to switch mode-aware accents at runtime.
 - Docs: README updated (commands).
 - Meta: bump version.
+## [4.16] - 2025-10-22
+- UI: add `ui.soft_borders` (default false) — lighter `WinSeparator`/`FloatBorder` for softer boundaries.
+- Command: `:NegSoftBorders {on|off|toggle}` to switch at runtime.
+- Docs: README updated (UI options + Commands).
+- Meta: bump version.
