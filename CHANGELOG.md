@@ -408,3 +408,8 @@ All notable changes to this project are documented here.
 ## [4.27] - 2025-10-22
 - Docs: add Russian quick guide `README.ru.md` covering new options and runtime commands; link from main README.
 - Meta: bump version.
+## [4.28] - 2025-10-22
+- Accessibility: add `ui.accessibility.achromatopsia` (monochrome/high-contrast assist). Reduces reliance on hue by normalizing syntax colors, uses style cues (bold/underline), grayscale diagnostics and neutral diff backgrounds.
+- Command: `:NegAccessibility achromatopsia {on|off|toggle}`.
+- Docs: README/README.ru updated (options + command).
+- Meta: bump version.

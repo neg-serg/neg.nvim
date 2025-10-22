@@ -122,6 +122,7 @@ require('neg').setup({
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
       strong_tui_cursor = false,       -- stronger Cursor/TermCursor/Visual for TUI
+      achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue
     },
   },
   treesitter = {
@@ -288,8 +289,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
-- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features
-  - features: deuteranopia | strong_undercurl | strong_tui_cursor
+-- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features
+  - features: deuteranopia | strong_undercurl | strong_tui_cursor | achromatopsia
 
 ## Overrides
 

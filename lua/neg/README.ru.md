@@ -28,6 +28,7 @@ require('neg').setup({
       deuteranopia = false,          -- дружественный режим для дальтонизма: «добавления» более сине‑голубые
       strong_undercurl = false,      -- более заметные подчеркивания (undercurl/underline) у диагностик
       strong_tui_cursor = false,     -- более заметный курсор/выделение в TUI
+      achromatopsia = false,         -- монохром/высокий контраст; минимальная зависимость от оттенков
     },
   },
 })
@@ -89,7 +90,7 @@ vim.cmd.colorscheme('neg')
   - `:NegSoftBorders {on|off|toggle}` — мягкие границы
   - `:NegLightSigns {on|off|toggle}` — лёгкие знаки в SignColumn
   - `:NegPunctFamily {on|off|toggle}` — различение семейства скобок
-  - `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor} {on|off|toggle}`
+  - `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}`
 
 ## Рекомендованные сочетания
 
@@ -129,4 +130,3 @@ require('neg').setup({
 -- Для более выразительных диагностик:
 -- :NegDiagStrong
 ```
-

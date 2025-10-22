@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.27
+-- Version:     4.28
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -56,6 +56,7 @@ local flags_from = U.flags_from
         deuteranopia = false,      -- shift additions to blue‑ish hue; keep warnings distinct
         strong_undercurl = false,  -- stronger/more visible diagnostic undercurls
         strong_tui_cursor = false, -- stronger Cursor/TermCursor/Visual for TUI
+        achromatopsia = false,     -- monochrome/high-contrast assist: reduce reliance on hue
       },
     },
     treesitter = {
@@ -490,6 +491,43 @@ local function apply_accessibility_opts(cfg)
     hi(0, 'Cursor', { reverse = true, bold = true })
     hi(0, 'TermCursor', { reverse = true, bold = true })
     hi(0, 'Visual', { bg = U.darken(p.bg_default, 18) })
+  end
+  -- Achromatopsia-friendly adjustments: try to remove hue reliance
+  if acc.achromatopsia then
+    -- 1) Syntax emphasis via styles rather than hue
+    for _, g in ipairs({ '@keyword' }) do hi(0, g, { fg = p.default_color, bold = true, italic = false }) end
+    for _, g in ipairs({ '@function','@method' }) do hi(0, g, { fg = p.default_color, italic = false }) end
+    for _, g in ipairs({ '@type','@type.builtin','@type.definition' }) do hi(0, g, { fg = p.default_color, underline = true, italic = false }) end
+    for _, g in ipairs({ '@string','@character' }) do hi(0, g, { fg = p.default_color, italic = false }) end
+    for _, g in ipairs({ '@number','@boolean','@operator','@constant','@variable','@property','@field','@namespace','@tag' }) do hi(0, g, { fg = p.default_color, italic = false }) end
+    for _, g in ipairs({ '@punctuation.bracket','@punctuation.delimiter','@punctuation.special' }) do hi(0, g, { fg = p.default_color }) end
+    -- 2) Links/URLs always underlined
+    hi(0, '@markup.link.url', { underline = true, fg = p.default_color })
+    -- 3) Diagnostics: grayscale luminance ramp and visible backgrounds
+    local w = p.white_color
+    local err = U.darken(w, 0)     -- brightest
+    local warn = U.darken(w, 20)
+    local info = U.darken(w, 35)
+    local hint = U.darken(w, 50)
+    local ok = U.darken(w, 25)
+    hi(0, 'DiagnosticError', { fg = err })
+    hi(0, 'DiagnosticWarn',  { fg = warn })
+    hi(0, 'DiagnosticInfo',  { fg = info })
+    hi(0, 'DiagnosticHint',  { fg = hint })
+    hi(0, 'DiagnosticOk',    { fg = ok })
+    -- virtual text: neutral backgrounds by lightening base bg
+    hi(0, 'DiagnosticVirtualTextError', { fg = p.default_color, bg = U.lighten(p.bg_default, 16) })
+    hi(0, 'DiagnosticVirtualTextWarn',  { fg = p.default_color, bg = U.lighten(p.bg_default, 12) })
+    hi(0, 'DiagnosticVirtualTextInfo',  { fg = p.default_color, bg = U.lighten(p.bg_default, 10) })
+    hi(0, 'DiagnosticVirtualTextHint',  { fg = p.default_color, bg = U.lighten(p.bg_default, 8) })
+    hi(0, 'DiagnosticVirtualTextOk',    { fg = p.default_color, bg = U.lighten(p.bg_default, 14) })
+    -- 4) Diff: grayscale backgrounds
+    hi(0, 'DiffAdd',    { bg = U.lighten(p.bg_default, 12), fg = 'NONE' })
+    hi(0, 'DiffChange', { bg = U.lighten(p.bg_default, 8),  fg = 'NONE' })
+    hi(0, 'DiffDelete', { bg = U.darken(p.bg_default, 10),  fg = 'NONE' })
+    hi(0, 'DiffText',   { bg = U.lighten(p.bg_default, 16), fg = 'NONE', bold = true })
+    -- 5) Comments without italics
+    hi(0, '@comment', { fg = p.comment_color, italic = false })
   end
 end
 
@@ -1083,9 +1121,9 @@ define_commands = function()
     for w in arg:gmatch("%S+") do parts[#parts+1] = w end
     local feature = parts[1]
     local state = (parts[2] or 'toggle')
-    local features = { deuteranopia=true, strong_undercurl=true, strong_tui_cursor=true }
+    local features = { deuteranopia=true, strong_undercurl=true, strong_tui_cursor=true, achromatopsia=true }
     if not features[feature or ''] then
-      print("neg.nvim: unknown feature '" .. tostring(feature) .. "'. Use: deuteranopia|strong_undercurl|strong_tui_cursor [on|off|toggle]")
+      print("neg.nvim: unknown feature '" .. tostring(feature) .. "'. Use: deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia [on|off|toggle]")
       return
     end
     local cfg = M._config or default_config
