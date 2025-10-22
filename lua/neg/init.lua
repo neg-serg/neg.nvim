@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.25
+-- Version:     4.26
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -198,6 +198,11 @@ local function apply_preset(preset, cfg)
     -- Selection more visible (no bold noise)
     hi(0, 'Visual', { bg = U.darken(p.bg_default, 16) })
   elseif preset == 'focus' then
+    if cfg then
+      cfg.ui = cfg.ui or {}
+      cfg.ui.dim_inactive = true
+      cfg.ui.soft_borders = true
+    end
     -- Dim inactive windows; soften separators
     do
       local base = (U.get_hl_colors and U.get_hl_colors('NormalNC')) or {}
