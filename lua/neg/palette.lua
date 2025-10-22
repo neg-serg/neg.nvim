@@ -1,3 +1,5 @@
+local U = require('neg.util')
+
 local colors = {
     norm='#6c7e96', -- default foreground
 
@@ -7,7 +9,9 @@ local colors = {
     whit='#d1e5ff', -- white color
 
     culc='#272727', -- cursor line/column hexadecimal
-    comm='#3c4754', -- comment color
+    -- Base comment color is derived from default to keep relative contrast stable
+    -- Placeholder; overwritten below using darken(default, 50%)
+    comm='#3c4754', -- comment color (will be recalculated)
 
     lit1='#127978', -- literal color 1
     lit2='#148787', -- literal color 2
@@ -81,6 +85,10 @@ local colors = {
 
     dnorm='#15181f'
 }
+
+-- Derive comment/dim color from default foreground (about 50% darker)
+-- This keeps comments and dimmed UI consistently toned if the base color changes.
+colors.comm = U.darken(colors.norm, 50)
 
 -- Backwards-compatible descriptive aliases
 -- Base and backgrounds
