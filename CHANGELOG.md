@@ -381,3 +381,8 @@ All notable changes to this project are documented here.
 - Treesitter operators: add `operator_colors = 'mono+'` preset — keeps single operator hue but with a slightly stronger accent; available via `:NegOperatorColors mono+`.
 - Docs: README updated (Options, command help).
 - Meta: bump version.
+## [4.22] - 2025-10-22
+- Treesitter punctuation: add `treesitter.punct_family` (default false) to differentiate `@punctuation.parenthesis`/`@punctuation.brace` from `@punctuation.bracket` with subtle hues.
+- Command: `:NegPunctFamily {on|off|toggle}` to switch at runtime.
+- Docs: README updated (Options + Commands).
+- Meta: bump version.

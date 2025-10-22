@@ -119,6 +119,7 @@ require('neg').setup({
   },
   treesitter = {
     extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
+    punct_family = false,              -- differentiate punctuation families (parenthesis/brace vs bracket) with subtle hues
   },
 
   styles = {
@@ -279,6 +280,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
+- :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 
 ## Overrides
 

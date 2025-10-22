@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.21
+-- Version:     4.22
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -55,6 +55,8 @@ local flags_from = U.flags_from
       -- When true, apply subtle extra captures (math/environment, string.template,
       -- boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
       extras = true,
+      -- Punctuation family differentiation (parenthesis/brace vs bracket)
+      punct_family = false,
     },
   styles = {
     comments = 'italic',
@@ -319,6 +321,21 @@ local function apply_auto_transparent_panels(cfg)
     local panel_bg = U.lighten(p.bg_default, 6)
     hi(0, 'NormalFloat', { bg = float_bg })
     hi(0, 'Pmenu', { bg = panel_bg })
+  end
+end
+
+local function apply_punct_family(cfg)
+  local ts = cfg and cfg.treesitter or {}
+  if ts and ts.punct_family then
+    local base = p.delimiter_color
+    local paren = (U.lighten and U.lighten(base, 6)) or base
+    local brace = (U.darken and U.darken(base, 6)) or base
+    hi(0, '@punctuation.parenthesis', { fg = paren })
+    hi(0, '@punctuation.brace', { fg = brace })
+  else
+    -- unify to bracket color
+    hi(0, '@punctuation.parenthesis', { link = '@punctuation.bracket' })
+    hi(0, '@punctuation.brace', { link = '@punctuation.bracket' })
   end
 end
 
@@ -720,6 +737,7 @@ function M.setup(opts)
   apply_auto_transparent_panels(cfg)
   apply_diff_focus(cfg)
   apply_light_signs(cfg)
+  apply_punct_family(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -978,6 +996,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set light signs (DiagnosticSign*/GitSigns*) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegPunctFamily', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.treesitter = newcfg.treesitter or {}
+    if arg == 'on' then
+      newcfg.treesitter.punct_family = true
+    elseif arg == 'off' then
+      newcfg.treesitter.punct_family = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.treesitter.punct_family = not (cfg.treesitter and cfg.treesitter.punct_family == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set punctuation family differentiation (on|off|toggle)'
   })
   vim.api.nvim_create_user_command('NegNumberColors', function(opts)
     local mode = (opts.args or ''):lower()
