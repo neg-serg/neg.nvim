@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.10
+-- Version:     4.11
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -27,7 +27,7 @@ local flags_from = U.flags_from
   local default_config = {
     transparent = false,
     terminal_colors = true,
-    preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing'
+  preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus'
     -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
     operator_colors = 'families',
     -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
@@ -175,6 +175,18 @@ local function apply_preset(preset, cfg)
     hi(0, 'ColorColumn', { bg = U.darken(p.bg_default, 12) })
     -- Selection more visible (no bold noise)
     hi(0, 'Visual', { bg = U.darken(p.bg_default, 16) })
+  elseif preset == 'focus' then
+    -- Dim inactive windows; soften separators
+    do
+      local base = (U.get_hl_colors and U.get_hl_colors('NormalNC')) or {}
+      local spec = { fg = p.comment_color, bg = U.darken(p.bg_default, 8) }
+      if base.bg and base.bg ~= '' and base.bg ~= 'NONE' then spec.bg = U.darken(base.bg, 6) end
+      hi(0, 'NormalNC', spec)
+    end
+    hi(0, 'WinBarNC', { fg = p.comment_color })
+    local soft_sep = U.darken(p.bg_default, 10)
+    hi(0, 'VertSplit', { fg = soft_sep })
+    hi(0, 'WinSeparator', { fg = soft_sep })
   end
 end
 
@@ -504,9 +516,9 @@ define_commands = function()
 
   vim.api.nvim_create_user_command('NegPreset', function(opts)
     local preset = (opts.args or ''):lower()
-    local allowed = { soft=true, hard=true, pro=true, writing=true, accessibility=true, none=true }
+    local allowed = { soft=true, hard=true, pro=true, writing=true, accessibility=true, focus=true, none=true }
     if not allowed[preset] then
-      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|accessibility|none")
+      print("neg.nvim: unknown preset '" .. preset .. "'. Use: soft|hard|pro|writing|accessibility|focus|none")
       return
     end
     local cfg = M._config or default_config
@@ -517,9 +529,9 @@ define_commands = function()
   end, {
     nargs = 1,
     complete = function()
-      return { 'soft', 'hard', 'pro', 'writing', 'accessibility', 'none' }
+      return { 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'none' }
     end,
-    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|accessibility|none)'
+    desc = 'neg.nvim: Apply style preset (soft|hard|pro|writing|accessibility|focus|none)'
   })
 
   vim.api.nvim_create_user_command('NegDiagBgMode', function(opts)

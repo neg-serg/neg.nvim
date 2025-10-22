@@ -331,3 +331,8 @@ All notable changes to this project are documented here.
 - Preset: add `accessibility` profile with higher contrast, minimal italics, stronger separators and line numbers; disables soft diagnostic virtual backgrounds.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
+
+## [4.11] - 2025-10-22
+- Preset: add `focus` profile — dims inactive windows (stronger NormalNC/WinBarNC) and softens separators (`VertSplit`/`WinSeparator`) to reduce visual noise.
+- Docs: README updated (presets list and examples).
+- Meta: bump version.
