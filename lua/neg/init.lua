@@ -178,19 +178,19 @@ end
 
 local function apply_styles(styles)
   local ts_map = {
-    comments = { '@comment' },
+    comments = { '@comment','@comment.documentation' },
     keywords = {
       '@keyword','@keyword.function','@keyword.operator','@keyword.directive','@keyword.storage',
       '@keyword.conditional','@keyword.debug','@keyword.exception','@keyword.import','@keyword.repeat','@keyword.return'
     },
     functions = { '@function','@function.macro','@method' },
-    strings = { '@string','@character' },
+    strings = { '@string','@character','@string.regex' },
     variables = { '@variable','@parameter','@field','@property' },
-    types = { '@type','@type.builtin','@type.definition' },
+    types = { '@type','@type.builtin','@type.definition','@type.parameter','@type.qualifier' },
     operators = { '@operator','@punctuation.delimiter','@punctuation.bracket' },
-    numbers = { '@number','@float' },
+    numbers = { '@number','@float','@number.integer','@number.hex','@number.octal','@number.binary' },
     booleans = { '@boolean' },
-    constants = { '@constant','@constant.builtin','@variable.builtin' },
+    constants = { '@constant','@constant.builtin','@variable.builtin','@constant.macro' },
     punctuation = { '@punctuation.delimiter','@punctuation.special' },
   }
   -- Apply style flags to Treesitter captures as well
