@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.26
+-- Version:     4.27
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim

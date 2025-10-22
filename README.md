@@ -1,5 +1,7 @@
 # neg
 
+[Русская версия README](README.ru.md)
+
 Modern Neovim colorscheme partially based on Jason W Ryan's miromiro:
 https://www.vim.org/scripts/script.php?script_id=3815
 

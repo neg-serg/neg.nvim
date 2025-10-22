@@ -405,3 +405,6 @@ All notable changes to this project are documented here.
 ## [4.26] - 2025-10-22
 - Preset: 'focus' now enables `ui.dim_inactive` and `ui.soft_borders` by default (as part of the profile) to reduce visual noise and emphasize the active window.
 - Meta: bump version.
+## [4.27] - 2025-10-22
+- Docs: add Russian quick guide `README.ru.md` covering new options and runtime commands; link from main README.
+- Meta: bump version.
