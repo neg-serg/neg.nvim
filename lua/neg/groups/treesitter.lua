@@ -16,11 +16,8 @@ return {
   ['@method.call']={ link = '@function' },
   ['@constant']={ fg = p.literal2_color },
   ['@string']={ fg = p.string_color },
-  ['@string.template']={ link = '@string' },
   ['@number']={ fg = p.keyword1_color },
   ['@boolean']={ fg = p.literal3_color },
-  ['@boolean.true']={ link = '@boolean' },
-  ['@boolean.false']={ link = '@boolean' },
   ['@operator']={ fg = p.keyword2_color },
   -- Operator families with subtle per-family hues
   -- assignment: dark/neutral
@@ -85,8 +82,6 @@ return {
   ['@attribute.builtin']={ link='@attribute' },
   ['@constructor']={ link='@function' },
   ['@constant.builtin']={ link='@constant' },
-  ['@nil']={ link = '@constant.builtin' },
-  ['@null']={ link = '@constant.builtin' },
   ['@function.builtin']={ link='@function' },
   ['@function.macro']={ fg = p.function_color },
   ['@property']={ fg = p.identifier_color },
@@ -132,10 +127,7 @@ return {
   ['@markup.list.checked']={ fg = p.identifier_color },
   ['@markup.list.unchecked']={ fg = p.comment_color },
   ['@markup.list.numbered']={ fg = p.comment_color },
-  -- Additional markup scopes
-  ['@markup.math']={ fg = p.literal2_color },
-  ['@markup.environment']={ fg = p.preproc_dark_color },
-  ['@markup.environment.name']={ fg = p.tag_color },
+  -- Additional markup scopes (core kept minimal; extra variants in treesitter_extras)
 
   -- Helix captures
   ['@function.method']={link='@method'},
@@ -199,8 +191,6 @@ return {
   ['@lsp.type.enumMember']={link='@constant'},
   ['@lsp.type.function']={link='@function'},
   ['@lsp.type.macro']={link='@function.macro'},
-  ['@lsp.type.decorator']={link='@function.macro'},
-  ['@lsp.type.annotation']={link='@attribute'},
   ['@lsp.type.method']={link='@method'},
   ['@lsp.type.event']={link='@type'},
   ['@lsp.type.operator']={link='@operator'},
@@ -227,23 +217,13 @@ return {
   ['@lsp.typemod.type.defaultLibrary']={link='@type.builtin'},
   ['@lsp.typemod.deprecated']={ strikethrough = true, fg = p.comment_color },
   -- extra common modifiers
-  ['@lsp.typemod.variable.declaration']={link='@variable'},
-  ['@lsp.typemod.class.declaration']={link='@type'},
-  ['@lsp.typemod.type.declaration']={link='@type'},
-  ['@lsp.typemod.property.declaration']={link='@property'},
-  ['@lsp.typemod.enumMember.declaration']={link='@constant'},
-  ['@lsp.typemod.function.declaration']={link='@function'},
-  ['@lsp.typemod.method.declaration']={link='@method'},
+  -- declaration variants moved to extras
   ['@lsp.typemod.variable.definition']={link='@variable'},
   ['@lsp.typemod.variable.reference']={link='@variable'},
   ['@lsp.typemod.parameter.readonly']={link='@parameter'},
   ['@lsp.typemod.property.readonly']={link='@constant'},
   ['@lsp.typemod.method.static']={link='@method'},
-  ['@lsp.typemod.property.static']={link='@property'},
-  ['@lsp.typemod.function.static']={link='@function'},
-  ['@lsp.typemod.type.abstract']={link='@type'},
-  ['@lsp.typemod.class.abstract']={link='@type'},
-  ['@lsp.typemod.enumMember.readonly']={link='@constant'},
+  -- additional static/abstract/readonly moved to extras
   ['@lsp.typemod.function.async']={link='@function'},
   ['@lsp.typemod.keyword.async']={link='@keyword'},
 }

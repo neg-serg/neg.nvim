@@ -313,3 +313,7 @@ All notable changes to this project are documented here.
 
 ## [3.23]
 - Previous version prior to the refactor documented above.
+## [4.08] - 2025-10-22
+- Treesitter: add option `treesitter.extras = true` (default) to enable subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links). Moved these into `neg.groups.treesitter_extras` and apply conditionally.
+- Validator: include `neg.groups.treesitter_extras` in module scan.
+- Meta: bump version.

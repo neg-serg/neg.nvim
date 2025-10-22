@@ -33,6 +33,7 @@ local function load_tables()
     'neg.groups.editor_extras',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
+    'neg.groups.treesitter_extras',
     -- plugins (extended)
     'neg.groups.plugins.bufferline',
     'neg.groups.plugins.cmp',
@@ -80,6 +81,7 @@ local function load_modules()
     'neg.groups.editor_extras',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
+    'neg.groups.treesitter_extras',
     -- plugins (extended)
     'neg.groups.plugins.bufferline',
     'neg.groups.plugins.cmp',

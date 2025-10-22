@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.07
+-- Version:     4.08
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -37,6 +37,11 @@ local flags_from = U.flags_from
       -- When true, define extra baseline UI groups missing in stock setup
       -- (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, LineNrAbove/Below, Question)
       core_enhancements = true,
+    },
+    treesitter = {
+      -- When true, apply subtle extra captures (math/environment, string.template,
+      -- boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
+      extras = true,
     },
   styles = {
     comments = 'italic',
@@ -370,6 +375,7 @@ function M.setup(opts)
   end
 
   -- Post-processing
+  if not (cfg.treesitter and cfg.treesitter.extras == false) then safe_apply('neg.groups.treesitter_extras') end
   if cfg.transparent then apply_transparent(cfg.transparent) end
   if cfg.terminal_colors then apply_terminal_colors() end
   apply_styles(cfg.styles)

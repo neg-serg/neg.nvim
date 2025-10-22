@@ -111,6 +111,9 @@ require('neg').setup({
   ui = {
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
   },
+  treesitter = {
+    extras = true,                     -- apply subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links)
+  },
 
   styles = {
     comments = 'italic',               -- 'italic' | 'bold' | 'underline' | 'undercurl' | 'none' | combos
