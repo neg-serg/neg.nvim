@@ -3,6 +3,12 @@
 All notable changes to this project are documented here.
 
 
+## [3.78] - 2025-10-22
+- Validator: add coverage listing (`NEG_VALIDATE_LIST` + `NEG_VALIDATE_LIST_FILTER` + `NEG_VALIDATE_LIST_LIMIT`), per‑module stats (`NEG_VALIDATE_MODULE_STATS`), and duplicate source reporting (`NEG_VALIDATE_DUP_SOURCES`).
+- Docs: README “Validator & CI” section updated to document the new options.
+- Meta: bump version and Last Change header in `init.lua`.
+
+
 ## [3.74] - 2025-10-21
 - Plugins: new integrations
   - neotest (status and UI groups)
