@@ -167,7 +167,7 @@ return {
   ['@lsp.typemod.macro.defaultLibrary']={link='@function.macro'},
   ['@lsp.typemod.enum.defaultLibrary']={link='@type.builtin'},
   ['@lsp.typemod.type.defaultLibrary']={link='@type.builtin'},
-  ['@lsp.typemod.deprecated']={link='DiagnosticDeprecated'},
+  ['@lsp.typemod.deprecated']={ strikethrough = true, fg = p.comment_color },
   -- extra common modifiers
   ['@lsp.typemod.variable.declaration']={link='@variable'},
   ['@lsp.typemod.variable.definition']={link='@variable'},
