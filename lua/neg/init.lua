@@ -177,20 +177,24 @@ local function apply_diagnostics_virtual_bg(cfg)
 end
 
 local function apply_styles(styles)
-  local map = {
-    comments = { 'Comment','SpecialComment' },
-    keywords = { 'Keyword','Statement','Conditional','Repeat','Label','PreProc','Include','Define','Macro','PreCondit' },
-    functions = { 'Function' },
-    strings = { 'String','SpecialChar' },
-    variables = { 'Identifier' },
-    types = { 'Type','StorageClass','Structure','Typedef' },
-    operators = { 'Operator' },
-    numbers = { 'Number' },
-    booleans = { 'Boolean' },
-    constants = { 'Constant' },
-    punctuation = { 'Delimiter' },
+  local ts_map = {
+    comments = { '@comment' },
+    keywords = {
+      '@keyword','@keyword.function','@keyword.operator','@keyword.directive','@keyword.storage',
+      '@keyword.conditional','@keyword.debug','@keyword.exception','@keyword.import','@keyword.repeat','@keyword.return'
+    },
+    functions = { '@function','@function.macro','@method' },
+    strings = { '@string','@character' },
+    variables = { '@variable','@parameter','@field','@property' },
+    types = { '@type','@type.builtin','@type.definition' },
+    operators = { '@operator','@punctuation.delimiter','@punctuation.bracket' },
+    numbers = { '@number','@float' },
+    booleans = { '@boolean' },
+    constants = { '@constant','@constant.builtin','@variable.builtin' },
+    punctuation = { '@punctuation.delimiter','@punctuation.special' },
   }
-  for key, groups in pairs(map) do
+  -- Apply style flags to Treesitter captures as well
+  for key, groups in pairs(ts_map) do
     local flags = flags_from(styles[key])
     if next(flags) ~= nil then
       for _, g in ipairs(groups) do
@@ -232,7 +236,6 @@ function M.setup(opts)
   end
 
   -- Core groups
-  apply(require('neg.groups.syntax'))
   apply(require('neg.groups.editor'))
   apply(require('neg.groups.diagnostics'))
   apply(require('neg.groups.lsp'))

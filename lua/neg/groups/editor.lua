@@ -30,7 +30,6 @@ return {
   StatusLine={bg='NONE', fg=p.function_color},
   StatusLineNC={bg='NONE', fg='NONE'},
   Title={bg=nil, fg=p.literal3_color},
-  Todo={bg='NONE', fg=p.red_blood_color},
   Underlined={bg=nil, fg=p.keyword4_color},
   VertSplit={bg='NONE', fg=p.dark_color},
   Visual={bg=p.bg_selection_dim, fg='NONE', bold=true},
@@ -46,7 +45,7 @@ return {
   FoldColumn={bg='NONE', fg=p.comment_color},
   SignColumn={bg='NONE', fg='NONE'},
 
-  Conceal={link='Operator'},
+  Conceal={link='@operator'},
   DeclRefExpr={link='Normal'},
 
   ExtraWhitespace={bg=p.literal3_color, fg='NONE'},

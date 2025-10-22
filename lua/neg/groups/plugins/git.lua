@@ -10,7 +10,7 @@ return {
   -- Diff
   DiffAdd={bg='#123425', fg=p.diff_add_color},
   diffAdded={fg=p.keyword4_color},
-  DiffAdded={link='String'},
+  DiffAdded={link='@string'},
   DiffChange={bg='#122c34', fg=p.diff_change_color},
   diffChanged={fg=p.keyword2_color},
   DiffDelete={bg=p.red_blood_color, fg=p.diff_delete_color},
@@ -19,7 +19,7 @@ return {
   diffOldFile={fg=p.preproc_dark_color},
   diffOldLine={fg=p.preproc_dark_color},
   diffRemoved={fg=p.red_blood_color},
-  DiffRemoved={link='Constant'},
+  DiffRemoved={link='@constant'},
   DiffText={bg='NONE', fg=p.white_color},
 
   -- Merge conflicts

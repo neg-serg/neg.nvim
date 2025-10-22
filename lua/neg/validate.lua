@@ -33,7 +33,6 @@ local builtin_targets = {
 local function load_tables()
   local mods = {
     -- core
-    'neg.groups.syntax',
     'neg.groups.editor',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',
@@ -80,7 +79,6 @@ end
 local function load_modules()
   local mods = {
     -- core
-    'neg.groups.syntax',
     'neg.groups.editor',
     'neg.groups.diagnostics',
     'neg.groups.treesitter',

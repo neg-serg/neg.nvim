@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [3.82] - 2025-10-22
+- Breaking: fully removed legacy Vim 'syntax' highlight groups. Theme now relies exclusively on Treesitter `@` captures and Neovim UI groups.
+- Removed module `neg.groups.syntax` and dropped its application from setup.
+- Styles: `apply_styles` now targets only Treesitter captures (e.g. `@comment`, `@keyword`, `@function`, etc.); classic groups like `String`, `Function`, etc. are no longer styled.
+- Links migrated to captures:
+  - `DiffAdded` → `@string`, `DiffRemoved` → `@constant`
+  - `Conceal` → `@operator`
+  - `FlashLabel` (noice) → `@comment.todo`
+- UI: removed `Todo` group; use `@comment.todo` instead.
+- Validator: removed `neg.groups.syntax` from module lists.
+- Migration tip: if you still depend on legacy Vim syntax groups, define them in your config or link them to the corresponding `@` captures.
+
 
 ## [3.78] - 2025-10-22
 - Validator: add coverage listing (`NEG_VALIDATE_LIST` + `NEG_VALIDATE_LIST_FILTER` + `NEG_VALIDATE_LIST_LIMIT`), per‑module stats (`NEG_VALIDATE_MODULE_STATS`), and duplicate source reporting (`NEG_VALIDATE_DUP_SOURCES`).
