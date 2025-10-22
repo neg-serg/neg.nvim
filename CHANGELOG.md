@@ -377,3 +377,7 @@ All notable changes to this project are documented here.
 - Diagnostics: add quick commands `:NegDiagSoft` and `:NegDiagStrong` to set softer/stronger virtual text backgrounds (blend ≈ 20 / 10) without tweaking individual settings.
 - Docs: README updated (Commands).
 - Meta: bump version.
+## [4.21] - 2025-10-22
+- Treesitter operators: add `operator_colors = 'mono+'` preset — keeps single operator hue but with a slightly stronger accent; available via `:NegOperatorColors mono+`.
+- Docs: README updated (Options, command help).
+- Meta: bump version.

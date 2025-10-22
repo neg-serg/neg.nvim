@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.20
+-- Version:     4.21
 -- Last Change: 22-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -28,7 +28,8 @@ local flags_from = U.flags_from
     transparent = false,
     terminal_colors = true,
   preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'presentation'
-    -- Operators coloring: 'families' (different subtle hues per family) or 'mono' (single color)
+    -- Operators coloring: 'families' (different subtle hues per family),
+    -- 'mono' (single color), or 'mono+' (single color with a slightly stronger accent)
     operator_colors = 'families',
     -- Number coloring: 'mono' (single hue) or 'ramp' (subtle single‑hue variants for integer/hex/octal/binary)
     number_colors = 'ramp',
@@ -482,7 +483,7 @@ local function apply_dim_inactive(cfg)
 end
 
 local function apply_operator_colors(mode)
-  if mode == 'mono' then
+  if mode == 'mono' or mode == 'mono+' or mode == 'mono_plus' then
     local groups = {
       '@operator.assignment','@operator.assignment.compound','@operator.assignment.augmented',
       '@operator.comparison','@operator.comparison.equality','@operator.comparison.relational',
@@ -493,6 +494,14 @@ local function apply_operator_colors(mode)
     }
     for _, g in ipairs(groups) do
       hi(0, g, { link = '@operator' })
+    end
+    -- In 'mono+' preset, give @operator a slightly stronger accent
+    if mode == 'mono+' or mode == 'mono_plus' then
+      local base = (U.get_hl_colors and U.get_hl_colors('@operator')) or {}
+      local spec = { fg = p.keyword1_color }
+      if base.bg then spec.bg = base.bg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, '@operator', spec)
     end
   end
 end
@@ -989,19 +998,20 @@ define_commands = function()
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()
-    local allowed = { families = true, mono = true }
+    local allowed = { families = true, mono = true, ['mono+'] = true, ['mono_plus'] = true }
     if not allowed[mode] then
-      print("neg.nvim: unknown mode '" .. mode .. "'. Use: families|mono")
+      print("neg.nvim: unknown mode '" .. mode .. "'. Use: families|mono|mono+")
       return
     end
     local cfg = M._config or default_config
     local newcfg = vim.deepcopy(cfg)
+    if mode == 'mono_plus' then mode = 'mono+' end
     newcfg.operator_colors = mode
-    M.setup(newcfg)
+  M.setup(newcfg)
   end, {
     nargs = 1,
-    complete = function() return { 'families', 'mono' } end,
-    desc = 'neg.nvim: Set operator colors mode (families|mono)'
+    complete = function() return { 'families', 'mono', 'mono+' } end,
+    desc = 'neg.nvim: Set operator colors mode (families|mono|mono+)'
   })
 end
 
