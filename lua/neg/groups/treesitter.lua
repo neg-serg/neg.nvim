@@ -84,10 +84,10 @@ return {
   ['@function.method.call']={link='@method.call'},
 
   -- Comment severities
-  ['@comment.todo']={link='DiagnosticInfo'},
-  ['@comment.warning']={link='DiagnosticWarn'},
-  ['@comment.error']={link='DiagnosticError'},
-  ['@comment.note']={link='DiagnosticHint'},
+  ['@comment.todo']={ fg = p.preproc_light_color },
+  ['@comment.warning']={ fg = p.warning_color },
+  ['@comment.error']={ fg = p.diff_delete_color },
+  ['@comment.note']={ fg = p.identifier_color },
   ['@text.todo']={link='@comment.todo'},
   ['@text.danger']={link='@comment.error'},
   ['@text.warning']={link='@comment.warning'},
