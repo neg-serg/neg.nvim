@@ -672,3 +672,8 @@ Release date: 2025-10-23 15:41:00 +0300
 - Setup: new flags under `plugins` for each; enabled by default.
 - Validator: include new modules.
 - Docs: README (EN/RU) plugin lists/options updated.
+## [4.56]
+Release date: 2025-10-23 16:02:00 +0300
+- Plugins: fzf-lua coverage — neutral defaults for picker and preview
+  (`FzfLuaNormal/Border/Title/CursorLine/Match`, preview variants).
+- Setup/validator/docs updated; no behavioral change for Telescope extensions (neutral defaults already applied).

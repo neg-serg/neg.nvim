@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.55
+-- Version:     4.56
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -172,6 +172,7 @@ local flags_from = U.flags_from
     dap_virtual_text = true,
     mini_pick = true,
     snacks = true,
+    fzf_lua = true,
   },
   overrides = nil,
   diagnostics_virtual_bg = false,
@@ -1311,6 +1312,7 @@ function M.setup(opts)
     dap_virtual_text = 'neg.groups.plugins.dap_virtual_text',
     mini_pick = 'neg.groups.plugins.mini_pick',
     snacks = 'neg.groups.plugins.snacks',
+    fzf_lua = 'neg.groups.plugins.fzf_lua',
   }) do
     if cfg.plugins[key] ~= false then safe_apply(mod) end
   end

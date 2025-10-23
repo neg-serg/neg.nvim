@@ -86,6 +86,7 @@ local function load_tables()
     'neg.groups.plugins.dap_virtual_text',
     'neg.groups.plugins.mini_pick',
     'neg.groups.plugins.snacks',
+    'neg.groups.plugins.fzf_lua',
   }
   local tables = {}
   for _, m in ipairs(mods) do
@@ -155,6 +156,7 @@ local function load_modules()
     'neg.groups.plugins.dap_virtual_text',
     'neg.groups.plugins.mini_pick',
     'neg.groups.plugins.snacks',
+    'neg.groups.plugins.fzf_lua',
   }
   local modules = {}
   for _, m in ipairs(mods) do

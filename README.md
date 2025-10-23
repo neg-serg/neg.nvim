@@ -17,7 +17,7 @@ clean setup API, plugin toggles, and a simple validator used in CI.
   diffview, fidget, toggleterm, dashboard‑nvim, heirline, oil.nvim,
   blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf,
   glance.nvim, barbecue.nvim, vim‑illuminate, hlslens.nvim, virt‑column.nvim,
-  nvim‑dap‑virtual‑text, mini.pick, snacks.nvim
+  nvim‑dap‑virtual‑text, mini.pick, snacks.nvim, fzf‑lua
 - Setup options: transparent backgrounds, terminal ANSI colors, extended style
   categories (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
 - Diagnostics with optional virtual text background (blend)
@@ -917,7 +917,8 @@ require('neg').setup({
 - dressing.nvim
   - Transparent float zone also covers: `DressingInput`, `DressingInputBorder`, `DressingSelect`, `DressingSelectBorder`
 - fzf-lua
-  - Transparent float zone also covers: `FzfLuaNormal`, `FzfLuaBorder`
+  - Groups: `FzfLuaNormal`, `FzfLuaBorder`, `FzfLuaTitle`, `FzfLuaCursorLine`, `FzfLuaMatch`
+  - Transparent float zone also covers: preview (`FzfLuaPreviewNormal`, `FzfLuaPreviewBorder`, `FzfLuaPreviewTitle`)
 
 
 ## Troubleshooting

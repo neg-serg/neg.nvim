@@ -14,7 +14,7 @@ https://www.vim.org/scripts/script.php?script_id=3815
   mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
   notify, treesitter‑context, hop, rainbow‑delimiters, obsidian,
   diffview, fidget, toggleterm, dashboard‑nvim, heirline, oil.nvim,
-  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf и др.
+  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf, fzf‑lua и др.
 - Опции конфигурации: прозрачные фоны, ANSI‑цвета терминала, расширенные стилевые категории
   (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
 - Диагностика с опциональным фоном виртуального текста (blend/alpha/lighten/darken)
