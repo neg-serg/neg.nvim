@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.63
+-- Version:     4.64
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -12,6 +12,44 @@ local U = require('neg.util')
 local define_commands
 local commands_defined = false
 local autocmds_defined = false
+M._scenarios = M._scenarios or {}
+
+local function deepcopy_tbl(t)
+  return vim.deepcopy(t)
+end
+
+local function pick_scenario_fields(cfg)
+  local out = {
+    saturation = cfg.saturation,
+    alpha_overlay = cfg.alpha_overlay,
+    transparent = cfg.transparent,
+    terminal_colors = cfg.terminal_colors,
+    preset = cfg.preset,
+    operator_colors = cfg.operator_colors,
+    number_colors = cfg.number_colors,
+    styles = cfg.styles,
+    treesitter = cfg.treesitter,
+    ui = cfg.ui,
+    diagnostics_virtual_bg = cfg.diagnostics_virtual_bg,
+    diagnostics_virtual_bg_blend = cfg.diagnostics_virtual_bg_blend,
+    diagnostics_virtual_bg_mode = cfg.diagnostics_virtual_bg_mode,
+    diagnostics_virtual_bg_strength = cfg.diagnostics_virtual_bg_strength,
+  }
+  return deepcopy_tbl(out)
+end
+
+local function apply_scenario_tbl(tbl, mode)
+  local cfg = M._config or default_config
+  local newcfg
+  if mode == 'replace' then
+    -- Start from current config to preserve plugin flags; override with scenario
+    newcfg = vim.tbl_deep_extend('force', deepcopy_tbl(cfg), tbl)
+  else
+    -- merge (default)
+    newcfg = vim.tbl_deep_extend('force', deepcopy_tbl(cfg), tbl)
+  end
+  M.setup(newcfg)
+end
 
 local function apply(tbl)
   for name, style in pairs(tbl) do hi(0, name, style) end
@@ -2263,6 +2301,118 @@ define_commands = function()
     end
     M.setup(newcfg)
   end, { nargs = 1, complete = function() return { 'focus','presentation','screenreader','tui','gui','accessibility' } end, desc = 'neg.nvim: Apply quick scenario: focus|presentation|screenreader|tui|gui|accessibility' })
+
+  -- Scenario management: save/list/delete/export/import
+  vim.api.nvim_create_user_command('NegScenarioSave', function(opts)
+    local name = (opts.args or ''):lower()
+    if name == '' then
+      print("neg.nvim: usage: :NegScenarioSave {name}")
+      return
+    end
+    local cfg = M._config or default_config
+    M._scenarios[name] = pick_scenario_fields(cfg)
+    print("neg.nvim: scenario saved: " .. name)
+  end, { nargs = 1, desc = 'neg.nvim: Save current config to a named scenario (memory)' })
+
+  vim.api.nvim_create_user_command('NegScenarioList', function()
+    local builtins = { 'focus','presentation','screenreader','tui','gui','accessibility' }
+    table.sort(builtins)
+    local names = {}
+    for k, _ in pairs(M._scenarios or {}) do names[#names+1] = k end
+    table.sort(names)
+    print('neg.nvim scenarios — built-in: ' .. table.concat(builtins, ', '))
+    print('user: ' .. (#names > 0 and table.concat(names, ', ') or '—'))
+  end, { desc = 'neg.nvim: List built-in and user scenarios' })
+
+  vim.api.nvim_create_user_command('NegScenarioDelete', function(opts)
+    local name = (opts.args or ''):lower()
+    if name == '' then
+      print("neg.nvim: usage: :NegScenarioDelete {name}")
+      return
+    end
+    if M._scenarios and M._scenarios[name] then
+      M._scenarios[name] = nil
+      print('neg.nvim: scenario deleted: ' .. name)
+    else
+      print('neg.nvim: scenario not found: ' .. name)
+    end
+  end, { nargs = 1, desc = 'neg.nvim: Delete saved user scenario (memory)' })
+
+  vim.api.nvim_create_user_command('NegScenarioExport', function(opts)
+    local raw = (opts.args or '')
+    local tokens = {}
+    for t in string.gmatch(raw, "[^%s]+") do tokens[#tokens+1] = t end
+    local name = tokens[1] or 'current'
+    local use_json, use_notify = true, false
+    for i = 2, #tokens do
+      local t = tokens[i]
+      if t == '--json' then use_json = true
+      elseif t:match('^%-%-notify=') or t == '--notify' then
+        local val = nil
+        if t == '--notify' and tokens[i+1] and tokens[i+1]:match('^(on|off)$') then val = tokens[i+1] end
+        val = val or t:match('^%-%-notify=(.+)$')
+        if val then use_notify = (val == 'on') end
+      end
+    end
+    local obj
+    if name == 'current' then
+      obj = pick_scenario_fields(M._config or default_config)
+    else
+      name = name:lower()
+      if M._scenarios and M._scenarios[name] then obj = deepcopy_tbl(M._scenarios[name]) end
+    end
+    if not obj then
+      local payload = vim.json_encode({ error = 'not_found', name = name })
+      if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      return
+    end
+    local payload = vim.json_encode({ name = name, scenario = obj })
+    if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+  end, { nargs = '*', desc = 'neg.nvim: Export scenario JSON (name or "current")' })
+
+  vim.api.nvim_create_user_command('NegScenarioImport', function(opts)
+    local raw = (opts.args or '')
+    if raw == '' then
+      print("neg.nvim: usage: :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on]")
+      return
+    end
+    local mode = 'merge'
+    local use_notify = true
+    -- Separate main blob from flags
+    local blob, rest = raw:match('^(%S+)%s*(.*)$')
+    for t in string.gmatch(rest or '', "[^%s]+") do
+      if t == '--merge' then mode = 'merge'
+      elseif t == '--replace' then mode = 'replace'
+      elseif t:match('^%-%-notify=') or t == '--notify' then
+        local val = nil
+        if t == '--notify' then val = 'on' end
+        val = val or t:match('^%-%-notify=(.+)$')
+        if val then use_notify = (val == 'on') end
+      end
+    end
+    local text
+    if blob:sub(1,1) == '@' then
+      local path = blob:sub(2)
+      local ok, data = pcall(vim.fn.readfile, path)
+      if not ok then print('neg.nvim: failed to read file: ' .. path); return end
+      text = table.concat(data or {}, '\n')
+    else
+      text = blob
+    end
+    local decoded = nil
+    local ok, obj = pcall(vim.json_decode, text)
+    if ok and type(obj) == 'table' then
+      -- Accept wrapped { name, scenario } or plain scenario
+      if obj.scenario and type(obj.scenario) == 'table' then decoded = obj.scenario else decoded = obj end
+    end
+    if not decoded then
+      local payload = vim.json_encode({ error = 'decode_failed' })
+      if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      return
+    end
+    apply_scenario_tbl(decoded, mode)
+    if use_notify and vim.notify then vim.notify('neg.nvim: scenario imported (' .. mode .. ')') else print('neg.nvim: scenario imported (' .. mode .. ')') end
+  end, { nargs = '+', desc = 'neg.nvim: Import scenario from JSON string or file (@/path); merge or replace' })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()

@@ -246,6 +246,11 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] [--json] [--notify=off|on] — посчитать контраст; есть JSON‑вывод и apply
 - :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — экспорт подсветок (выбор секций; доступен JSON)
 - :NegScenario {focus|presentation|screenreader|tui|gui|accessibility} — быстро применить готовый набор тумблеров
+- :NegScenarioSave {name} — сохранить текущую конфигурацию как именованный сценарий (в памяти сессии)
+- :NegScenarioList — показать встроенные и пользовательские сценарии
+- :NegScenarioDelete {name} — удалить сохранённый пользовательский сценарий
+- :NegScenarioExport {name|current} [--json] [--notify=off|on] — экспорт сценария в JSON ({ name, scenario })
+- :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on] — импорт сценария из JSON‑строки или файла
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — распечатать интеграции (фильтр по состоянию/подстроке; JSON-вывод и управление notify)
 
 ### Флаги плагинов — Сводка

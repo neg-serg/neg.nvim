@@ -391,6 +391,11 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] [--json] [--notify=off|on] — print contrast ratio; can output JSON and apply suggested :hi
 - :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — export highlights (choose sections; JSON output available)
 - :NegScenario {focus|presentation|screenreader|tui|gui|accessibility} — apply a curated set of toggles quickly
+- :NegScenarioSave {name} — save current config as a named scenario (session memory)
+- :NegScenarioList — list built‑in and user scenarios
+- :NegScenarioDelete {name} — delete a saved user scenario
+- :NegScenarioExport {name|current} [--json] [--notify=off|on] — export scenario JSON (wrapped as { name, scenario })
+- :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on] — import scenario from JSON string or file
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — print plugin integrations (filter by state/substring; JSON output and notify control)
 
 ### Plugin Flags — Quick Summary

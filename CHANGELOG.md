@@ -711,3 +711,10 @@ Release date: 2025-10-23 17:44:00 +0300
 - Command: `:NegContrast` — add `--json` and `--notify=off|on`, preserve `apply` and `--target`.
 - Command: `:NegScenario {focus|presentation|screenreader|tui|gui|accessibility}` — quick curated combinations beyond presets.
 - Docs: README (EN/RU) updated.
+## [4.64]
+Release date: 2025-10-23 18:05:00 +0300
+- Scenarios: add management commands — save/list/delete/export/import.
+  - :NegScenarioSave {name}, :NegScenarioList, :NegScenarioDelete {name}
+  - :NegScenarioExport {name|current} [--json] [--notify=off|on]
+  - :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on]
+- Docs: README (EN/RU) updated with new commands.
