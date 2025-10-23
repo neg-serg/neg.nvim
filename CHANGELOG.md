@@ -8,6 +8,15 @@ Release date: 2025-10-23 12:36:14 +0300
 - UI: `:NegPathSep` now affects Startify/Navic/WhichKey only; Telescope is excluded.
 - Docs: README (EN/RU) updated to reflect new scope; plugin coverage list no longer mentions `TelescopePathSeparator`.
 
+## [4.54]
+Release date: 2025-10-23 12:49:00 +0300
+- Plugins: add neutral integrations (toggleable) for:
+  diffview.nvim, fidget.nvim, toggleterm.nvim, dashboard‑nvim, heirline.nvim,
+  oil.nvim, blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf.
+- Setup: new flags under `plugins` to enable/disable each integration (defaults: true).
+- Validator: include new modules in coverage.
+- Docs: README (EN/RU) options + coverage updated.
+
 ## [4.04]
 Release date: 2025-10-23 02:02:37 +0300
 - Command: add `:NegOperatorColors {families|mono}` to switch operator coloring at runtime.

@@ -13,7 +13,9 @@ clean setup API, plugin toggles, and a simple validator used in CI.
 - Modular highlight groups: core UI, syntax, diagnostics, LSP, Tree‑sitter
 - Plugin integrations (toggleable): telescope, cmp, gitsigns, indent‑blankline/ibl,
   mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
-  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian
+  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian,
+  diffview, fidget, toggleterm, dashboard‑nvim, heirline, oil.nvim,
+  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf
 - Setup options: transparent backgrounds, terminal ANSI colors, extended style
   categories (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
 - Diagnostics with optional virtual text background (blend)
@@ -180,6 +182,18 @@ require('neg').setup({
     notify = true,
     treesitter_context = true,
     hop = true,
+    -- phase 1 additions
+    diffview = true,
+    fidget = true,
+    toggleterm = true,
+    dashboard = true,
+    heirline = true,
+    oil = true,
+    blink = true,
+    leap = true,
+    flash = true,
+    ufo = true,
+    bqf = true,
     -- additional supported plugins
     alpha = true,
     mini_statusline = true,
@@ -799,21 +813,21 @@ require('neg').setup({
 ```
 
 - telescope.nvim, nvim-cmp
-- gitsigns.nvim, gitgutter (basic), diff
+- gitsigns.nvim, gitgutter (basic), diff, diffview.nvim
 - indent‑blankline/ibl, mini.indentscope
 - mini.statusline, mini.tabline
 - which‑key.nvim
 - neo‑tree, nvim‑tree
 - bufferline.nvim
 - lualine.nvim (theme = 'neg')
-- nvim‑dap, dap‑ui
+- nvim‑dap, dap‑ui, nvim‑dap‑virtual‑text
 - trouble.nvim
 - nvim‑notify
 - treesitter‑context
 - hop.nvim, rainbow‑delimiters
 - obsidian.nvim
 - alpha‑nvim
-- startify
+- startify, dashboard‑nvim
 - todo‑comments.nvim
 - lspsaga.nvim
 - overseer.nvim
@@ -821,6 +835,12 @@ require('neg').setup({
 - harpoon
 - nvim‑navic
 - treesitter‑playground
+- heirline.nvim (theme via palette)
+- oil.nvim
+- blink.cmp
+- leap.nvim, flash.nvim
+- nvim‑ufo
+- nvim‑bqf
 
 ### Detailed Plugin Coverage
 

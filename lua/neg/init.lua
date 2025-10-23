@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.53
+-- Version:     4.54
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -151,6 +151,18 @@ local flags_from = U.flags_from
     notify = true,
     treesitter_context = true,
     hop = true,
+    -- phase 1 additions
+    diffview = true,
+    fidget = true,
+    toggleterm = true,
+    dashboard = true,
+    heirline = true,
+    oil = true,
+    blink = true,
+    leap = true,
+    flash = true,
+    ufo = true,
+    bqf = true,
   },
   overrides = nil,
   diagnostics_virtual_bg = false,
@@ -1269,6 +1281,18 @@ function M.setup(opts)
     notify = 'neg.groups.plugins.notify',
     treesitter_context = 'neg.groups.plugins.treesitter_context',
     hop = 'neg.groups.plugins.hop',
+    -- phase 1 additions
+    diffview = 'neg.groups.plugins.diffview',
+    fidget = 'neg.groups.plugins.fidget',
+    toggleterm = 'neg.groups.plugins.toggleterm',
+    dashboard = 'neg.groups.plugins.dashboard',
+    heirline = 'neg.groups.plugins.heirline',
+    oil = 'neg.groups.plugins.oil',
+    blink = 'neg.groups.plugins.blink',
+    leap = 'neg.groups.plugins.leap',
+    flash = 'neg.groups.plugins.flash',
+    ufo = 'neg.groups.plugins.ufo',
+    bqf = 'neg.groups.plugins.bqf',
   }) do
     if cfg.plugins[key] ~= false then safe_apply(mod) end
   end

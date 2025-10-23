@@ -12,7 +12,9 @@ https://www.vim.org/scripts/script.php?script_id=3815
 - Модульные группы подсветки: базовые UI, синтаксис, диагностика, LSP, Tree‑sitter
 - Интеграции с популярными плагинами (можно отключать): telescope, cmp, gitsigns, indent‑blankline/ibl,
   mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
-  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian и др.
+  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian,
+  diffview, fidget, toggleterm, dashboard‑nvim, heirline, oil.nvim,
+  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf и др.
 - Опции конфигурации: прозрачные фоны, ANSI‑цвета терминала, расширенные стилевые категории
   (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
 - Диагностика с опциональным фоном виртуального текста (blend/alpha/lighten/darken)
@@ -51,6 +53,10 @@ lazy.nvim
         indent = true, which_key = true, nvim_tree = false, neo_tree = true,
         dap = true, dapui = true, trouble = true, notify = true,
         treesitter_context = true, hop = true,
+        -- phase 1 additions
+        diffview = true, fidget = true, toggleterm = true, dashboard = true,
+        heirline = true, oil = true, blink = true, leap = true, flash = true,
+        ufo = true, bqf = true,
       },
       overrides = function(colors)
         return { NormalFloat = { bg = 'NONE' }, CursorLine = { underline = true } }

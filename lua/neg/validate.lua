@@ -65,6 +65,18 @@ local function load_tables()
     'neg.groups.plugins.treesitter_context',
     'neg.groups.plugins.trouble',
     'neg.groups.plugins.which_key',
+    -- phase 1 additions
+    'neg.groups.plugins.diffview',
+    'neg.groups.plugins.fidget',
+    'neg.groups.plugins.toggleterm',
+    'neg.groups.plugins.dashboard',
+    'neg.groups.plugins.heirline',
+    'neg.groups.plugins.oil',
+    'neg.groups.plugins.blink',
+    'neg.groups.plugins.leap',
+    'neg.groups.plugins.flash',
+    'neg.groups.plugins.ufo',
+    'neg.groups.plugins.bqf',
   }
   local tables = {}
   for _, m in ipairs(mods) do
@@ -113,6 +125,18 @@ local function load_modules()
     'neg.groups.plugins.treesitter_context',
     'neg.groups.plugins.trouble',
     'neg.groups.plugins.which_key',
+    -- phase 1 additions
+    'neg.groups.plugins.diffview',
+    'neg.groups.plugins.fidget',
+    'neg.groups.plugins.toggleterm',
+    'neg.groups.plugins.dashboard',
+    'neg.groups.plugins.heirline',
+    'neg.groups.plugins.oil',
+    'neg.groups.plugins.blink',
+    'neg.groups.plugins.leap',
+    'neg.groups.plugins.flash',
+    'neg.groups.plugins.ufo',
+    'neg.groups.plugins.bqf',
   }
   local modules = {}
   for _, m in ipairs(mods) do

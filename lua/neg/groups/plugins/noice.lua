@@ -11,6 +11,4 @@ return {
   NoicePopupBorder = { link = 'FloatBorder' },
   NoicePopupmenu = { bg = '#111d26', fg = p.default_color },
   NoicePopupmenuBorder = { link = 'FloatBorder' },
-
-  FlashLabel = { link = '@comment.todo' },
 }
