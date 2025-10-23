@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.31
+-- Version:     4.32
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1322,6 +1322,78 @@ define_commands = function()
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set screenreader-friendly mode (on|off|toggle)'
   })
+
+  vim.api.nvim_create_user_command('NegContrast', function(opts)
+    local name = (opts.args or '')
+    if name == '' then
+      print("neg.nvim: usage: :NegContrast {Group|@capture}")
+      return
+    end
+    local function get_hl(name_, follow)
+      local function as_hex(v)
+        if type(v) == 'number' then return string.format('#%06x', v) end
+        if type(v) == 'string' then return v end
+        return nil
+      end
+      if type(vim.api.nvim_get_hl) == 'function' then
+        local ok, t = pcall(vim.api.nvim_get_hl, 0, { name = name_, link = follow and true or false })
+        if ok and type(t) == 'table' then
+          return { fg = as_hex(t.fg), bg = as_hex(t.bg), sp = as_hex(t.sp) }
+        end
+      end
+      if type(vim.api.nvim_get_hl_by_name) == 'function' then
+        local ok2, t2 = pcall(vim.api.nvim_get_hl_by_name, name_, true)
+        if ok2 and type(t2) == 'table' then
+          return { fg = as_hex(t2.foreground), bg = as_hex(t2.background), sp = as_hex(t2.special) }
+        end
+      end
+      return {}
+    end
+    local function hex_to_rgb(hex)
+      if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
+      return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
+    end
+    local function srgb_to_linear(c)
+      c = c/255
+      if c <= 0.03928 then return c/12.92 end
+      return ((c + 0.055)/1.055)^2.4
+    end
+    local function rel_luminance(hex)
+      local r, g, b = hex_to_rgb(hex)
+      if not r then return nil end
+      r, g, b = srgb_to_linear(r), srgb_to_linear(g), srgb_to_linear(b)
+      return 0.2126*r + 0.7152*g + 0.0722*b
+    end
+    local function contrast_ratio(fg, bg)
+      local L1 = rel_luminance(fg)
+      local L2 = rel_luminance(bg)
+      if not L1 or not L2 then return nil end
+      if L1 < L2 then L1, L2 = L2, L1 end
+      return (L1 + 0.05) / (L2 + 0.05)
+    end
+    local g = get_hl(name, true)
+    local fg = g.fg
+    local bg = g.bg
+    if (not bg) or bg == '' or bg == 'NONE' then
+      local n = get_hl('Normal', true)
+      bg = n.bg
+    end
+    if (not fg) or (not bg) then
+      print("neg.nvim: can't resolve colors for '" .. name .. "' (fg=" .. tostring(fg) .. ", bg=" .. tostring(bg) .. ")")
+      return
+    end
+    local ratio = contrast_ratio(fg, bg)
+    if not ratio then
+      print("neg.nvim: failed to compute contrast for '" .. name .. "'")
+      return
+    end
+    local grade
+    if ratio >= 7.0 then grade = 'AAA'
+    elseif ratio >= 4.5 then grade = 'AA'
+    elseif ratio >= 3.0 then grade = 'AA (large)'
+    else grade = 'low' end
+    print(string.format("neg.nvim: %s — fg %s on bg %s → contrast %.2f (%s)", name, fg, bg, ratio, grade))
+  end, { nargs = 1, desc = 'neg.nvim: Show contrast ratio for a group/capture vs background' })
 
   vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)
     local arg = (opts.args or ''):lower()

@@ -526,3 +526,9 @@ Release date: 2025-10-23 03:27:24 +0300
   - `:NegScreenreader {on|off|toggle}` — screenreader‑friendly mode.
 - Docs: README/README.ru — Commands section updated.
 - Meta: bump version.
+
+## [4.32]
+Release date: 2025-10-23 03:29:33 +0300
+- Command: add `:NegContrast {Group|@capture}` — prints contrast ratio (WCAG) for the group's foreground vs background (resolves effective colors; falls back to Normal bg).
+- Docs: README/README.ru updated with the new command.
+- Meta: bump version and header.
