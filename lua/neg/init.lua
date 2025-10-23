@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.36
+-- Version:     4.37
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1323,15 +1323,24 @@ define_commands = function()
       print("neg.nvim: usage: :NegContrast {Group|@capture} [vs {Group|#rrggbb}]")
       return
     end
-    -- Parse "<group> [vs <bg>]"
+    -- Parse "<group> [vs <bg>] [--target AA|AAA] [apply]"
     local tokens = {}
     for w in raw:gmatch('%S+') do tokens[#tokens+1] = w end
     local name = tokens[1]
     local bg_arg
+    local target_label
+    local apply_now = false
     for i = 2, #tokens do
-      if tokens[i]:lower() == 'vs' and tokens[i+1] then
+      local t = tokens[i]
+      local tl = t:lower()
+      if tl == 'vs' and tokens[i+1] then
         bg_arg = tokens[i+1]
-        break
+      elseif tl == 'apply' then
+        apply_now = true
+      elseif tl == '--target' and tokens[i+1] then
+        target_label = tostring(tokens[i+1]):upper()
+      elseif tl:match('^%-%-target=') then
+        target_label = tostring(t:sub(10)):upper()
       end
     end
     local function get_hl(name_, follow)
@@ -1442,18 +1451,40 @@ define_commands = function()
     local vs_str = bg_arg and (' vs ' .. bg_arg) or ''
     local msg = string.format("neg.nvim: %s%s — fg %s on bg %s → contrast %.2f (%s)", name, vs_str, fg, bg, ratio, grade)
     print(msg)
-    if ratio < 4.5 then
-      local aa_fg, aa_r, aa_mode, aa_pct = find_suggestion(4.5)
-      local aal_fg, aal_r, aal_mode, aal_pct = find_suggestion(3.0)
-      if aa_fg and aa_r then
-        print(string.format("  · suggestion (AA): set fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
-        print(string.format("    :hi %s guifg=%s", name, aa_fg))
-      elseif aal_fg and aal_r then
-        print(string.format("  · suggestion (AA large): set fg=%s (≈%.2f, %s %d%%)", aal_fg, aal_r, aal_mode, aal_pct))
-        print(string.format("    :hi %s guifg=%s", name, aal_fg))
+    local target_ratio = 4.5
+    if target_label == 'AAA' then target_ratio = 7.0
+    elseif target_label == 'AA' or target_label == nil then target_ratio = 4.5
+    end
+    if ratio >= target_ratio then
+      print(string.format("  · OK: meets target %s (%.1f)", target_label or 'AA', target_ratio))
+      return
+    end
+    local sug_fg, sug_r, sug_mode, sug_pct = find_suggestion(target_ratio)
+    if sug_fg and sug_r then
+      print(string.format("  · suggestion (%s): set fg=%s (≈%.2f, %s %d%%)", target_label or 'AA', sug_fg, sug_r, sug_mode, sug_pct))
+      local hi_line = string.format(":hi %s guifg=%s", name, sug_fg)
+      print("    " .. hi_line)
+      if apply_now then
+        local base = (U.get_hl_colors and U.get_hl_colors(name)) or {}
+        local spec = { fg = sug_fg }
+        if base.bg then spec.bg = base.bg end
+        if base.sp then spec.sp = base.sp end
+        hi(0, name, spec)
+        print("    applied")
       end
-      -- Quick tips
-      print("  · tips: try :NegHc soft|strong or :NegPreset accessibility|presentation for higher contrast")
+      return
+    end
+    -- If AAA target unreachable by fg tweak, try suggesting AA as fallback (no auto-apply)
+    if target_ratio >= 7.0 then
+      local aa_fg, aa_r, aa_mode, aa_pct = find_suggestion(4.5)
+      if aa_fg and aa_r then
+        print(string.format("  · can't reach AAA by fg alone (<=60%%). Closest AA: fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
+        print(string.format("    :hi %s guifg=%s", name, aa_fg))
+      else
+        print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong")
+      end
+    else
+      print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong")
     end
   end, { nargs = '+', desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"' })
 

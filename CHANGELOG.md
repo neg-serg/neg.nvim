@@ -556,3 +556,10 @@ Release date: 2025-10-23 03:34:58 +0300
 - :NegAccessibility: update accepted features to `deuteranopia|strong_undercurl|achromatopsia`.
 - Docs: README/README.ru updated accordingly.
 - Meta: bump version and header.
+
+## [4.37]
+Release date: 2025-10-23 03:37:50 +0300
+- :NegContrast: add `--target AA|AAA` to compute suggestions against a chosen WCAG threshold; default is AA.
+- :NegContrast: support `apply` to instantly set the suggested foreground via `:hi {Group} guifg=...`.
+- Docs: README/README.ru updated with new flags.
+- Meta: bump version and header.
