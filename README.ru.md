@@ -244,7 +244,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
 - :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
-- :NegExport — экспорт текущих цветов (core/diagnostics/syntax) с подсказками
+- :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — экспорт подсветок (выбор секций; доступен JSON)
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — распечатать интеграции (фильтр по состоянию/подстроке; JSON-вывод и управление notify)
 
 ### Флаги плагинов — Сводка

@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.61
+-- Version:     4.62
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -2188,7 +2188,10 @@ define_commands = function()
     M.setup(newcfg)
   end, { nargs = 1, complete = function() return { 'default','kitty' } end, desc = 'neg.nvim: Set selection model (default|kitty)' })
 
-  vim.api.nvim_create_user_command('NegExport', function()
+  -- Export highlights; supports section selection and JSON
+  -- Usage: :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on]
+  -- Multiple sections can be comma-separated (e.g., core,diagnostics)
+  vim.api.nvim_create_user_command('NegExport', function(opts)
     local function get_hl(name_, follow)
       local function as_hex(v)
         if type(v) == 'number' then return string.format('#%06x', v) end
@@ -2216,38 +2219,72 @@ define_commands = function()
       return string.format('%-28s fg=%-9s bg=%-9s sp=%-9s', name, fg, bg, sp)
     end
     local function header(title) print(('== %s =='):format(title)) end
-    -- Summary
-    print('neg.nvim export — current highlight colors')
-    do
-      local cfg = M._config or default_config
-      local summary = (
-        'config: saturation=%s alpha_overlay=%s operator_colors=%s number_colors=%s\n' ..
-        '        ui.mode_accent=%s ui.soft_borders=%s ui.dim_inactive=%s ui.diff_focus=%s'
-      ):format(
-        tostring(cfg.saturation), tostring(cfg.alpha_overlay), tostring(cfg.operator_colors), tostring(cfg.number_colors),
-        tostring(cfg.ui and cfg.ui.mode_accent), tostring(cfg.ui and cfg.ui.soft_borders), tostring(cfg.ui and cfg.ui.dim_inactive), tostring(cfg.ui and cfg.ui.diff_focus)
-      )
-      print(summary)
+    -- Parse args
+    local args = (opts.args or '')
+    local use_json, use_notify = false, true
+    local sections = { core=true, diff=true, diagnostics=true, syntax=true, hints=true }
+    if args and args ~= '' then
+      local toks = {}
+      for t in string.gmatch(args, "[^%s]+") do toks[#toks+1] = t end
+      for _, t in ipairs(toks) do
+        if t == '--json' then use_json = true
+        elseif t:match('^%-%-notify=') or t == '--notify' then
+          local val = nil
+          if t == '--notify' then val = toks[_+1] end
+          val = val or t:match('^%-%-notify=(.+)$')
+          if val then use_notify = (val == 'on') end
+        else
+          local sel = t:lower()
+          if sel == 'all' then sections = { core=true, diff=true, diagnostics=true, syntax=true, hints=true }
+          else
+            -- allow comma-separated
+            local picked = {}
+            for part in sel:gmatch("[^,]+") do picked[#picked+1] = part end
+            sections = { core=false, diff=false, diagnostics=false, syntax=false, hints=false }
+            for _, s in ipairs(picked) do if sections[s] ~= nil then sections[s] = true end end
+          end
+        end
+      end
     end
-    -- Core UI
-    header('Core UI')
-    for _, g in ipairs({ 'Normal','NormalNC','NormalFloat','StatusLine','StatusLineNC','Title','Underlined','WinBar','WinBarNC','VertSplit','WinSeparator','FloatBorder','LineNr','CursorLine','CursorLineNr','ColorColumn','CursorColumn','Visual','SignColumn','FoldColumn','NonText','Whitespace','EndOfBuffer','Search','CurSearch','IncSearch','Pmenu','PmenuSel','PmenuThumb','QuickFixLine','Substitute' }) do
-      print(fmt(g, get_hl(g, true)))
+
+    local cfg = M._config or default_config
+    local summary_tbl = {
+      saturation = cfg.saturation,
+      alpha_overlay = cfg.alpha_overlay,
+      operator_colors = cfg.operator_colors,
+      number_colors = cfg.number_colors,
+      ui = {
+        mode_accent = cfg.ui and cfg.ui.mode_accent or false,
+        soft_borders = cfg.ui and cfg.ui.soft_borders or false,
+        dim_inactive = cfg.ui and cfg.ui.dim_inactive or false,
+        diff_focus = cfg.ui and cfg.ui.diff_focus or false,
+      },
+    }
+
+    local function collect(names)
+      local arr = {}
+      for _, g in ipairs(names) do
+        local t = get_hl(g, true)
+        arr[#arr+1] = { name = g, fg = t.fg or 'NONE', bg = t.bg or 'NONE', sp = t.sp or 'NONE' }
+      end
+      return arr
     end
-    -- Diff
-    header('Diff')
-    for _, g in ipairs({ 'DiffAdd','DiffChange','DiffDelete','DiffText' }) do print(fmt(g, get_hl(g, true))) end
-    -- Diagnostics
-    header('Diagnostics')
-    for _, g in ipairs({ 'DiagnosticError','DiagnosticWarn','DiagnosticInfo','DiagnosticHint','DiagnosticOk','DiagnosticVirtualTextError','DiagnosticVirtualTextWarn','DiagnosticVirtualTextInfo','DiagnosticVirtualTextHint','DiagnosticVirtualTextOk' }) do
-      print(fmt(g, get_hl(g, true)))
+
+    local out = { config = summary_tbl, sections = {} }
+
+    if sections.core then
+      out.sections.core = collect({ 'Normal','NormalNC','NormalFloat','StatusLine','StatusLineNC','Title','Underlined','WinBar','WinBarNC','VertSplit','WinSeparator','FloatBorder','LineNr','CursorLine','CursorLineNr','ColorColumn','CursorColumn','Visual','SignColumn','FoldColumn','NonText','Whitespace','EndOfBuffer','Search','CurSearch','IncSearch','Pmenu','PmenuSel','PmenuThumb','QuickFixLine','Substitute' })
     end
-    -- Syntax (Treesitter)
-    header('Syntax (TS)')
-    for _, g in ipairs({ '@comment','@keyword','@function','@method','@type','@type.builtin','@string','@number','@boolean','@operator','@constant','@variable','@property','@field','@namespace','@tag','@punctuation.bracket','@punctuation.delimiter','@punctuation.special','@markup.heading.1','@markup.link','@markup.math' }) do
-      print(fmt(g, get_hl(g, true)))
+    if sections.diff then
+      out.sections.diff = collect({ 'DiffAdd','DiffChange','DiffDelete','DiffText' })
     end
-    -- Diff hints
+    if sections.diagnostics then
+      out.sections.diagnostics = collect({ 'DiagnosticError','DiagnosticWarn','DiagnosticInfo','DiagnosticHint','DiagnosticOk','DiagnosticVirtualTextError','DiagnosticVirtualTextWarn','DiagnosticVirtualTextInfo','DiagnosticVirtualTextHint','DiagnosticVirtualTextOk' })
+    end
+    if sections.syntax then
+      out.sections.syntax = collect({ '@comment','@keyword','@function','@method','@type','@type.builtin','@string','@number','@boolean','@operator','@constant','@variable','@property','@field','@namespace','@tag','@punctuation.bracket','@punctuation.delimiter','@punctuation.special','@markup.heading.1','@markup.link','@markup.math' })
+    end
+    -- Hints
     local function hex_to_rgb(hex)
       if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
       return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
@@ -2264,8 +2301,8 @@ define_commands = function()
       if L1 < L2 then L1, L2 = L2, L1 end
       return (L1 + 0.05) / (L2 + 0.05)
     end
+    local hints = {}
     do
-      header('Hints')
       local low = {}
       for _, g in ipairs({ 'DiffAdd','DiffChange','DiffDelete','DiffText' }) do
         local t = get_hl(g, true)
@@ -2273,13 +2310,58 @@ define_commands = function()
         local r = (bg and bg ~= 'NONE') and contrast_ratio('#ffffff', bg) or nil
         if (not bg) or bg == 'NONE' or (r and r < 1.20) then low[#low+1] = g end
       end
-      if #low > 0 then
-        print('· diff tips: backgrounds for ' .. table.concat(low, ', ') .. ' may be too soft; try :NegDiffFocus on')
-      end
+      if #low > 0 then hints[#hints+1] = 'diff tips: backgrounds for ' .. table.concat(low, ', ') .. ' may be too soft; try :NegDiffFocus on' end
       local s = get_hl('Search', true)
-      if (not s.bg or s.bg == 'NONE') then print('· search tips: try :NegAlpha 8 or :NegSearchVisibility soft|strong') end
+      if (not s.bg or s.bg == 'NONE') then hints[#hints+1] = 'search tips: try :NegAlpha 8 or :NegSearchVisibility soft|strong' end
     end
-  end, { desc = 'neg.nvim: Export current highlight colors (core, diff, diagnostics, syntax) with quick hints' })
+    if sections.hints then out.sections.hints = { messages = hints } end
+
+    if use_json then
+      local ok_json, enc = pcall(function() return vim.json_encode(out) end)
+      local payload = ok_json and enc or ('{"error":"json_encode_failed"}')
+      if use_notify then
+        local ok_notify, _ = pcall(require, 'notify')
+        if ok_notify and vim.notify then vim.notify(payload) else print(payload) end
+      else
+        print(payload)
+      end
+      return
+    end
+
+    -- Textual output
+    print('neg.nvim export — current highlight colors')
+    do
+      local s = summary_tbl
+      local summary = (
+        'config: saturation=%s alpha_overlay=%s operator_colors=%s number_colors=%s\n' ..
+        '        ui.mode_accent=%s ui.soft_borders=%s ui.dim_inactive=%s ui.diff_focus=%s'
+      ):format(
+        tostring(s.saturation), tostring(s.alpha_overlay), tostring(s.operator_colors), tostring(s.number_colors),
+        tostring(s.ui.mode_accent), tostring(s.ui.soft_borders), tostring(s.ui.dim_inactive), tostring(s.ui.diff_focus)
+      )
+      print(summary)
+    end
+    if sections.core then
+      header('Core UI')
+      for _, e in ipairs(out.sections.core or {}) do print(fmt(e.name, { fg = e.fg, bg = e.bg, sp = e.sp })) end
+    end
+    if sections.diff then
+      header('Diff')
+      for _, e in ipairs(out.sections.diff or {}) do print(fmt(e.name, { fg = e.fg, bg = e.bg, sp = e.sp })) end
+    end
+    if sections.diagnostics then
+      header('Diagnostics')
+      for _, e in ipairs(out.sections.diagnostics or {}) do print(fmt(e.name, { fg = e.fg, bg = e.bg, sp = e.sp })) end
+    end
+    if sections.syntax then
+      header('Syntax (TS)')
+      for _, e in ipairs(out.sections.syntax or {}) do print(fmt(e.name, { fg = e.fg, bg = e.bg, sp = e.sp })) end
+    end
+    if sections.hints then
+      header('Hints')
+      for _, m in ipairs(hints) do print('· ' .. m) end
+    end
+  end, { desc = 'neg.nvim: Export highlights (supports sections + --json + --notify)' })
 
   -- List plugin integrations and their state
   -- Usage: :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on]

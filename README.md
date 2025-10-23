@@ -389,7 +389,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegSearchVisibility {default|soft|strong} — search/cursearch visibility
 - :NegHc {off|soft|strong} — high-contrast pack presets
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — print contrast ratio; accepts explicit bg, can target AA/AAA and print/apply a suggested :hi
-- :NegExport — export current core/diagnostics/syntax colors with quick tips
+- :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — export highlights (choose sections; JSON output available)
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — print plugin integrations (filter by state/substring; JSON output and notify control)
 
 ### Plugin Flags — Quick Summary

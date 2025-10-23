@@ -699,3 +699,10 @@ Release date: 2025-10-23 16:52:00 +0300
 Release date: 2025-10-23 17:05:00 +0300
 - Command: `:NegPlugins` gains `--json` output and `--notify=off|on` flag to force/disable notify.
 - Docs: command synopsis updated (EN/RU).
+
+## [4.62]
+Release date: 2025-10-23 17:22:00 +0300
+- Command: enhance `:NegExport` — supports section selection and JSON output:
+  `:NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on]`.
+- JSON contains `config` and selected `sections`; textual output respects chosen sections.
+- Docs: command synopsis updated (EN/RU).
