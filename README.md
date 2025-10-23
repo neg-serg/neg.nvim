@@ -430,6 +430,21 @@ require('neg').setup({
 })
 ```
 
+## Known Interactions
+
+- CursorLine (mode_accent, focus_caret, thick_cursor)
+  - Order: mode accents → focus caret → thick cursor. Thick cursor makes CursorLine stronger after accents; screenreader may later stabilize it.
+  - Tip: for fully stable visuals (no dynamic changes), disable `ui.mode_accent` and `ui.focus_caret`, or enable `:NegScreenreader on`.
+- WinSeparator/FloatBorder (soft_borders, outlines)
+  - Soft borders lightens `WinSeparator`/`FloatBorder` globally; outlines remap `WinSeparator` per‑window to active/inactive variants.
+  - Outcome: outlines take precedence for `WinSeparator`; soft borders still affect `FloatBorder`.
+- Diff backgrounds (diff_focus, screenreader)
+  - Diff focus strengthens `Diff*` bgs in `:diff`; screenreader clears that strengthening for calmer output.
+- Telescope + borders
+  - Telescope borders link to `WinSeparator`: with outlines on, Telescope adopts active/inactive border tint per window; with soft borders on (no outlines) borders stay softly lightened.
+- Selection, alpha overlay, diagnostics virtual bg
+  - Apply order (see “Apply Order”): diagnostics virtual bg → alpha overlay → selection model. If your Visual looks too soft, reduce `alpha_overlay` or use `:NegSearchVisibility`.
+
 ## Overrides
 
 You can override any highlight groups:

@@ -304,6 +304,21 @@ require('neg').setup({
 })
 ```
 
+## Известные взаимодействия
+
+- CursorLine (mode_accent, focus_caret, thick_cursor)
+  - Порядок: акценты по режиму → caret‑фокус → «толстый» курсор. Thick cursor усиливает CursorLine после акцентов; screenreader может затем стабилизировать.
+  - Совет: для стабильной картинки (без динамики) отключите `ui.mode_accent` и `ui.focus_caret` или включите `:NegScreenreader on`.
+- WinSeparator/FloatBorder (soft_borders, outlines)
+  - Soft borders осветляет `WinSeparator`/`FloatBorder` глобально; outlines переназначает `WinSeparator` поканально на активный/неактивный.
+  - Итог: outlines имеет приоритет для `WinSeparator`; soft borders продолжает влиять на `FloatBorder`.
+- Фоны Diff (diff_focus, screenreader)
+  - Diff focus усиливает `Diff*` в `:diff`; screenreader снимает это усиление для более спокойного вывода.
+- Telescope + границы
+  - Границы Telescope ссылаются на `WinSeparator`: при включенных outlines Telescope наследует активный/неактивный оттенок; при soft borders (без outlines) остаётся мягкое осветление.
+- Выделение, альфа‑оверлей, фон виртуальных диагностик
+  - Порядок применения (см. «Порядок применения»): фон диагностик → alpha overlay → модель выделения. Если Visual слишком мягкий — уменьшите `alpha_overlay` или используйте `:NegSearchVisibility`.
+
 ## Overrides
 
 Можно переопределять любые группы:
