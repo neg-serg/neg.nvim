@@ -621,3 +621,9 @@ Release date: 2025-10-23 04:04:42 +0300
 - Selection model: add `ui.selection_model = 'default'|'kitty'` (default 'default') and `:NegSelection {default|kitty}` to match kitty's selection colors in Visual/VisualNOS when requested.
 - Palette: add `selection_bg = '#0d1824'` and `selection_fg = '#367bbf'` (derived from kitty config) used when model = 'kitty'.
 - Note: to preserve exact kitty look, keep `alpha_overlay = 0`.
+
+## [4.48]
+Release date: 2025-10-23 04:17:59 +0300
+- Telescope: default selection now links to `Visual` (previously `CursorLine`), removing the bluish row tint for a more neutral, non‑distracting selection. Enhanced accents remain behind the toggle `ui.telescope_accents`.
+- Docs: add explicit “Apply Order” note (EN/RU) and remove duplicate `:NegNumberColors` lines; selection/float override examples synced across EN/RU.
+- Meta: bump version and header.

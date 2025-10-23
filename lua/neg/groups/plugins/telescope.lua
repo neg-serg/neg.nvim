@@ -4,8 +4,8 @@ local p = require('neg.palette')
 return {
   -- Keep matching neutral by default (no color fill), only underline
   TelescopeMatching = { underline = true },
-  -- Neutral selection: reuse CursorLine
-  TelescopeSelection = { link = 'CursorLine' },
+  -- Neutral selection: reuse Visual (subtle, not bluish)
+  TelescopeSelection = { link = 'Visual' },
   -- Borders follow WinSeparator/soft borders
   TelescopeBorder = { link = 'WinSeparator' },
   TelescopePreviewBorder = { link = 'WinSeparator' },

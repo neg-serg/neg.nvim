@@ -141,6 +141,16 @@ require('neg').setup({
 })
 ```
 
+### Порядок применения
+
+Когда включено несколько пост‑процессингов, neg.nvim применяет их в предсказуемой последовательности, чтобы избежать конфликтов:
+
+- Сначала опции доступности (deuteranopia/achromatopsia), затем пакет повышенного контраста `hc`
+- Затем фоны виртуального текста диагностик (если включены)
+- Далее глобальный альфа‑оверлей мягких фонов (`alpha_overlay` для Search/CurSearch/Visual/VirtualText)
+- Затем модель выделения (дефолтная темы или kitty)
+- В самом конце пользовательские переопределения (`overrides` как таблица или функция)
+
 ## Пресеты
 
 - soft — по умолчанию: деликатные акценты, курсив комментариев
@@ -173,7 +183,6 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagSoft / :NegDiagStrong — быстрые пресеты мягче/сильнее
 - :NegOperatorColors {families|mono|mono+} — режим окраски операторов
 - :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — пресеты ramp для чисел
-- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — пресеты ramp для чисел
 - :NegSaturation {0..100} — глобальная насыщенность (100 = исходная палитра, 0 = монохром)
 - :NegAlpha {0..30} — общий альфа‑уровень мягких фонов (Search/CurSearch/Visual/VirtualText)
 - :NegModeAccent {on|off|toggle} — акценты по режимам (CursorLine/StatusLine)
@@ -197,6 +206,79 @@ require('neg').setup({ preset = 'hard' })
 - :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
 - :NegExport — экспорт текущих цветов (core/diagnostics/syntax) с подсказками
+
+### Модель выделения (kitty)
+
+По умолчанию Visual использует цвета темы. Чтобы получить вид как в kitty:
+
+- Опция: `ui.selection_model = 'kitty'`
+- Команда: `:NegSelection kitty`
+
+Используются цвета палитры:
+
+- `selection_bg = '#0d1824'`
+- `selection_fg = '#367bbf'`
+
+Примечания:
+
+- Для точного совпадения лучше держать `alpha_overlay = 0` (альфа‑оверлей смягчает фон).
+- Можно переопределить `selection_bg/fg` через `overrides`.
+
+Примеры быстрых overrides:
+
+```lua
+-- Свои цвета "как в kitty"
+require('neg').setup({
+  ui = { selection_model = 'kitty' },
+  overrides = {
+    Visual    = { bg = '#101a28', fg = '#62a0ff', bold = false, underline = false },
+    VisualNOS = { bg = '#101a28', fg = '#62a0ff' },
+  },
+})
+
+-- Или на базе палитры
+require('neg').setup({
+  ui = { selection_model = 'kitty' },
+  overrides = function(colors)
+    return {
+      Visual = { bg = colors.selection_bg, fg = '#5fb0ff' },
+    }
+  end,
+})
+```
+
+### Модель фона флоатов
+
+По умолчанию `NormalFloat` совпадает с фоном `Normal` (без оттенков). Если нужен чуть более светлый “панельный” фон:
+
+- Опция: `ui.float_panel_bg = true`
+- Команда: `:NegFloatBg on`
+
+Фон берётся из `palette.bg_panel` (на основе базового фона). Переключение — `:NegFloatBg toggle`.
+
+Примеры быстрых overrides:
+
+```lua
+-- Чуть темнее граница и свой фон флоатов
+require('neg').setup({
+  ui = { float_panel_bg = true },
+  overrides = {
+    NormalFloat = { bg = '#0f131a' },
+    FloatBorder = { fg = '#1a1f29' },
+  },
+})
+
+-- Или отталкиваясь от палитры
+require('neg').setup({
+  ui = { float_panel_bg = true },
+  overrides = function(colors)
+    return {
+      NormalFloat = { bg = colors.bg_panel },
+      FloatBorder = { fg = colors.border_color },
+    }
+  end,
+})
+```
 
 ## Overrides
 

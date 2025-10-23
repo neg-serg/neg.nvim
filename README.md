@@ -201,6 +201,16 @@ require('neg').setup({
 })
 ```
 
+### Apply Order
+
+When multiple post‑processing features are enabled, neg.nvim applies them in a predictable order to avoid clashes:
+
+- Accessibility tweaks first (deuteranopia/achromatopsia, then high‑contrast pack `hc`)
+- Diagnostics virtual backgrounds (if enabled)
+- Global soft backgrounds alpha (`alpha_overlay` for Search/CurSearch/Visual/VirtualText)
+- Selection model (theme default vs kitty)
+- User overrides last (`overrides` table or function)
+
 ## Migration: Palette Names (old → new)
 
 The palette now exposes descriptive aliases without the `fg_` prefix. Old short names remain for compatibility, but new names are recommended for overrides and custom recipes.
@@ -299,7 +309,6 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagStrong — quick stronger virtual text background (blend ≈ 10)
 - :NegOperatorColors {families|mono|mono+} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
-- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
 - :NegSaturation {0..100} — set global saturation (100 = original, 0 = grayscale)
 - :NegAlpha {0..30} — set global soft backgrounds alpha (Search/CurSearch/Visual/VirtualText)
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
@@ -323,6 +332,79 @@ require('neg').setup({ preset = 'hard' })
 - :NegHc {off|soft|strong} — high-contrast pack presets
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — print contrast ratio; accepts explicit bg, can target AA/AAA and print/apply a suggested :hi
 - :NegExport — export current core/diagnostics/syntax colors with quick tips
+
+### Selection model (kitty-style)
+
+By default, Visual selection uses the theme's selection color. To match kitty's selection exactly:
+
+- Option: `ui.selection_model = 'kitty'`
+- Command: `:NegSelection kitty`
+
+Colors used (from palette):
+
+- `selection_bg = '#0d1824'`
+- `selection_fg = '#367bbf'`
+
+Notes:
+
+- Keep `alpha_overlay = 0` for a closer match (alpha overlay softens backgrounds).
+- You can override `selection_bg/fg` via `overrides` if you prefer different shades.
+
+Quick overrides examples:
+
+```lua
+-- Custom kitty-like selection colors
+require('neg').setup({
+  ui = { selection_model = 'kitty' },
+  overrides = {
+    Visual    = { bg = '#101a28', fg = '#62a0ff', bold = false, underline = false },
+    VisualNOS = { bg = '#101a28', fg = '#62a0ff' },
+  },
+})
+
+-- Or compute from palette
+require('neg').setup({
+  ui = { selection_model = 'kitty' },
+  overrides = function(colors)
+    return {
+      Visual = { bg = colors.selection_bg, fg = '#5fb0ff' },
+    }
+  end,
+})
+```
+
+### Float background model
+
+Floats default to the exact same background as `Normal` (no tint). If you prefer a slightly lighter panel‑like background:
+
+- Option: `ui.float_panel_bg = true`
+- Command: `:NegFloatBg on`
+
+This sets `NormalFloat` bg to `palette.bg_panel` (derived from base bg). Toggle with `:NegFloatBg toggle`.
+
+Quick overrides examples:
+
+```lua
+-- Slightly darker panel border and custom float bg
+require('neg').setup({
+  ui = { float_panel_bg = true },
+  overrides = {
+    NormalFloat = { bg = '#0f131a' },
+    FloatBorder = { fg = '#1a1f29' },
+  },
+})
+
+-- Or base on palette values
+require('neg').setup({
+  ui = { float_panel_bg = true },
+  overrides = function(colors)
+    return {
+      NormalFloat = { bg = colors.bg_panel },
+      FloatBorder = { fg = colors.border_color },
+    }
+  end,
+})
+```
 
 ## Overrides
 
