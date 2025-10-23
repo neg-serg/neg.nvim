@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.40
+-- Version:     4.41
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -47,6 +47,8 @@ local flags_from = U.flags_from
       dim_inactive = false,
       -- Mode-aware accents for CursorLine/StatusLine by Vim mode (Normal/Insert/Visual)
       mode_accent = true,
+      -- Focus caret: if overall contrast is low, slightly boost CursorLine visibility
+      focus_caret = true,
       -- Soft borders: lighten WinSeparator/FloatBorder to reduce visual noise
       soft_borders = false,
       -- Auto-tune float/panel backgrounds when terminal background is transparent
@@ -457,6 +459,54 @@ local function apply_soft_borders(cfg)
     -- Restore default linking to VertSplit
     hi(0, 'WinSeparator', { link = 'VertSplit' })
     hi(0, 'FloatBorder',  { link = 'VertSplit' })
+  end
+end
+
+local function apply_focus_caret(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.focus_caret == true
+  local ok_api = (vim and vim.api and vim.api.nvim_create_autocmd)
+  local function compute_and_apply()
+    local function as_hex(v)
+      if type(v) == 'number' then return string.format('#%06x', v) end
+      if type(v) == 'string' then return v end
+      return nil
+    end
+    local function hex_to_rgb(hex)
+      if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
+      return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
+    end
+    local function srgb_to_linear(c) c=c/255; if c<=0.03928 then return c/12.92 end; return ((c+0.055)/1.055)^2.4 end
+    local function rel_lum(hex)
+      local r,g,b = hex_to_rgb(hex); if not r then return nil end
+      r,g,b = srgb_to_linear(r), srgb_to_linear(g), srgb_to_linear(b)
+      return 0.2126*r + 0.7152*g + 0.0722*b
+    end
+    local function contrast(fg,bg)
+      local L1, L2 = rel_lum(fg), rel_lum(bg)
+      if not L1 or not L2 then return nil end
+      if L1 < L2 then L1, L2 = L2, L1 end
+      return (L1 + 0.05) / (L2 + 0.05)
+    end
+    local normal = (U.get_hl_colors and U.get_hl_colors('Normal')) or {}
+    local fg = normal.fg or as_hex((vim.api.nvim_get_hl and vim.api.nvim_get_hl(0,{name='Normal'}).fg) or 0) or p.default_color
+    local bg = normal.bg or p.bg_default
+    local ratio = contrast(fg, bg) or 7.0
+    if ratio >= 4.5 then return end
+    local base = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
+    local delta
+    if ratio < 3.0 then delta = 16 else delta = 12 end
+    local spec = { bg = U.darken(p.bg_default, delta) }
+    if base.fg then spec.fg = base.fg end
+    if base.sp then spec.sp = base.sp end
+    hi(0, 'CursorLine', spec)
+  end
+  if enable and ok_api then
+    local grp = vim.api.nvim_create_augroup('NegFocusCaret', { clear = true })
+    compute_and_apply()
+    vim.api.nvim_create_autocmd({ 'ModeChanged','WinEnter','VimResized' }, { group = grp, callback = compute_and_apply })
+  elseif ok_api then
+    vim.api.nvim_create_augroup('NegFocusCaret', { clear = true })
   end
 end
 
@@ -1144,6 +1194,7 @@ function M.setup(opts)
   apply_number_colors(cfg.number_colors)
   apply_dim_inactive(cfg)
   apply_mode_accent(cfg)
+  apply_focus_caret(cfg)
   apply_soft_borders(cfg)
   apply_auto_transparent_panels(cfg)
   apply_diff_focus(cfg)
@@ -1377,6 +1428,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegFocusCaret', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.focus_caret = true
+    elseif arg == 'off' then
+      newcfg.ui.focus_caret = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.focus_caret = not (cfg.ui and cfg.ui.focus_caret == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set focus-caret (boost CursorLine contrast when overall contrast is low)'
   })
 
   vim.api.nvim_create_user_command('NegDimInactive', function(opts)

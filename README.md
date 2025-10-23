@@ -116,6 +116,7 @@ require('neg').setup({
     core_enhancements = true,          -- define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
     dim_inactive = false,              -- dim NormalNC/WinBarNC and LineNr in inactive windows (window-local winhighlight mapping)
     mode_accent = true,                -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
+    focus_caret = true,                -- boost CursorLine visibility if overall contrast is low
     soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
@@ -301,6 +302,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegAlpha {0..30} — set global soft backgrounds alpha (Search/CurSearch/Visual/VirtualText)
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
+- :NegFocusCaret {on|off|toggle} — boost CursorLine contrast when overall contrast is low
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegDimInactive {on|off|toggle} — dim inactive windows
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff

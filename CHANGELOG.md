@@ -583,3 +583,9 @@ Release date: 2025-10-23 03:45:55 +0300
 - Command: add `:NegExport` — prints current highlight colors (core UI, diff, diagnostics, syntax) in a compact report with quick tips (diff/search).
 - Docs: README/README.ru document the command.
 - Meta: bump header.
+
+## [4.41]
+Release date: 2025-10-23 03:47:13 +0300
+- Focus caret: new `ui.focus_caret = true` (default on) and `:NegFocusCaret {on|off|toggle}` — slightly boosts `CursorLine` contrast when overall contrast is below AA (~4.5:1), with an autocmd that coexists with mode accents.
+- Docs: README/README.ru updated (options + commands).
+- Meta: bump version and header.

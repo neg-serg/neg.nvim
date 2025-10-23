@@ -93,6 +93,7 @@ require('neg').setup({
     core_enhancements = true,           -- Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, Question, LineNrAbove/Below
     dim_inactive = false,               -- приглушать неактивные окна (NormalNC/WinBarNC) и LineNr по winhighlight
     mode_accent = true,                 -- акцентировать CursorLine/StatusLine по режимам
+    focus_caret = true,                 -- усилить видимость CursorLine при низком общем контрасте
     soft_borders = false,               -- смягчить WinSeparator/FloatBorder
     auto_transparent_panels = true,     -- мягкая подложка для float/panel при прозрачном терминале
     diff_focus = true,                  -- усилить фоны Diff* при :diff
@@ -175,6 +176,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegAlpha {0..30} — общий альфа‑уровень мягких фонов (Search/CurSearch/Visual/VirtualText)
 - :NegModeAccent {on|off|toggle} — акценты по режимам (CursorLine/StatusLine)
 - :NegSoftBorders {on|off|toggle} — мягкие границы (WinSeparator/FloatBorder)
+- :NegFocusCaret {on|off|toggle} — повысить контраст CursorLine при низком общем контрасте
 - :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
 - :NegDimInactive {on|off|toggle} — приглушить неактивные окна
 - :NegDiffFocus {on|off|toggle} — усилить фоны Diff* при :diff
