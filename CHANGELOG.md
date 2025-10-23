@@ -532,3 +532,10 @@ Release date: 2025-10-23 03:29:33 +0300
 - Command: add `:NegContrast {Group|@capture}` — prints contrast ratio (WCAG) for the group's foreground vs background (resolves effective colors; falls back to Normal bg).
 - Docs: README/README.ru updated with the new command.
 - Meta: bump version and header.
+
+## [4.33]
+Release date: 2025-10-23 03:32:10 +0300
+- :NegContrast: add actionable suggestions when contrast is below AA:
+  - Prints a nearest suggested foreground to reach AA / AA (large) and the operation (lighten/darken, approx. %).
+  - Tips to try `:NegHc soft|strong` or `:NegPreset accessibility|presentation`, and a minimal overrides snippet.
+- Meta: bump version.

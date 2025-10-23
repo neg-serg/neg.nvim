@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.32
+-- Version:     4.33
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1392,7 +1392,49 @@ define_commands = function()
     elseif ratio >= 4.5 then grade = 'AA'
     elseif ratio >= 3.0 then grade = 'AA (large)'
     else grade = 'low' end
-    print(string.format("neg.nvim: %s — fg %s on bg %s → contrast %.2f (%s)", name, fg, bg, ratio, grade))
+    -- Suggest improvements when contrast is not AA
+    local function clamp(x, a, b) if x < a then return a elseif x > b then return b else return x end end
+    local function lighten(hex, percent)
+      local r, g, b = hex_to_rgb(hex); if not r then return hex end
+      local k = clamp(tonumber(percent) or 0, 0, 100) / 100
+      r = r + (255 - r) * k; g = g + (255 - g) * k; b = b + (255 - b) * k
+      return string.format('#%02x%02x%02x', r, g, b)
+    end
+    local function darken(hex, percent)
+      local r, g, b = hex_to_rgb(hex); if not r then return hex end
+      local k = 1 - clamp(tonumber(percent) or 0, 0, 100) / 100
+      r = r * k; g = g * k; b = b * k
+      return string.format('#%02x%02x%02x', r, g, b)
+    end
+    local function find_suggestion(target)
+      local best, best_ratio, best_mode, best_pct
+      for _, mode in ipairs({ 'lighten', 'darken' }) do
+        for pct = 2, 60, 2 do
+          local cand = (mode == 'lighten') and lighten(fg, pct) or darken(fg, pct)
+          local r = contrast_ratio(cand, bg)
+          if r and r >= target then
+            best, best_ratio, best_mode, best_pct = cand, r, mode, pct
+            break
+          end
+        end
+        if best then break end
+      end
+      return best, best_ratio, best_mode, best_pct
+    end
+    local msg = string.format("neg.nvim: %s — fg %s on bg %s → contrast %.2f (%s)", name, fg, bg, ratio, grade)
+    print(msg)
+    if ratio < 4.5 then
+      local aa_fg, aa_r, aa_mode, aa_pct = find_suggestion(4.5)
+      local aal_fg, aal_r, aal_mode, aal_pct = find_suggestion(3.0)
+      if aa_fg and aa_r then
+        print(string.format("  · suggestion (AA): set fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
+      elseif aal_fg and aal_r then
+        print(string.format("  · suggestion (AA large): set fg=%s (≈%.2f, %s %d%%)", aal_fg, aal_r, aal_mode, aal_pct))
+      end
+      -- Quick tips
+      print("  · tips: try :NegHc soft|strong or :NegPreset accessibility|presentation for higher contrast")
+      print("          or override: require('neg').setup({ overrides = { [" .. string.format("'%s'", name) .. "] = { fg = '#rrggbb' } } })")
+    end
   end, { nargs = 1, desc = 'neg.nvim: Show contrast ratio for a group/capture vs background' })
 
   vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)
