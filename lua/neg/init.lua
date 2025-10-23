@@ -27,6 +27,8 @@ local flags_from = U.flags_from
   local default_config = {
     -- Global saturation scale (0..100). 100 = original palette, 0 = grayscale.
     saturation = 100,
+    -- Global soft backgrounds alpha (0..30). Controls subtle bg fill on Search/CurSearch/Visual and DiagnosticVirtualText* overlays.
+    alpha_overlay = 0,
     transparent = false,
     terminal_colors = true,
   preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'presentation'
@@ -332,6 +334,58 @@ local function set_palette_saturation(percent)
       p[k] = hsl_to_rgb(h, s2, l)
     else
       p[k] = val
+    end
+  end
+end
+
+-- Global soft backgrounds alpha for Search/CurSearch/Visual and DiagnosticVirtualText*
+local function apply_alpha_overlay(cfg)
+  local v = (cfg and cfg.alpha_overlay) or 0
+  if not v or v <= 0 then return end
+  if v > 30 then v = 30 end
+  local a = v / 100 -- convert to 0..0.30 alpha for blending
+  -- Search background: overlay search hue over base
+  do
+    local base = (U.get_hl_colors and U.get_hl_colors('Search')) or {}
+    local spec = { bg = (U.alpha and U.alpha(p.search_color, p.bg_default, a)) or base.bg }
+    if base.fg then spec.fg = base.fg end
+    if base.sp then spec.sp = base.sp end
+    hi(0, 'Search', spec)
+  end
+  -- CurSearch: slightly stronger overlay
+  do
+    local base = (U.get_hl_colors and U.get_hl_colors('CurSearch')) or {}
+    local aa = math.min(0.6, a * 1.4)
+    local spec = { bg = (U.alpha and U.alpha(p.search_color, p.bg_default, aa)) or base.bg }
+    if base.fg then spec.fg = base.fg end
+    if base.sp then spec.sp = base.sp end
+    hi(0, 'CurSearch', spec)
+  end
+  -- Visual: darken base bg proportional to overlay
+  do
+    local base = (U.get_hl_colors and U.get_hl_colors('Visual')) or {}
+    local delta = 8 + math.floor(a * 40 + 0.5) -- ≈ 8..20
+    local spec = { bg = U.darken(p.bg_default, delta) }
+    if base.fg then spec.fg = base.fg end
+    if base.sp then spec.sp = base.sp end
+    if base.bold ~= nil then spec.bold = base.bold end
+    hi(0, 'Visual', spec)
+  end
+  -- Diagnostics virtual text: apply alpha overlay if virtual bg is enabled
+  if cfg and cfg.diagnostics_virtual_bg then
+    local map = {
+      DiagnosticVirtualTextError = p.diff_delete_color,
+      DiagnosticVirtualTextWarn  = p.warning_color,
+      DiagnosticVirtualTextInfo  = p.preproc_light_color,
+      DiagnosticVirtualTextHint  = p.identifier_color,
+      DiagnosticVirtualTextOk    = p.diff_add_color,
+    }
+    for g, col in pairs(map) do
+      local base = (U.get_hl_colors and U.get_hl_colors(g)) or {}
+      local spec = { bg = (U.alpha and U.alpha(col, p.bg_default, math.min(0.6, a))) or base.bg }
+      if base.fg then spec.fg = base.fg end
+      if base.sp then spec.sp = base.sp end
+      hi(0, g, spec)
     end
   end
 end
@@ -1104,8 +1158,9 @@ function M.setup(opts)
   apply_search_visibility(cfg)
   apply_screenreader(cfg)
   apply_telescope_accents(cfg)
-  apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
+  apply_alpha_overlay(cfg)
+  apply_overrides(cfg.overrides)
   define_commands()
   if not autocmds_defined then
     autocmds_defined = true
@@ -1807,6 +1862,20 @@ define_commands = function()
     newcfg.saturation = v
     M.setup(newcfg)
   end, { nargs = 1, complete = function() return { '0','25','50','75','100' } end, desc = 'neg.nvim: Set global saturation (0..100); 100 = original palette' })
+
+  vim.api.nvim_create_user_command('NegAlpha', function(opts)
+    local v = tonumber(opts.args)
+    if not v then
+      print("neg.nvim: alpha must be a number in 0..30")
+      return
+    end
+    if v < 0 then v = 0 end
+    if v > 30 then v = 30 end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.alpha_overlay = v
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { '0','5','10','15','20','25','30' } end, desc = 'neg.nvim: Set global soft backgrounds alpha (0..30) for Search/Visual/VirtualText' })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()

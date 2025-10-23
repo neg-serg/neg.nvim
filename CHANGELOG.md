@@ -570,3 +570,10 @@ Release date: 2025-10-23 03:40:03 +0300
 - Implementation: transforms the palette in-place from a pristine base before (re)applying highlights; idempotent and reversible.
 - Docs: README/README.ru updated (options + commands).
 - Meta: bump version and header.
+
+## [4.39]
+Release date: 2025-10-23 03:43:20 +0300
+- Global alpha overlay: add `alpha_overlay = 0` option and `:NegAlpha {0..30}` command to control soft backgrounds for Search/CurSearch/Visual and DiagnosticVirtualText*. Values map to alpha blend (0..0.30) and proportional darken for Visual.
+- Order of application: applied after diagnostics virtual bg and before user overrides to stay predictable.
+- Docs: README/README.ru updated (options + commands).
+- Meta: bump version and header.
