@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.34
+-- Version:     4.35
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1460,7 +1460,6 @@ define_commands = function()
       end
       -- Quick tips
       print("  · tips: try :NegHc soft|strong or :NegPreset accessibility|presentation for higher contrast")
-      print("          or override: require('neg').setup({ overrides = { [" .. string.format("'%s'", name) .. "] = { fg = '#rrggbb' } } })")
     end
   end, { nargs = '+', desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"' })
 

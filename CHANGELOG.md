@@ -546,3 +546,8 @@ Release date: 2025-10-23 03:33:25 +0300
 - :NegContrast: print a ready `:hi {Group} guifg=#rrggbb` line for the suggested AA/AA-large foreground.
 - Docs: README/README.ru updated with new usage.
 - Meta: bump version.
+
+## [4.35]
+Release date: 2025-10-23 03:35:00 +0300
+- :NegContrast: switched to printing a ready `:hi {Group} guifg=#rrggbb` line only (removed Lua overrides snippet in output).
+- Meta: bump version.
