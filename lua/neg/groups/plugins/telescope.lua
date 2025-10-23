@@ -16,6 +16,11 @@ return {
   TelescopePreviewNormal = { link = 'Normal' },
   TelescopePromptNormal = { link = 'Normal' },
   TelescopeResultsNormal = { link = 'Normal' },
+  TelescopePromptPrefix = { link = 'Normal' },
+  TelescopePromptCounter = { link = 'Normal' },
+  TelescopePromptTitle = { link = 'WinBar' },
+  TelescopeResultsTitle = { link = 'WinBar' },
+  TelescopePreviewTitle = { link = 'WinBar' },
   -- Path separators shouldn't stand out
   TelescopePathSeparator = { link = 'Normal' },
 }

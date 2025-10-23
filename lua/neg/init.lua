@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.43
+-- Version:     4.44
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -894,7 +894,12 @@ end
 
 local function apply_telescope_accents(cfg)
   local ui = cfg and cfg.ui or {}
-  if not (ui and ui.telescope_accents) then return end
+  if not (ui and ui.telescope_accents) then
+    -- Enforce neutral defaults even if other plugins recolor later
+    hi(0, 'TelescopeMatching', { underline = true })
+    hi(0, 'TelescopeSelection', { link = 'CursorLine' })
+    return
+  end
   -- Accented matching/selection/borders for Telescope
   -- Keep tasteful: emphasize matches and selection; borders follow soft_borders if enabled
   local match_fg = p.search_color or p.include_color or p.keyword3_color

@@ -182,10 +182,10 @@ colors.rainbow_5=colors.br5; colors.rainbow_6=colors.br6; colors.rainbow_7=color
 colors.bg_selection_dim = colors.dnorm
 
 -- Additional convenience aliases (non-breaking; map to existing hues)
--- Float/panels/borders
-colors.bg_float = colors.shade_06
-colors.bg_panel = colors.shade_07
-colors.border_color = colors.shade_08
+-- Neutral defaults derived from base background (avoid bluish tint)
+colors.bg_float = U.lighten(colors.bclr, 8)
+colors.bg_panel = U.lighten(colors.bclr, 6)
+colors.border_color = U.darken(colors.bclr, 10)
 
 -- Severities and statuses
 colors.error_color = colors.diff_delete_color
