@@ -207,6 +207,30 @@ require('neg').setup({ preset = 'hard' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
 - :NegExport — экспорт текущих цветов (core/diagnostics/syntax) с подсказками
 
+### Быстрые переключатели
+
+| Команда | Действие | По умолчанию |
+| --- | --- | --- |
+| `:NegModeAccent {on|off|toggle}` | Акценты по режимам (CursorLine/StatusLine) | вкл |
+| `:NegFocusCaret {on|off|toggle}` | Усилить видимость CursorLine при низком контрасте | вкл |
+| `:NegDimInactive {on|off|toggle}` | Приглушать неактивные окна (NormalNC/WinBarNC, LineNr) | выкл |
+| `:NegDiffFocus {on|off|toggle}` | Более явные фоны Diff* при `:diff` | вкл |
+| `:NegSoftBorders {on|off|toggle}` | Мягкие границы (WinSeparator/FloatBorder) | выкл |
+| `:NegFloatBg {on|off|toggle}` | Слегка «панельный» фон флоатов | выкл |
+| `:NegLightSigns {on|off|toggle}` | «Лёгкие» значки SignColumn (DiagnosticSign*/GitSigns*) | выкл |
+| `:NegTelescopeAccents {on|off|toggle}` | Усиленные акценты Telescope (совпадения/выделение) | выкл |
+| `:NegSelection {default|kitty}` | Модель выделения (тема/kitty) | default |
+| `:NegPunctFamily {on|off|toggle}` | Различать семейства скобок | выкл |
+| `:NegReadingMode {on|off|toggle}` | Режим чтения (почти монохром) | выкл |
+| `:NegOutlines {on|off|toggle}` | Рамки активных/неактивных окон | выкл |
+| `:NegThickCursor {on|off|toggle}` | Более «толстая» строка курсора | выкл |
+| `:NegSearchVisibility {default|soft|strong}` | Видимость поиска/текущего совпадения | default |
+| `:NegScreenreader {on|off|toggle}` | Режим, дружелюбный к скринридеру | выкл |
+| `:NegAccessibility {deuteranopia|strong_undercurl|achromatopsia}` | Флаги доступности | все выкл |
+| `:NegHc {off|soft|strong}` | Пакет высокого контраста (achromatopsia) | off |
+| `:NegDiagPattern {none|minimal|strong}` | Паттерны Diagnostic* | none |
+| `:NegDiagSoft` / `:NegDiagStrong` | Быстрые пресеты фонов виртуального текста | выкл |
+
 ### Модель выделения (kitty)
 
 По умолчанию Visual использует цвета темы. Чтобы получить вид как в kitty:

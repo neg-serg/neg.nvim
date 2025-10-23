@@ -333,6 +333,30 @@ require('neg').setup({ preset = 'hard' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — print contrast ratio; accepts explicit bg, can target AA/AAA and print/apply a suggested :hi
 - :NegExport — export current core/diagnostics/syntax colors with quick tips
 
+### Quick Toggles
+
+| Command | Effect | Default |
+| --- | --- | --- |
+| `:NegModeAccent {on|off|toggle}` | Mode‑aware CursorLine/StatusLine accents | on |
+| `:NegFocusCaret {on|off|toggle}` | Boost CursorLine when overall contrast is low | on |
+| `:NegDimInactive {on|off|toggle}` | Dim inactive windows (NormalNC/WinBarNC, LineNr) | off |
+| `:NegDiffFocus {on|off|toggle}` | Stronger Diff* backgrounds in `:diff` | on |
+| `:NegSoftBorders {on|off|toggle}` | Lighten WinSeparator/FloatBorder | off |
+| `:NegFloatBg {on|off|toggle}` | Slightly lighter float “panel” background | off |
+| `:NegLightSigns {on|off|toggle}` | Softer sign icons (DiagnosticSign*/GitSigns*) | off |
+| `:NegTelescopeAccents {on|off|toggle}` | Enhanced Telescope matching/selection accents | off |
+| `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | default |
+| `:NegPunctFamily {on|off|toggle}` | Differentiate punctuation families | off |
+| `:NegReadingMode {on|off|toggle}` | Near‑monochrome reading mode | off |
+| `:NegOutlines {on|off|toggle}` | Neutral outlines for active/inactive windows | off |
+| `:NegThickCursor {on|off|toggle}` | Thicker CursorLine/CursorLineNr | off |
+| `:NegSearchVisibility {default|soft|strong}` | Tune Search/CurSearch visibility | default |
+| `:NegScreenreader {on|off|toggle}` | Reduce dynamic accents and colored backgrounds | off |
+| `:NegAccessibility {deuteranopia|strong_undercurl|achromatopsia}` | Toggle accessibility features | all off |
+| `:NegHc {off|soft|strong}` | High‑contrast pack (achromatopsia) | off |
+| `:NegDiagPattern {none|minimal|strong}` | Diagnostics pattern presets | none |
+| `:NegDiagSoft` / `:NegDiagStrong` | Quick soft/strong DiagnosticVirtualText bg | off |
+
 ### Selection model (kitty-style)
 
 By default, Visual selection uses the theme's selection color. To match kitty's selection exactly:
