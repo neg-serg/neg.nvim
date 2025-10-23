@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.58
+-- Version:     4.59
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -2280,6 +2280,26 @@ define_commands = function()
       if (not s.bg or s.bg == 'NONE') then print('· search tips: try :NegAlpha 8 or :NegSearchVisibility soft|strong') end
     end
   end, { desc = 'neg.nvim: Export current highlight colors (core, diff, diagnostics, syntax) with quick hints' })
+
+  -- List plugin integrations and their state
+  vim.api.nvim_create_user_command('NegPlugins', function()
+    local cfg = M._config or default_config
+    local plugs = cfg.plugins or {}
+    local on, off = {}, {}
+    for k, v in pairs(plugs) do
+      if v == false then off[#off+1] = k else on[#on+1] = k end
+    end
+    table.sort(on)
+    table.sort(off)
+    local lines = {}
+    lines[#lines+1] = ('neg.nvim plugins — enabled: %d, disabled: %d, total: %d')
+      :format(#on, #off, (#on + #off))
+    lines[#lines+1] = 'enabled: ' .. (#on > 0 and table.concat(on, ', ') or '—')
+    if #off > 0 then lines[#lines+1] = 'disabled: ' .. table.concat(off, ', ') end
+    local ok_notify, _ = pcall(require, 'notify')
+    local msg = table.concat(lines, '\n')
+    if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
+  end, { desc = 'neg.nvim: List plugin integrations and their state' })
 end
 
 return M

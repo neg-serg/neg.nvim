@@ -684,3 +684,7 @@ Release date: 2025-10-23 16:18:00 +0300
 ## [4.58]
 Release date: 2025-10-23 16:28:00 +0300
 - Docs: add concise “Plugin Flags — Quick Summary” (EN/RU) listing integration keys, defaults, and categories.
+
+## [4.59]
+Release date: 2025-10-23 16:40:00 +0300
+- Command: add `:NegPlugins` — prints enabled/disabled plugin integrations from current config (uses notify if available).
