@@ -627,3 +627,8 @@ Release date: 2025-10-23 04:17:59 +0300
 - Telescope: default selection now links to `Visual` (previously `CursorLine`), removing the bluish row tint for a more neutral, non‑distracting selection. Enhanced accents remain behind the toggle `ui.telescope_accents`.
 - Docs: add explicit “Apply Order” note (EN/RU) and remove duplicate `:NegNumberColors` lines; selection/float override examples synced across EN/RU.
 - Meta: bump version and header.
+
+## [4.49]
+Release date: 2025-10-23 04:31:00 +0300
+- Selection model: default changed to kitty — `ui.selection_model = 'kitty'`. This makes Visual/VisualNOS use kitty‑style selection out of the box. Use `:NegSelection default` or set `selection_model = 'default'` to revert to the theme selection.
+- Docs: update Options defaults, Quick Toggles default, and selection section (EN/RU).

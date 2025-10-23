@@ -109,7 +109,7 @@ require('neg').setup({
     search_visibility = 'default',      -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
     telescope_accents = false,          -- усиленные акценты для Telescope (совпадения/выделение/границы)
-    selection_model = 'default',        -- 'default' (тема) или 'kitty' (как выделение в kitty)
+    selection_model = 'kitty',          -- 'default' (тема) или 'kitty' (как выделение в kitty)
 
     accessibility = {
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
@@ -232,7 +232,7 @@ require('neg').setup({ preset = 'hard' })
 | `:NegFloatBg {on|off|toggle}` | Слегка «панельный» фон флоатов | выкл |
 | `:NegLightSigns {on|off|toggle}` | «Лёгкие» значки SignColumn (DiagnosticSign*/GitSigns*) | выкл |
 | `:NegTelescopeAccents {on|off|toggle}` | Усиленные акценты Telescope (совпадения/выделение) | выкл |
-| `:NegSelection {default|kitty}` | Модель выделения (тема/kitty) | default |
+| `:NegSelection {default|kitty}` | Модель выделения (тема/kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Различать семейства скобок | выкл |
 | `:NegReadingMode {on|off|toggle}` | Режим чтения (почти монохром) | выкл |
 | `:NegOutlines {on|off|toggle}` | Рамки активных/неактивных окон | выкл |
@@ -246,10 +246,10 @@ require('neg').setup({ preset = 'hard' })
 
 ### Модель выделения (kitty)
 
-По умолчанию Visual использует цвета темы. Чтобы получить вид как в kitty:
+По умолчанию выделение соответствует kitty. Чтобы вернуть выделение темы:
 
-- Опция: `ui.selection_model = 'kitty'`
-- Команда: `:NegSelection kitty`
+- Опция: `ui.selection_model = 'default'`
+- Команда: `:NegSelection default`
 
 Используются цвета палитры:
 

@@ -130,7 +130,7 @@ require('neg').setup({
     search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
-    selection_model = 'default',      -- 'default' (theme) or 'kitty' (match kitty selection colors)
+    selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
@@ -329,7 +329,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegFloatBg {on|off|toggle} — float background model (Normal vs slightly lighter panel-like bg)
 - :NegFocusCaret {on|off|toggle} — boost CursorLine contrast when overall contrast is low
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
-- :NegSelection {default|kitty} — set selection model (theme default vs kitty-style selection colors)
+- :NegSelection {default|kitty} — set selection model (kitty by default)
 - :NegDimInactive {on|off|toggle} — dim inactive windows
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
@@ -358,7 +358,7 @@ require('neg').setup({ preset = 'hard' })
 | `:NegFloatBg {on|off|toggle}` | Slightly lighter float “panel” background | off |
 | `:NegLightSigns {on|off|toggle}` | Softer sign icons (DiagnosticSign*/GitSigns*) | off |
 | `:NegTelescopeAccents {on|off|toggle}` | Enhanced Telescope matching/selection accents | off |
-| `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | default |
+| `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Differentiate punctuation families | off |
 | `:NegReadingMode {on|off|toggle}` | Near‑monochrome reading mode | off |
 | `:NegOutlines {on|off|toggle}` | Neutral outlines for active/inactive windows | off |
@@ -372,10 +372,10 @@ require('neg').setup({ preset = 'hard' })
 
 ### Selection model (kitty-style)
 
-By default, Visual selection uses the theme's selection color. To match kitty's selection exactly:
+By default, selection matches kitty. To use the theme selection instead:
 
-- Option: `ui.selection_model = 'kitty'`
-- Command: `:NegSelection kitty`
+- Option: `ui.selection_model = 'default'`
+- Command: `:NegSelection default`
 
 Colors used (from palette):
 
@@ -384,7 +384,7 @@ Colors used (from palette):
 
 Notes:
 
-- Keep `alpha_overlay = 0` for a closer match (alpha overlay softens backgrounds).
+- Keep `alpha_overlay = 0` for an exact kitty match (alpha overlay softens backgrounds).
 - You can override `selection_bg/fg` via `overrides` if you prefer different shades.
 
 Quick overrides examples:

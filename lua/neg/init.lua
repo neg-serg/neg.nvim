@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.48
+-- Version:     4.49
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -83,7 +83,7 @@ local flags_from = U.flags_from
       -- Enhanced accents for Telescope (matching/selection/borders); off by default
       telescope_accents = false,
       -- Selection model: 'default' (theme) or 'kitty' (match kitty selection colors)
-      selection_model = 'default',
+      selection_model = 'kitty',
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
