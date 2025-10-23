@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.38
+-- Version:     4.40
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1894,6 +1894,99 @@ define_commands = function()
     complete = function() return { 'families', 'mono', 'mono+' } end,
     desc = 'neg.nvim: Set operator colors mode (families|mono|mono+)'
   })
+
+  vim.api.nvim_create_user_command('NegExport', function()
+    local function get_hl(name_, follow)
+      local function as_hex(v)
+        if type(v) == 'number' then return string.format('#%06x', v) end
+        if type(v) == 'string' then return v end
+        return nil
+      end
+      if type(vim.api.nvim_get_hl) == 'function' then
+        local ok, t = pcall(vim.api.nvim_get_hl, 0, { name = name_, link = follow and true or false })
+        if ok and type(t) == 'table' then
+          return { fg = as_hex(t.fg), bg = as_hex(t.bg), sp = as_hex(t.sp) }
+        end
+      end
+      if type(vim.api.nvim_get_hl_by_name) == 'function' then
+        local ok2, t2 = pcall(vim.api.nvim_get_hl_by_name, name_, true)
+        if ok2 and type(t2) == 'table' then
+          return { fg = as_hex(t2.foreground), bg = as_hex(t2.background), sp = as_hex(t2.special) }
+        end
+      end
+      return {}
+    end
+    local function fmt(name, t)
+      local fg = t.fg or 'NONE'
+      local bg = t.bg or 'NONE'
+      local sp = t.sp or 'NONE'
+      return string.format('%-28s fg=%-9s bg=%-9s sp=%-9s', name, fg, bg, sp)
+    end
+    local function header(title) print(('== %s =='):format(title)) end
+    -- Summary
+    print('neg.nvim export — current highlight colors')
+    do
+      local cfg = M._config or default_config
+      local summary = (
+        'config: saturation=%s alpha_overlay=%s operator_colors=%s number_colors=%s\n' ..
+        '        ui.mode_accent=%s ui.soft_borders=%s ui.dim_inactive=%s ui.diff_focus=%s'
+      ):format(
+        tostring(cfg.saturation), tostring(cfg.alpha_overlay), tostring(cfg.operator_colors), tostring(cfg.number_colors),
+        tostring(cfg.ui and cfg.ui.mode_accent), tostring(cfg.ui and cfg.ui.soft_borders), tostring(cfg.ui and cfg.ui.dim_inactive), tostring(cfg.ui and cfg.ui.diff_focus)
+      )
+      print(summary)
+    end
+    -- Core UI
+    header('Core UI')
+    for _, g in ipairs({ 'Normal','NormalNC','NormalFloat','StatusLine','StatusLineNC','Title','Underlined','WinBar','WinBarNC','VertSplit','WinSeparator','FloatBorder','LineNr','CursorLine','CursorLineNr','ColorColumn','CursorColumn','Visual','SignColumn','FoldColumn','NonText','Whitespace','EndOfBuffer','Search','CurSearch','IncSearch','Pmenu','PmenuSel','PmenuThumb','QuickFixLine','Substitute' }) do
+      print(fmt(g, get_hl(g, true)))
+    end
+    -- Diff
+    header('Diff')
+    for _, g in ipairs({ 'DiffAdd','DiffChange','DiffDelete','DiffText' }) do print(fmt(g, get_hl(g, true))) end
+    -- Diagnostics
+    header('Diagnostics')
+    for _, g in ipairs({ 'DiagnosticError','DiagnosticWarn','DiagnosticInfo','DiagnosticHint','DiagnosticOk','DiagnosticVirtualTextError','DiagnosticVirtualTextWarn','DiagnosticVirtualTextInfo','DiagnosticVirtualTextHint','DiagnosticVirtualTextOk' }) do
+      print(fmt(g, get_hl(g, true)))
+    end
+    -- Syntax (Treesitter)
+    header('Syntax (TS)')
+    for _, g in ipairs({ '@comment','@keyword','@function','@method','@type','@type.builtin','@string','@number','@boolean','@operator','@constant','@variable','@property','@field','@namespace','@tag','@punctuation.bracket','@punctuation.delimiter','@punctuation.special','@markup.heading.1','@markup.link','@markup.math' }) do
+      print(fmt(g, get_hl(g, true)))
+    end
+    -- Diff hints
+    local function hex_to_rgb(hex)
+      if type(hex) ~= 'string' or not hex:match('^#%x%x%x%x%x%x$') then return nil end
+      return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
+    end
+    local function srgb_to_linear(c) c = c/255; if c <= 0.03928 then return c/12.92 end; return ((c + 0.055)/1.055)^2.4 end
+    local function rel_luminance(hex)
+      local r, g, b = hex_to_rgb(hex); if not r then return nil end
+      r, g, b = srgb_to_linear(r), srgb_to_linear(g), srgb_to_linear(b)
+      return 0.2126*r + 0.7152*g + 0.0722*b
+    end
+    local function contrast_ratio(fg, bg)
+      local L1 = rel_luminance(fg); local L2 = rel_luminance(bg)
+      if not L1 or not L2 then return nil end
+      if L1 < L2 then L1, L2 = L2, L1 end
+      return (L1 + 0.05) / (L2 + 0.05)
+    end
+    do
+      header('Hints')
+      local low = {}
+      for _, g in ipairs({ 'DiffAdd','DiffChange','DiffDelete','DiffText' }) do
+        local t = get_hl(g, true)
+        local bg = t.bg
+        local r = (bg and bg ~= 'NONE') and contrast_ratio('#ffffff', bg) or nil
+        if (not bg) or bg == 'NONE' or (r and r < 1.20) then low[#low+1] = g end
+      end
+      if #low > 0 then
+        print('· diff tips: backgrounds for ' .. table.concat(low, ', ') .. ' may be too soft; try :NegDiffFocus on')
+      end
+      local s = get_hl('Search', true)
+      if (not s.bg or s.bg == 'NONE') then print('· search tips: try :NegAlpha 8 or :NegSearchVisibility soft|strong') end
+    end
+  end, { desc = 'neg.nvim: Export current highlight colors (core, diff, diagnostics, syntax) with quick hints' })
 end
 
 return M

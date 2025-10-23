@@ -190,6 +190,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
 - :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
+- :NegExport — экспорт текущих цветов (core/diagnostics/syntax) с подсказками
 
 ## Overrides
 

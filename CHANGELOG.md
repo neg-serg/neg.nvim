@@ -577,3 +577,9 @@ Release date: 2025-10-23 03:43:20 +0300
 - Order of application: applied after diagnostics virtual bg and before user overrides to stay predictable.
 - Docs: README/README.ru updated (options + commands).
 - Meta: bump version and header.
+
+## [4.40]
+Release date: 2025-10-23 03:45:55 +0300
+- Command: add `:NegExport` — prints current highlight colors (core UI, diff, diagnostics, syntax) in a compact report with quick tips (diff/search).
+- Docs: README/README.ru document the command.
+- Meta: bump header.
