@@ -170,6 +170,19 @@ require('neg').setup({ preset = 'hard' })
 -- :NegPreset none  -- сброс пресета
 ```
 
+### Таблица пресетов
+
+| Пресет | Цель | Изменения | Примечания |
+| --- | --- | --- | --- |
+| soft | Сдержанный базовый вид | Дефолты; курсив комментариев | Базовая палитра |
+| hard | Выше контраст акцентов | Жирные keywords/functions/types/constants/booleans/numbers; Title жирный | Хорошо для презентаций кода |
+| pro | Без курсива | Отключает курсив у комментариев, inlay hints, CodeLens, markup italics | Можно сочетать с `lexeme_cues=minimal` |
+| writing | Акценты для разметки | Жирные заголовки/strong; курсив для emphasis; Title жирный | Для Markdown/прозы |
+| accessibility | Более высокий контраст UI | Отключает фон виртуальных диагностик; сильнее LineNr/границы; более явные CursorLine/ColorColumn/Visual; без курсива комментариев | Комбинируйте с `ui.accessibility.*` и `:NegHc` |
+| focus | Меньше шума, фокус на окне | Включает `ui.dim_inactive=true`, `ui.soft_borders=true` | Удобно при множестве сплитов |
+| presentation | Ярче акценты | Более видимые CursorLine/CursorLineNr; сильнее Title и поиск | Для демо/докладов |
+| none | Без пресета | Нет доп. изменений | Используйте явные опции |
+
 ## Команды
 
 - :NegToggleTransparent — переключить прозрачность и применить тему

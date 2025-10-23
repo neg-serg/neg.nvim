@@ -295,6 +295,19 @@ require('neg').setup({ preset = 'hard' })
 -- :NegPreset none  -- clear preset
 ```
 
+### Preset Map
+
+| Preset | Aim | Changes | Notes |
+| --- | --- | --- | --- |
+| soft | Subtle defaults | Keep defaults; italic comments | Baseline look |
+| hard | Higher contrast accents | Makes keywords/functions/types/constants/booleans/numbers bold; Title bold | Good for code presentations |
+| pro | No italics | Disables italics for comments, inlay hints, code lens, markup italics | Pair with `lexeme_cues=minimal` if desired |
+| writing | Emphasize markup | Bold headings/strong; italic emphasis; Title bold | For Markdown/prose |
+| accessibility | Higher UI contrast | Disables diagnostic virtual BG; stronger LineNr/Separators; clearer CursorLine/ColorColumn/Visual; no italic comments | Combine with `ui.accessibility.*` and `:NegHc` |
+| focus | Reduce noise, focus current window | Sets `ui.dim_inactive=true`, `ui.soft_borders=true` | Good for many splits |
+| presentation | Brighter accents | Stronger CursorLine/CursorLineNr; Title and Search emphasized | For demos and talks |
+| none | No preset | No extra changes | Use explicit options only |
+
 ## Commands
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
