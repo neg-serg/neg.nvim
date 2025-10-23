@@ -399,6 +399,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegScenarioWrite [@/path] [--notify=off|on] — write user scenarios to file (default: stdpath('config')/neg/scenarios.json)
 - :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on] — read scenarios from file into memory
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — print plugin integrations (filter by state/substring; JSON output and notify control)
+- :NegPluginsSuggest [--json] [--notify=off|on] — print a ready `plugins = { ... }` block by scanning lazy plugins
 
 ### Plugin Flags — Quick Summary
 

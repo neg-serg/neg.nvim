@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.65
+-- Version:     4.66
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -2796,6 +2796,65 @@ define_commands = function()
     end,
     desc = 'neg.nvim: List plugin integrations and their state (filterable, --json, --notify=off|on)'
   })
+
+  -- Suggest a ready 'plugins = { ... }' block based on installed lazy plugins
+  -- Usage: :NegPluginsSuggest [--json] [--notify=off|on]
+  vim.api.nvim_create_user_command('NegPluginsSuggest', function(opts)
+    local args = (opts.args or '')
+    local use_json, use_notify = false, true
+    for t in string.gmatch(args, "[^%s]+") do
+      if t == '--json' then use_json = true end
+      if t:match('^%-%-notify=') then use_notify = (t:match('=on$') ~= nil) end
+    end
+    local data_dir = vim.fn.stdpath('data')
+    local lazy_dir = data_dir .. '/lazy'
+    local entries = vim.fn.glob(lazy_dir .. '/*', 0, 1) or {}
+    local present = {}
+    for _, pth in ipairs(entries) do
+      local base = vim.fn.fnamemodify(pth, ':t')
+      present[base] = true
+    end
+    local function has_any(patterns)
+      for _, pat in ipairs(patterns) do if present[pat] then return true end end
+      return false
+    end
+    local detectors = {
+      telescope={'telescope.nvim'}, blink={'blink.cmp'}, diffview={'diffview.nvim'}, fidget={'fidget.nvim'},
+      gitsigns={'gitsigns.nvim'}, harpoon={'harpoon'}, heirline={'heirline.nvim'}, leap={'leap.nvim'},
+      noice={'noice.nvim'}, dap={'nvim-dap'}, dapui={'nvim-dap-ui'}, dap_virtual_text={'nvim-dap-virtual-text'},
+      navbuddy={'nvim-navbuddy'}, navic={'nvim-navic'}, overseer={'overseer.nvim'}, trouble={'trouble.nvim'},
+      toggleterm={'toggleterm.nvim'}, hlslens={'hlslens.nvim'}, virt_column={'virt-column.nvim'},
+      rainbow={'rainbow-delimiters.nvim'}, cmp={'nvim-cmp'}, bufferline={'bufferline.nvim'}, alpha={'alpha-nvim'},
+      startify={'vim-startify','startify'}, mini_statusline={'mini.statusline','mini.nvim'}, mini_tabline={'mini.tabline','mini.nvim'},
+      todo_comments={'todo-comments.nvim'}, lspsaga={'lspsaga.nvim'}, nvim_tree={'nvim-tree.lua','nvim-tree'},
+      neo_tree={'neo-tree.nvim'}, notify={'nvim-notify'}, treesitter_context={'treesitter-context','nvim-treesitter-context'},
+      hop={'hop.nvim'}, ufo={'nvim-ufo'}, bqf={'nvim-bqf'}, flash={'flash.nvim'}, glance={'glance.nvim'},
+      barbecue={'barbecue.nvim'}, illuminate={'vim-illuminate'}, oil={'oil.nvim'}, mini_pick={'mini.pick','mini.nvim'},
+      snacks={'snacks.nvim'}, fzf_lua={'fzf-lua'}, obsidian={'obsidian.nvim'}, neotest={'neotest'}, which_key={'which-key.nvim'},
+      indent={'indent-blankline.nvim','ibl','mini.indentscope','mini.nvim'}, headline={'headline.nvim'}, treesitter_playground={'treesitter-playground'},
+    }
+    local keys = {}
+    for k, _ in pairs(detectors) do keys[#keys+1] = k end
+    table.sort(keys)
+    local result = { git = true }
+    for _, k in ipairs(keys) do result[k] = has_any(detectors[k]) end
+    if use_json then
+      local obj = { plugins = result, lazy_dir = lazy_dir }
+      local payload = vim.json_encode(obj)
+      if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      return
+    end
+    -- Render Lua block
+    local lines = {}
+    lines[#lines+1] = 'plugins = {'
+    lines[#lines+1] = '  git = true,'
+    for _, k in ipairs(keys) do
+      lines[#lines+1] = string.format('  %s = %s,', k, tostring(result[k]))
+    end
+    lines[#lines+1] = '}'
+    local msg = table.concat(lines, '\n')
+    if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+  end, { nargs = '*', desc = "neg.nvim: Suggest a 'plugins = { ... }' block from installed lazy plugins" })
 end
 
 return M

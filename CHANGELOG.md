@@ -724,3 +724,7 @@ Release date: 2025-10-23 18:22:00 +0300
   - :NegScenarioWrite [@/path] [--notify=off|on]
   - :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on]
 - Docs: README (EN/RU) updated.
+## [4.66]
+Release date: 2025-10-23 18:38:00 +0300
+- Command: add `:NegPluginsSuggest` — prints a ready `plugins = { ... }` block by scanning lazy plugin dirs.
+- Docs: README (EN/RU) updated.
