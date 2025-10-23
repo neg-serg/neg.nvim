@@ -109,7 +109,7 @@ require('neg').setup({
     accessibility = {
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
       strong_undercurl = false,         -- более заметные undercurl (с underline‑fallback)
-      strong_tui_cursor = false,        -- сильнее Cursor/TermCursor/Visual для TUI
+      -- удалено: strong_tui_cursor
       achromatopsia = false,            -- монохром/высокий контраст (минимум зависимости от цвета)
       hc = 'off',                       -- high‑contrast для achromatopsia: 'off' | 'soft' | 'strong'
     },
@@ -175,7 +175,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiffFocus {on|off|toggle} — усилить фоны Diff* при :diff
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок
 - :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
-- :NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}
+- :NegAccessibility {deuteranopia|strong_undercurl|achromatopsia} {on|off|toggle}
 - :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
 - :NegLexemeCues {off|minimal|strong} — подсказки для функций/типов
 - :NegThickCursor {on|off|toggle} — «толстый» курсор/строка

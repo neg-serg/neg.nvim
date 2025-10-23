@@ -129,7 +129,7 @@ require('neg').setup({
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
-      strong_tui_cursor = false,       -- stronger Cursor/TermCursor/Visual for TUI
+      -- removed: strong_tui_cursor
       achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue
       hc = 'off',                      -- high‑contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
     },
@@ -301,7 +301,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
-- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia)
+- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues
 - :NegThickCursor {on|off|toggle} — thicker CursorLine/CursorLineNr

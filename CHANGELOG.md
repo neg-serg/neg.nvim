@@ -474,8 +474,7 @@ Release date: 2025-10-23 02:35:12 +0300
 - Accessibility options:
   - `ui.accessibility.deuteranopia` — shifts additions (ok/plus) toward blue for red/green deficiency; warnings remain orange.
   - `ui.accessibility.strong_undercurl` — makes diagnostic undercurls more visible (adds underline fallback).
-  - `ui.accessibility.strong_tui_cursor` — stronger `Cursor`/`TermCursor` and `Visual` for TUI.
-- Command: `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor} {on|off|toggle}`.
+  - Command: `:NegAccessibility {deuteranopia|strong_undercurl} {on|off|toggle}`.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
 ## [4.25]
@@ -551,3 +550,9 @@ Release date: 2025-10-23 03:33:25 +0300
 Release date: 2025-10-23 03:35:00 +0300
 - :NegContrast: switched to printing a ready `:hi {Group} guifg=#rrggbb` line only (removed Lua overrides snippet in output).
 - Meta: bump version.
+## [4.36]
+Release date: 2025-10-23 03:34:58 +0300
+- Accessibility: remove `ui.accessibility.strong_tui_cursor` option and its behavior; feature is no longer supported.
+- :NegAccessibility: update accepted features to `deuteranopia|strong_undercurl|achromatopsia`.
+- Docs: README/README.ru updated accordingly.
+- Meta: bump version and header.
