@@ -694,3 +694,8 @@ Release date: 2025-10-23 16:52:00 +0300
 - Command: enhance `:NegPlugins` with optional filters —
   `:NegPlugins [enabled|disabled|all] [filter]`, where filter is a case‑insensitive substring.
 - Docs: update command synopsis (EN/RU).
+
+## [4.61]
+Release date: 2025-10-23 17:05:00 +0300
+- Command: `:NegPlugins` gains `--json` output and `--notify=off|on` flag to force/disable notify.
+- Docs: command synopsis updated (EN/RU).

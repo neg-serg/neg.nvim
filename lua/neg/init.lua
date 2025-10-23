@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.60
+-- Version:     4.61
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -2282,22 +2282,40 @@ define_commands = function()
   end, { desc = 'neg.nvim: Export current highlight colors (core, diff, diagnostics, syntax) with quick hints' })
 
   -- List plugin integrations and their state
-  -- Usage: :NegPlugins [enabled|disabled|all] [filter]
-  -- Example: :NegPlugins enabled  |  :NegPlugins disabled  |  :NegPlugins all neo
+  -- Usage: :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on]
+  -- Example: :NegPlugins enabled | :NegPlugins disabled | :NegPlugins all neo --json
   vim.api.nvim_create_user_command('NegPlugins', function(opts)
     local cfg = M._config or default_config
     local plugs = cfg.plugins or {}
     local args = (opts.args or '')
     local state, filter = 'all', nil
-    do
-      local a1, a2 = args:match('^(%S+)%s+(.*)$')
-      if not a1 then a1 = args end
-      a1 = (a1 or ''):lower()
-      if a1 == 'enabled' or a1 == 'disabled' or a1 == 'all' then
-        state = a1
-        filter = a2 and a2:lower() or nil
+    local use_json, use_notify = false, true
+    local tokens = {}
+    for t in string.gmatch(args, "[^%s]+") do tokens[#tokens+1] = t end
+    local function take_state(tok)
+      tok = (tok or ''):lower()
+      if tok == 'enabled' or tok == 'disabled' or tok == 'all' then state = tok; return true end
+      return false
+    end
+    local i = 1
+    while i <= #tokens do
+      local t = tokens[i]
+      if t == '--json' then use_json = true; i = i + 1
+      elseif t:match('^%-%-notify=') or t == '--notify' then
+        local val = nil
+        if t == '--notify' then
+          if tokens[i+1] and tokens[i+1]:match('^(on|off)$') then val = tokens[i+1]; i = i + 1 end
+        else
+          val = t:match('^%-%-notify=(.+)$')
+        end
+        if val then use_notify = (val == 'on') end
+        i = i + 1
+      elseif take_state(t) and not filter then
+        i = i + 1
+      elseif not filter then
+        filter = t:lower(); i = i + 1
       else
-        filter = (args ~= '' and args:lower() or nil)
+        i = i + 1
       end
     end
     local on, off = {}, {}
@@ -2310,23 +2328,45 @@ define_commands = function()
       end
     end
     table.sort(on); table.sort(off)
-    local function join(tbl) return (#tbl > 0) and table.concat(tbl, ', ') or '—' end
-    local lines = {}
-    lines[#lines+1] = ('neg.nvim plugins — enabled: %d, disabled: %d, total: %d%s')
-      :format(#on, #off, (#on + #off), (filter and (' (filter: ' .. filter .. ')') or ''))
-    if state == 'all' or state == 'enabled' then lines[#lines+1] = 'enabled: ' .. join(on) end
-    if state == 'all' or state == 'disabled' then lines[#lines+1] = 'disabled: ' .. join(off) end
-    local ok_notify, _ = pcall(require, 'notify')
-    local msg = table.concat(lines, '\n')
-    if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
+    if use_json then
+      local out = {
+        state = state,
+        filter = filter,
+        enabled = on,
+        disabled = off,
+        enabled_count = #on,
+        disabled_count = #off,
+        total = (#on + #off),
+      }
+      local ok_json, enc = pcall(function() return vim.json_encode(out) end)
+      local payload = ok_json and enc or ('{"error":"json_encode_failed"}')
+      -- For JSON output, default to print unless explicitly forced via --notify=on
+      if use_notify then
+        local ok_notify, _ = pcall(require, 'notify')
+        if ok_notify and vim.notify then vim.notify(payload) else print(payload) end
+      else
+        print(payload)
+      end
+    else
+      local function join(tbl) return (#tbl > 0) and table.concat(tbl, ', ') or '—' end
+      local lines = {}
+      lines[#lines+1] = ('neg.nvim plugins — enabled: %d, disabled: %d, total: %d%s')
+        :format(#on, #off, (#on + #off), (filter and (' (filter: ' .. filter .. ')') or ''))
+      if state == 'all' or state == 'enabled' then lines[#lines+1] = 'enabled: ' .. join(on) end
+      if state == 'all' or state == 'disabled' then lines[#lines+1] = 'disabled: ' .. join(off) end
+      local ok_notify, _ = pcall(require, 'notify')
+      local msg = table.concat(lines, '\n')
+      if use_notify and ok_notify and vim.notify then vim.notify(msg) else print(msg) end
+    end
   end, {
     nargs = '*',
     complete = function(_, line)
       local args = vim.split(line, '%s+', { trimempty = true })
-      if #args <= 2 then return { 'enabled', 'disabled', 'all' } end
-      return {}
+      local opts = { 'enabled', 'disabled', 'all', '--json', '--notify=off', '--notify=on' }
+      if #args <= 2 then return opts end
+      return opts
     end,
-    desc = 'neg.nvim: List plugin integrations and their state (filterable)'
+    desc = 'neg.nvim: List plugin integrations and their state (filterable, --json, --notify=off|on)'
   })
 end
 
