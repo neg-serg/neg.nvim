@@ -284,7 +284,7 @@ require('neg').setup({ preset = 'hard' })
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
 - :NegToggleTransparentZone {float|sidebar|statusline} — toggle transparency for a specific zone
-- :NegPreset {soft|hard|pro|writing|none} — apply a style preset (or clear with 'none')
+- :NegPreset {soft|hard|pro|writing|accessibility|focus|presentation|none} — apply a style preset (or clear with 'none')
 - :NegReload — re‑apply highlights using the current config
 - :NegInfo — show a short summary of current options, including diagnostics virtual background (enabled/mode/strength/blend)
 - :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — set diagnostics virtual text background mode (or turn off/on)
