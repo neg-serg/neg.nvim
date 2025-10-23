@@ -2,11 +2,20 @@ local p = require('neg.palette')
 
 -- Neutral defaults; enhanced accents are applied conditionally from init.lua
 return {
+  -- Keep matching neutral by default (no color fill), only underline
   TelescopeMatching = { underline = true },
+  -- Neutral selection: reuse CursorLine
   TelescopeSelection = { link = 'CursorLine' },
+  -- Borders follow WinSeparator/soft borders
   TelescopeBorder = { link = 'WinSeparator' },
   TelescopePreviewBorder = { link = 'WinSeparator' },
   TelescopePromptBorder = { link = 'WinSeparator' },
   TelescopeResultsBorder = { link = 'WinSeparator' },
+  -- Neutral backgrounds for all Telescope panes
+  TelescopeNormal = { link = 'Normal' },
+  TelescopePreviewNormal = { link = 'Normal' },
+  TelescopePromptNormal = { link = 'Normal' },
+  TelescopeResultsNormal = { link = 'Normal' },
+  -- Path separators shouldn't stand out
   TelescopePathSeparator = { link = 'Normal' },
 }

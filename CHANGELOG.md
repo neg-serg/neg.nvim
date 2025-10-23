@@ -595,3 +595,8 @@ Release date: 2025-10-23 03:48:40 +0300
 - Accessibility (achromatopsia): softly increase visibility of structure zones — `Folded` and `ColorColumn` now get slightly stronger backgrounds to stay readable without color cues.
 - Docs: README/README.ru note the behavior under `ui.accessibility.achromatopsia`.
 - Meta: bump version and header.
+
+## [4.43]
+Release date: 2025-10-23 03:50:20 +0300
+- Telescope: fully neutralize prompt/results/preview backgrounds by linking `Telescope*Normal` (Prompt/Results/Preview/Normal) to `Normal` (no bluish float tint). Matching stays underline-only by default.
+- Rationale: previous blue tint came from `NormalFloat` (bg_float) affecting Telescope windows; explicit links remove that hue.
