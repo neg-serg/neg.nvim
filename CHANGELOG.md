@@ -688,3 +688,9 @@ Release date: 2025-10-23 16:28:00 +0300
 ## [4.59]
 Release date: 2025-10-23 16:40:00 +0300
 - Command: add `:NegPlugins` — prints enabled/disabled plugin integrations from current config (uses notify if available).
+
+## [4.60]
+Release date: 2025-10-23 16:52:00 +0300
+- Command: enhance `:NegPlugins` with optional filters —
+  `:NegPlugins [enabled|disabled|all] [filter]`, where filter is a case‑insensitive substring.
+- Docs: update command synopsis (EN/RU).

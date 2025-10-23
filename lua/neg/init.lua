@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.59
+-- Version:     4.60
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -2282,24 +2282,52 @@ define_commands = function()
   end, { desc = 'neg.nvim: Export current highlight colors (core, diff, diagnostics, syntax) with quick hints' })
 
   -- List plugin integrations and their state
-  vim.api.nvim_create_user_command('NegPlugins', function()
+  -- Usage: :NegPlugins [enabled|disabled|all] [filter]
+  -- Example: :NegPlugins enabled  |  :NegPlugins disabled  |  :NegPlugins all neo
+  vim.api.nvim_create_user_command('NegPlugins', function(opts)
     local cfg = M._config or default_config
     local plugs = cfg.plugins or {}
+    local args = (opts.args or '')
+    local state, filter = 'all', nil
+    do
+      local a1, a2 = args:match('^(%S+)%s+(.*)$')
+      if not a1 then a1 = args end
+      a1 = (a1 or ''):lower()
+      if a1 == 'enabled' or a1 == 'disabled' or a1 == 'all' then
+        state = a1
+        filter = a2 and a2:lower() or nil
+      else
+        filter = (args ~= '' and args:lower() or nil)
+      end
+    end
     local on, off = {}, {}
     for k, v in pairs(plugs) do
-      if v == false then off[#off+1] = k else on[#on+1] = k end
+      local is_on = not (v == false)
+      local name = tostring(k)
+      local pass = (not filter) or name:lower():find(filter, 1, true) ~= nil
+      if pass then
+        if is_on then on[#on+1] = name else off[#off+1] = name end
+      end
     end
-    table.sort(on)
-    table.sort(off)
+    table.sort(on); table.sort(off)
+    local function join(tbl) return (#tbl > 0) and table.concat(tbl, ', ') or '—' end
     local lines = {}
-    lines[#lines+1] = ('neg.nvim plugins — enabled: %d, disabled: %d, total: %d')
-      :format(#on, #off, (#on + #off))
-    lines[#lines+1] = 'enabled: ' .. (#on > 0 and table.concat(on, ', ') or '—')
-    if #off > 0 then lines[#lines+1] = 'disabled: ' .. table.concat(off, ', ') end
+    lines[#lines+1] = ('neg.nvim plugins — enabled: %d, disabled: %d, total: %d%s')
+      :format(#on, #off, (#on + #off), (filter and (' (filter: ' .. filter .. ')') or ''))
+    if state == 'all' or state == 'enabled' then lines[#lines+1] = 'enabled: ' .. join(on) end
+    if state == 'all' or state == 'disabled' then lines[#lines+1] = 'disabled: ' .. join(off) end
     local ok_notify, _ = pcall(require, 'notify')
     local msg = table.concat(lines, '\n')
     if ok_notify and vim.notify then vim.notify(msg) else print(msg) end
-  end, { desc = 'neg.nvim: List plugin integrations and their state' })
+  end, {
+    nargs = '*',
+    complete = function(_, line)
+      local args = vim.split(line, '%s+', { trimempty = true })
+      if #args <= 2 then return { 'enabled', 'disabled', 'all' } end
+      return {}
+    end,
+    desc = 'neg.nvim: List plugin integrations and their state (filterable)'
+  })
 end
 
 return M
