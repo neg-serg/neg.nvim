@@ -251,6 +251,8 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegScenarioDelete {name} — удалить сохранённый пользовательский сценарий
 - :NegScenarioExport {name|current} [--json] [--notify=off|on] — экспорт сценария в JSON ({ name, scenario })
 - :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on] — импорт сценария из JSON‑строки или файла
+- :NegScenarioWrite [@/path] [--notify=off|on] — записать пользовательские сценарии в файл (по умолчанию stdpath('config')/neg/scenarios.json)
+- :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on] — прочитать сценарии из файла в память
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — распечатать интеграции (фильтр по состоянию/подстроке; JSON-вывод и управление notify)
 
 ### Флаги плагинов — Сводка

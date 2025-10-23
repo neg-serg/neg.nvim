@@ -718,3 +718,9 @@ Release date: 2025-10-23 18:05:00 +0300
   - :NegScenarioExport {name|current} [--json] [--notify=off|on]
   - :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on]
 - Docs: README (EN/RU) updated with new commands.
+## [4.65]
+Release date: 2025-10-23 18:22:00 +0300
+- Scenarios: persist and load scenarios to/from disk.
+  - :NegScenarioWrite [@/path] [--notify=off|on]
+  - :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on]
+- Docs: README (EN/RU) updated.

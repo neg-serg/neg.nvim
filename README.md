@@ -396,6 +396,8 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegScenarioDelete {name} — delete a saved user scenario
 - :NegScenarioExport {name|current} [--json] [--notify=off|on] — export scenario JSON (wrapped as { name, scenario })
 - :NegScenarioImport {@/path|JSON} [--merge|--replace] [--notify=off|on] — import scenario from JSON string or file
+- :NegScenarioWrite [@/path] [--notify=off|on] — write user scenarios to file (default: stdpath('config')/neg/scenarios.json)
+- :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on] — read scenarios from file into memory
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — print plugin integrations (filter by state/substring; JSON output and notify control)
 
 ### Plugin Flags — Quick Summary

@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.64
+-- Version:     4.65
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -49,6 +49,12 @@ local function apply_scenario_tbl(tbl, mode)
     newcfg = vim.tbl_deep_extend('force', deepcopy_tbl(cfg), tbl)
   end
   M.setup(newcfg)
+end
+
+local function default_scenarios_path()
+  local ok, stdpath = pcall(vim.fn.stdpath, 'config')
+  local base = ok and stdpath or '.'
+  return (base .. '/neg/scenarios.json')
 end
 
 local function apply(tbl)
@@ -2413,6 +2419,88 @@ define_commands = function()
     apply_scenario_tbl(decoded, mode)
     if use_notify and vim.notify then vim.notify('neg.nvim: scenario imported (' .. mode .. ')') else print('neg.nvim: scenario imported (' .. mode .. ')') end
   end, { nargs = '+', desc = 'neg.nvim: Import scenario from JSON string or file (@/path); merge or replace' })
+
+  -- ScenarioWrite: persist all user scenarios to a JSON file
+  -- Usage: :NegScenarioWrite [@/path] [--notify=off|on]
+  vim.api.nvim_create_user_command('NegScenarioWrite', function(opts)
+    local raw = (opts.args or '')
+    local tokens = {}
+    for t in string.gmatch(raw, "[^%s]+") do tokens[#tokens+1] = t end
+    local dest = tokens[1]
+    local use_notify = true
+    for i = 2, #tokens do
+      local t = tokens[i]
+      if t:match('^%-%-notify=') or t == '--notify' then
+        local val = nil
+        if t == '--notify' and tokens[i+1] and tokens[i+1]:match('^(on|off)$') then val = tokens[i+1] end
+        val = val or t:match('^%-%-notify=(.+)$')
+        if val then use_notify = (val == 'on') end
+      end
+    end
+    local path
+    if dest and dest:sub(1,1) == '@' then path = dest:sub(2) end
+    path = path or default_scenarios_path()
+    local data = { scenarios = M._scenarios or {}, version = (M and M._config and '4.x') or '4.x' }
+    local ok_json, payload = pcall(function() return vim.json_encode(data) end)
+    if not ok_json then
+      local msg = 'neg.nvim: failed to encode scenarios'
+      if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+      return
+    end
+    -- ensure dir exists
+    local dir = vim.fn.fnamemodify(path, ':h')
+    pcall(vim.fn.mkdir, dir, 'p')
+    local ok_write = pcall(vim.fn.writefile, { payload }, path)
+    local msg = ok_write and ('neg.nvim: scenarios written to ' .. path) or ('neg.nvim: failed to write ' .. path)
+    if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+  end, { nargs = '*', desc = 'neg.nvim: Write user scenarios to JSON (@path optional; defaults to stdpath(\'config\')/neg/scenarios.json)' })
+
+  -- ScenarioRead: load scenarios from JSON file into memory (merge/replace)
+  -- Usage: :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on]
+  vim.api.nvim_create_user_command('NegScenarioRead', function(opts)
+    local raw = (opts.args or '')
+    local tokens = {}
+    for t in string.gmatch(raw, "[^%s]+") do tokens[#tokens+1] = t end
+    local src = tokens[1]
+    local mode, use_notify = 'merge', true
+    for i = 2, #tokens do
+      local t = tokens[i]
+      if t == '--merge' then mode = 'merge' end
+      if t == '--replace' then mode = 'replace' end
+      if t:match('^%-%-notify=') or t == '--notify' then
+        local val = nil
+        if t == '--notify' and tokens[i+1] and tokens[i+1]:match('^(on|off)$') then val = tokens[i+1] end
+        val = val or t:match('^%-%-notify=(.+)$')
+        if val then use_notify = (val == 'on') end
+      end
+    end
+    local path
+    if src and src:sub(1,1) == '@' then path = src:sub(2) end
+    path = path or default_scenarios_path()
+    local ok_read, lines = pcall(vim.fn.readfile, path)
+    if not ok_read then
+      local msg = 'neg.nvim: failed to read ' .. path
+      if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+      return
+    end
+    local text = table.concat(lines or {}, '\n')
+    local ok_json, obj = pcall(vim.json_decode, text)
+    if not ok_json or type(obj) ~= 'table' then
+      local msg = 'neg.nvim: failed to decode scenarios JSON'
+      if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+      return
+    end
+    local incoming = obj.scenarios or obj
+    if type(incoming) ~= 'table' then incoming = {} end
+    if mode == 'replace' then
+      M._scenarios = incoming
+    else
+      M._scenarios = M._scenarios or {}
+      for k, v in pairs(incoming) do M._scenarios[k] = v end
+    end
+    local msg = ('neg.nvim: scenarios loaded (%s) from %s'):format(mode, path)
+    if use_notify and vim.notify then vim.notify(msg) else print(msg) end
+  end, { nargs = '*', desc = 'neg.nvim: Read scenarios from JSON (@path optional; merge or replace memory)' })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()
