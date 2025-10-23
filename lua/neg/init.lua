@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.37
+-- Version:     4.38
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -25,6 +25,8 @@ end
 local flags_from = U.flags_from
 
   local default_config = {
+    -- Global saturation scale (0..100). 100 = original palette, 0 = grayscale.
+    saturation = 100,
     transparent = false,
     terminal_colors = true,
   preset = nil, -- one of: 'soft', 'hard', 'pro', 'writing', 'accessibility', 'focus', 'presentation'
@@ -265,6 +267,74 @@ local function apply_preset(preset, cfg)
 end
 
 local function apply_terminal_colors() U.apply_terminal_colors(p) end
+
+-- Global saturation control: adjust all palette hex colors via HSL scaling
+local function set_palette_saturation(percent)
+  local v = tonumber(percent) or 100
+  if v < 0 then v = 0 end
+  if v > 100 then v = 100 end
+  -- Keep a pristine copy of the palette for idempotent transforms
+  if not M._palette_base then M._palette_base = vim.deepcopy(p) end
+  local base = M._palette_base
+  local function is_hex(s)
+    return type(s) == 'string' and s:match('^#%x%x%x%x%x%x$') ~= nil
+  end
+  local function hex_to_rgb(hex)
+    return tonumber(hex:sub(2,3),16), tonumber(hex:sub(4,5),16), tonumber(hex:sub(6,7),16)
+  end
+  local function rgb_to_hsl(r, g, b)
+    r, g, b = r/255, g/255, b/255
+    local max = math.max(r,g,b); local min = math.min(r,g,b)
+    local h, s, l
+    l = (max + min) / 2
+    if max == min then
+      h, s = 0, 0
+    else
+      local d = max - min
+      s = d / (1 - math.abs(2*l - 1))
+      if max == r then
+        h = ((g - b) / d) % 6
+      elseif max == g then
+        h = ((b - r) / d) + 2
+      else
+        h = ((r - g) / d) + 4
+      end
+      h = h * 60
+      if h < 0 then h = h + 360 end
+    end
+    return h, s, l
+  end
+  local function hsl_to_rgb(h, s, l)
+    local c = (1 - math.abs(2*l - 1)) * s
+    local x = c * (1 - math.abs(((h/60) % 2) - 1))
+    local m = l - c/2
+    local r1, g1, b1
+    if h < 60 then r1, g1, b1 = c, x, 0
+    elseif h < 120 then r1, g1, b1 = x, c, 0
+    elseif h < 180 then r1, g1, b1 = 0, c, x
+    elseif h < 240 then r1, g1, b1 = 0, x, c
+    elseif h < 300 then r1, g1, b1 = x, 0, c
+    else r1, g1, b1 = c, 0, x end
+    local r = math.floor((r1 + m) * 255 + 0.5)
+    local g = math.floor((g1 + m) * 255 + 0.5)
+    local b = math.floor((b1 + m) * 255 + 0.5)
+    if r < 0 then r = 0 elseif r > 255 then r = 255 end
+    if g < 0 then g = 0 elseif g > 255 then g = 255 end
+    if b < 0 then b = 0 elseif b > 255 then b = 255 end
+    return string.format('#%02x%02x%02x', r, g, b)
+  end
+  local scale = v / 100
+  for k, val in pairs(base) do
+    if is_hex(val) then
+      local r, g, b = hex_to_rgb(val)
+      local h, s, l = rgb_to_hsl(r, g, b)
+      local s2 = s * scale
+      p[k] = hsl_to_rgb(h, s2, l)
+    else
+      p[k] = val
+    end
+  end
+end
 
 local function apply_mode_accent(cfg)
   local ui = cfg and cfg.ui or {}
@@ -952,6 +1022,9 @@ function M.setup(opts)
   if type(opts) == 'table' and opts.force ~= nil then force_apply = opts.force and true or false end
   if cfg.force ~= nil then cfg.force = nil end
   M._config = cfg
+
+  -- Apply palette saturation before any highlight tables are required
+  set_palette_saturation(cfg.saturation or 100)
 
   -- Idempotent apply: skip if no changes and no function overrides
   if not force_apply and M._applied_key and type(cfg.overrides) ~= 'function' then
@@ -1720,6 +1793,20 @@ define_commands = function()
     complete = function() return { 'mono', 'ramp', 'ramp-soft', 'ramp-strong' } end,
     desc = 'neg.nvim: Set number colors (mono|ramp|ramp-soft|ramp-strong)'
   })
+
+  vim.api.nvim_create_user_command('NegSaturation', function(opts)
+    local v = tonumber(opts.args)
+    if not v then
+      print("neg.nvim: saturation must be a number in 0..100")
+      return
+    end
+    if v < 0 then v = 0 end
+    if v > 100 then v = 100 end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.saturation = v
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { '0','25','50','75','100' } end, desc = 'neg.nvim: Set global saturation (0..100); 100 = original palette' })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()

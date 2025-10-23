@@ -104,6 +104,7 @@ All options are optional. Defaults are shown below.
 
 ```lua
 require('neg').setup({
+  saturation = 100,                    -- global saturation scale 0..100 (100 = original, 0 = grayscale)
   transparent = false,                  -- boolean or { float, sidebar, statusline }
   -- transparent = { float = false, sidebar = false, statusline = false },
   terminal_colors = true,              -- set 16 ANSI terminal colors
@@ -294,6 +295,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagStrong — quick stronger virtual text background (blend ≈ 10)
 - :NegOperatorColors {families|mono|mono+} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
+- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
+- :NegSaturation {0..100} — set global saturation (100 = original, 0 = grayscale)
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)

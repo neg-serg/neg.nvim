@@ -563,3 +563,10 @@ Release date: 2025-10-23 03:37:50 +0300
 - :NegContrast: support `apply` to instantly set the suggested foreground via `:hi {Group} guifg=...`.
 - Docs: README/README.ru updated with new flags.
 - Meta: bump version and header.
+
+## [4.38]
+Release date: 2025-10-23 03:40:03 +0300
+- Global saturation: add `saturation = 100` option and runtime command `:NegSaturation {0..100}` to scale palette saturation via HSL (100 = original, 0 = grayscale).
+- Implementation: transforms the palette in-place from a pristine base before (re)applying highlights; idempotent and reversible.
+- Docs: README/README.ru updated (options + commands).
+- Meta: bump version and header.

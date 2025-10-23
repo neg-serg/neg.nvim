@@ -75,6 +75,7 @@ colorscheme neg
 
 ```lua
 require('neg').setup({
+  saturation = 100,                    -- глобальный масштаб насыщенности 0..100 (100 = исходная палитра, 0 = монохром)
   transparent = false,                  -- boolean или { float, sidebar, statusline }
   terminal_colors = true,               -- задать 16 ANSI цветов терминала
   preset = nil,                         -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation' | nil
@@ -168,6 +169,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagSoft / :NegDiagStrong — быстрые пресеты мягче/сильнее
 - :NegOperatorColors {families|mono|mono+} — режим окраски операторов
 - :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — пресеты ramp для чисел
+- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — пресеты ramp для чисел
+- :NegSaturation {0..100} — глобальная насыщенность (100 = исходная палитра, 0 = монохром)
 - :NegModeAccent {on|off|toggle} — акценты по режимам (CursorLine/StatusLine)
 - :NegSoftBorders {on|off|toggle} — мягкие границы (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
