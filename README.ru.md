@@ -319,6 +319,62 @@ require('neg').setup({
 - Выделение, альфа‑оверлей, фон виртуальных диагностик
   - Порядок применения (см. «Порядок применения»): фон диагностик → alpha overlay → модель выделения. Если Visual слишком мягкий — уменьшите `alpha_overlay` или используйте `:NegSearchVisibility`.
 
+### Сценарии (рецепты)
+
+- Спокойная презентация (ярче, но без шума)
+
+```lua
+require('neg').setup({
+  preset = 'presentation',
+  number_colors = 'ramp-soft',
+  ui = {
+    soft_borders = true,
+    diff_focus = false,
+    search_visibility = 'soft',
+    telescope_accents = false,
+  },
+})
+```
+
+- Высокий контраст (achromatopsia, strong)
+
+```lua
+require('neg').setup({
+  preset = 'accessibility',
+  alpha_overlay = 0,
+  ui = {
+    mode_accent = false,
+    focus_caret = false,
+    soft_borders = false,
+    diag_pattern = 'strong',
+    accessibility = {
+      achromatopsia = true,
+      strong_undercurl = true,
+      hc = 'strong',
+    },
+  },
+})
+-- Коротко в рантайме:
+-- :NegAccessibility achromatopsia on | :NegHc strong | :NegDiagPattern strong
+```
+
+- Минимум динамики (стабильная картинка)
+
+```lua
+require('neg').setup({
+  alpha_overlay = 0,
+  operator_colors = 'mono',
+  number_colors = 'mono',
+  ui = {
+    mode_accent = false,
+    focus_caret = false,
+    diff_focus = false,
+    outlines = false,
+    screenreader_friendly = true,
+  },
+})
+```
+
 ## Overrides
 
 Можно переопределять любые группы:

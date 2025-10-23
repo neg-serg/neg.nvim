@@ -445,6 +445,62 @@ require('neg').setup({
 - Selection, alpha overlay, diagnostics virtual bg
   - Apply order (see “Apply Order”): diagnostics virtual bg → alpha overlay → selection model. If your Visual looks too soft, reduce `alpha_overlay` or use `:NegSearchVisibility`.
 
+### Scenario Recipes
+
+- Calm presentation (brighter but not noisy)
+
+```lua
+require('neg').setup({
+  preset = 'presentation',
+  number_colors = 'ramp-soft',
+  ui = {
+    soft_borders = true,
+    diff_focus = false,
+    search_visibility = 'soft',
+    telescope_accents = false,
+  },
+})
+```
+
+- High contrast (achromatopsia, strong)
+
+```lua
+require('neg').setup({
+  preset = 'accessibility',
+  alpha_overlay = 0,
+  ui = {
+    mode_accent = false,
+    focus_caret = false,
+    soft_borders = false,
+    diag_pattern = 'strong',
+    accessibility = {
+      achromatopsia = true,
+      strong_undercurl = true,
+      hc = 'strong',
+    },
+  },
+})
+-- Runtime shorthand:
+-- :NegAccessibility achromatopsia on | :NegHc strong | :NegDiagPattern strong
+```
+
+- Minimum dynamics (stable visuals)
+
+```lua
+require('neg').setup({
+  alpha_overlay = 0,
+  operator_colors = 'mono',
+  number_colors = 'mono',
+  ui = {
+    mode_accent = false,
+    focus_caret = false,
+    diff_focus = false,
+    outlines = false,
+    screenreader_friendly = true,
+  },
+})
+```
+
 ## Overrides
 
 You can override any highlight groups:
