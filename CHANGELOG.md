@@ -677,3 +677,7 @@ Release date: 2025-10-23 16:02:00 +0300
 - Plugins: fzf-lua coverage — neutral defaults for picker and preview
   (`FzfLuaNormal/Border/Title/CursorLine/Match`, preview variants).
 - Setup/validator/docs updated; no behavioral change for Telescope extensions (neutral defaults already applied).
+## [4.57]
+Release date: 2025-10-23 16:18:00 +0300
+- Apply order: make code match docs — accessibility first, then diagnostics virtual bg, then alpha overlay, then selection model; overrides remain last.
+- Docs: Known Interactions note about `dim_inactive` not overriding `WinSeparator` mappings and outlines keeping precedence (EN/RU).

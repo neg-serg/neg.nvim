@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.56
+-- Version:     4.57
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1326,6 +1326,14 @@ function M.setup(opts)
   apply_markup_prefs(cfg)
   apply_operator_colors(cfg.operator_colors)
   apply_number_colors(cfg.number_colors)
+
+  -- Apply order (as documented): accessibility → diagnostics virtual bg → alpha overlay → selection model → others → overrides
+  apply_accessibility_opts(cfg)
+  if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
+  apply_alpha_overlay(cfg)
+  apply_selection_model(cfg)
+
+  -- Other feature toggles
   apply_dim_inactive(cfg)
   apply_mode_accent(cfg)
   apply_focus_caret(cfg)
@@ -1335,7 +1343,6 @@ function M.setup(opts)
   apply_diff_focus(cfg)
   apply_light_signs(cfg)
   apply_punct_family(cfg)
-  apply_accessibility_opts(cfg)
   apply_diag_pattern(cfg)
   apply_lexeme_cues(cfg)
   apply_thick_cursor(cfg)
@@ -1345,9 +1352,8 @@ function M.setup(opts)
   apply_screenreader(cfg)
   apply_telescope_accents(cfg)
   apply_path_separator(cfg)
-  if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
-  apply_selection_model(cfg)
-  apply_alpha_overlay(cfg)
+
+  -- User overrides last
   apply_overrides(cfg.overrides)
   define_commands()
   if not autocmds_defined then

@@ -353,6 +353,8 @@ require('neg').setup({
 - WinSeparator/FloatBorder (soft_borders, outlines)
   - Soft borders осветляет `WinSeparator`/`FloatBorder` глобально; outlines переназначает `WinSeparator` поканально на активный/неактивный.
   - Итог: outlines имеет приоритет для `WinSeparator`; soft borders продолжает влиять на `FloatBorder`.
+ - Dim inactive и outlines
+  - `ui.dim_inactive` переназначает только `LineNr` (и базовые NormalNC/WinBarNC) по окну и не изменяет `WinSeparator`; приоритет для разделителей остаётся за outlines.
 - Фоны Diff (diff_focus, screenreader)
   - Diff focus усиливает `Diff*` в `:diff`; screenreader снимает это усиление для более спокойного вывода.
 - Telescope + границы
