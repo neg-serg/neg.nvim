@@ -1,11 +1,12 @@
 local p = require('neg.palette')
 
+-- Neutral defaults; enhanced accents are applied conditionally from init.lua
 return {
-  TelescopeMatching={bg='NONE', fg=p.shade_19, italic=true},
-  TelescopeSelection={fg=p.shade_17},
-  TelescopeBorder={fg='#111d26'},
-  TelescopePreviewBorder={fg='#111d26'},
-  TelescopePromptBorder={fg='#111d26'},
-  TelescopeResultsBorder={fg='#111d26'},
-  TelescopePathSeparator={link='Normal'},
+  TelescopeMatching = { underline = true },
+  TelescopeSelection = { link = 'CursorLine' },
+  TelescopeBorder = { link = 'WinSeparator' },
+  TelescopePreviewBorder = { link = 'WinSeparator' },
+  TelescopePromptBorder = { link = 'WinSeparator' },
+  TelescopeResultsBorder = { link = 'WinSeparator' },
+  TelescopePathSeparator = { link = 'Normal' },
 }

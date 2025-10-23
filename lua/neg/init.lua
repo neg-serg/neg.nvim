@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     4.29
--- Last Change: 22-10-2025
+-- Version:     4.30
+-- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -73,6 +73,8 @@ local flags_from = U.flags_from
       search_visibility = 'default',
       -- Screenreader friendly: reduce dynamic accents and colored backgrounds
       screenreader_friendly = false,
+      -- Enhanced accents for Telescope (matching/selection/borders); off by default
+      telescope_accents = false,
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -710,6 +712,21 @@ local function apply_screenreader(cfg)
   end
 end
 
+local function apply_telescope_accents(cfg)
+  local ui = cfg and cfg.ui or {}
+  if not (ui and ui.telescope_accents) then return end
+  -- Accented matching/selection/borders for Telescope
+  -- Keep tasteful: emphasize matches and selection; borders follow soft_borders if enabled
+  local match_fg = p.search_color or p.include_color or p.keyword3_color
+  hi(0, 'TelescopeMatching', { fg = match_fg, italic = true, underline = false })
+  -- Selection: use CursorLine but ensure fg remains readable
+  local cl = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
+  local sel = { }
+  if cl.bg then sel.bg = cl.bg end
+  hi(0, 'TelescopeSelection', sel)
+  -- Borders: if soft_borders already set WinSeparator, leave links; nothing to do here
+end
+
 local function apply_dim_inactive(cfg)
   local ui = cfg and cfg.ui or {}
   local enable = ui and ui.dim_inactive == true
@@ -1019,6 +1036,7 @@ function M.setup(opts)
   apply_reading_mode(cfg)
   apply_search_visibility(cfg)
   apply_screenreader(cfg)
+  apply_telescope_accents(cfg)
   apply_overrides(cfg.overrides)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   define_commands()
@@ -1237,6 +1255,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.telescope_accents = true
+    elseif arg == 'off' then
+      newcfg.ui.telescope_accents = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.telescope_accents = not (cfg.ui and cfg.ui.telescope_accents == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set enhanced Telescope accents (matching/selection/borders)'
   })
 
   vim.api.nvim_create_user_command('NegDiagSoft', function()

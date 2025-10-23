@@ -510,3 +510,10 @@ Release date: 2025-10-23 02:49:53 +0300
   - Screenreader friendly: `ui.screenreader_friendly` — снижает динамические акценты.
 - Docs: README/README.ru updated (options + commands).
 - Meta: bump version.
+
+## [4.30]
+Release date: 2025-10-23 03:19:51 +0300
+- Telescope: neutral defaults restored (no strong blue). Enhanced accents moved behind new option `ui.telescope_accents = false` by default.
+- Command: add `:NegTelescopeAccents {on|off|toggle}` to control enhanced Telescope accents at runtime.
+- Docs: README/README.ru updated (options + commands). Clarified accessibility high‑contrast `ui.accessibility.hc` option in English README.
+- Meta: bump version and update `Last Change` header in `lua/neg/init.lua`.

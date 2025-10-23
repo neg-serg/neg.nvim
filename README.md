@@ -118,11 +118,20 @@ require('neg').setup({
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
     light_signs = false,               -- soften sign icons (DiagnosticSign*, GitSigns*) without changing hue
+    diag_pattern = 'none',             -- diagnostics pattern preset: 'none' | 'minimal' | 'strong'
+    lexeme_cues = 'off',              -- functions underline; types underline+bold (off|minimal|strong)
+    thick_cursor = false,             -- thicker CursorLine/CursorLineNr for TUI
+    outlines = false,                 -- active/inactive window outlines via winhighlight
+    reading_mode = false,             -- near-monochrome syntax with clearer structure
+    search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
+    screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
+    telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
       strong_tui_cursor = false,       -- stronger Cursor/TermCursor/Visual for TUI
       achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue
+      hc = 'off',                      -- high‑contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
     },
   },
   treesitter = {
@@ -283,12 +292,13 @@ require('neg').setup({ preset = 'hard' })
 - :NegDiagBgBlend {0..100} — set blend value when mode = 'blend'
 - :NegDiagSoft — quick softer virtual text background (blend ≈ 20)
 - :NegDiagStrong — quick stronger virtual text background (blend ≈ 10)
-- :NegOperatorColors {families|mono} — switch operator coloring mode at runtime
+- :NegOperatorColors {families|mono|mono+} — switch operator coloring mode at runtime
 - :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — switch number coloring mode/preset
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
+- :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
 - :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues

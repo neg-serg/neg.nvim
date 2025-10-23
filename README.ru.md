@@ -104,6 +104,7 @@ require('neg').setup({
     reading_mode = false,               -- режим чтения (почти монохром)
     search_visibility = 'default',      -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
+    telescope_accents = false,          -- усиленные акценты для Telescope (совпадения/выделение/границы)
 
     accessibility = {
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
@@ -171,6 +172,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegSoftBorders {on|off|toggle} — мягкие границы (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок
+- :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
 - :NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}
 - :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
 - :NegLexemeCues {off|minimal|strong} — подсказки для функций/типов
