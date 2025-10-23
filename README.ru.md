@@ -414,6 +414,9 @@ require('neg').setup({
 
 - Терминал (TUI)
 
+  - Когда: работа в терминале без прозрачности; нужно чёткое выделение (kitty) и спокойные значки.
+  - Что меняется: выключаем альфа‑оверлей мягких фонов, включаем «толстый» курсор и light_signs, оставляем нейтральные границы и diff_focus.
+
 ```lua
 -- Совет: включите truecolor в Neovim: :set termguicolors
 require('neg').setup({
@@ -433,6 +436,9 @@ require('neg').setup({
 
 - GUI (Neovide/Goneovim и т.п.)
 
+  - Когда: GUI‑фронтенды; хочется мягких границ и «панельных» флоатов, лёгкие акценты.
+  - Что меняется: мягкие границы + панельный фон флоатов, лёгкий alpha overlay, опциональные акценты Telescope.
+
 ```lua
 require('neg').setup({
   saturation = 95,
@@ -450,6 +456,9 @@ require('neg').setup({
 ```
 
 - Яркая презентация
+
+  - Когда: демо/проектор, где акценты должны читаться издалека.
+  - Что меняется: пресет presentation, сильнее числа/поиск, отключаем динамические акценты.
 
 ```lua
 require('neg').setup({
@@ -469,6 +478,9 @@ require('neg').setup({
 
 - Дружелюбно к скринридеру
 
+  - Когда: пользователи скринридера или тем, кому важна стабильная картинка.
+  - Что меняется: стабилизируем акценты, achromatopsia + мягкий high‑contrast, сильные undercurl, без diff focus.
+
 ```lua
 require('neg').setup({
   alpha_overlay = 0,
@@ -486,6 +498,23 @@ require('neg').setup({
     },
   },
 })
+```
+
+- Терминал + kitty + голубые разделители путей (как в zsh)
+
+  - Когда: TUI с kitty‑выделением и голубыми разделителями путей как в zsh.
+  - Что меняется: kitty‑выделение + голубые разделители (цвет задаётся явно или ключом палитры).
+
+```lua
+require('neg').setup({
+  ui = {
+    selection_model = 'kitty',
+    path_separator_blue = true,
+    -- необязательный цвет (hex или ключ палитры):
+    -- path_separator_color = 'include_color', -- или '#22aaff'
+  },
+})
+-- В рантайме: :NegPathSep on | :NegPathSepColor include_color
 ```
 
 ## Overrides

@@ -540,6 +540,9 @@ require('neg').setup({
 
 - Terminal (TUI)
 
+  - When: terminal usage without transparency; want crisp selection (kitty) and calmer signs.
+  - Changes: disables alpha overlay, enables thicker cursor and light signs, keeps neutral borders and diff focus.
+
 ```lua
 -- Tip: ensure Neovim uses truecolor: :set termguicolors
 require('neg').setup({
@@ -559,6 +562,9 @@ require('neg').setup({
 
 - GUI (Neovide/Goneovim, etc.)
 
+  - When: GUI frontends; prefer soft borders and panel floats with mild accents.
+  - Changes: soft borders + panel float bg, light alpha overlay, optional Telescope accents.
+
 ```lua
 require('neg').setup({
   saturation = 95,
@@ -576,6 +582,9 @@ require('neg').setup({
 ```
 
 - Bright presentation
+
+  - When: live demos/projectors where accents need to read from a distance.
+  - Changes: presentation preset, stronger numbers and search, disables dynamic accents.
 
 ```lua
 require('neg').setup({
@@ -595,6 +604,9 @@ require('neg').setup({
 
 - Screenreader‑friendly
 
+  - When: screenreader users or anyone preferring very stable visuals.
+  - Changes: stabilizes accents, achromatopsia + soft high‑contrast, strong undercurls, no diff focus.
+
 ```lua
 require('neg').setup({
   alpha_overlay = 0,
@@ -612,6 +624,23 @@ require('neg').setup({
     },
   },
 })
+```
+
+- Terminal + kitty + blue path separators (zsh‑like)
+
+  - When: TUI with kitty‑style selection and blue path separators like zsh.
+  - Changes: kitty selection + blue path separators (configurable color or palette key).
+
+```lua
+require('neg').setup({
+  ui = {
+    selection_model = 'kitty',
+    path_separator_blue = true,
+    -- optional custom color (hex or palette key):
+    -- path_separator_color = 'include_color', -- or '#22aaff'
+  },
+})
+-- Runtime: :NegPathSep on | :NegPathSepColor include_color
 ```
 
 ## Overrides
