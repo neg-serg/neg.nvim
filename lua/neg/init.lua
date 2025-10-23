@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.54
+-- Version:     4.55
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -163,6 +163,15 @@ local flags_from = U.flags_from
     flash = true,
     ufo = true,
     bqf = true,
+    -- phase 2 additions
+    glance = true,
+    barbecue = true,
+    illuminate = true,
+    hlslens = true,
+    virt_column = true,
+    dap_virtual_text = true,
+    mini_pick = true,
+    snacks = true,
   },
   overrides = nil,
   diagnostics_virtual_bg = false,
@@ -1293,6 +1302,15 @@ function M.setup(opts)
     flash = 'neg.groups.plugins.flash',
     ufo = 'neg.groups.plugins.ufo',
     bqf = 'neg.groups.plugins.bqf',
+    -- phase 2 additions
+    glance = 'neg.groups.plugins.glance',
+    barbecue = 'neg.groups.plugins.barbecue',
+    illuminate = 'neg.groups.plugins.illuminate',
+    hlslens = 'neg.groups.plugins.hlslens',
+    virt_column = 'neg.groups.plugins.virt_column',
+    dap_virtual_text = 'neg.groups.plugins.dap_virtual_text',
+    mini_pick = 'neg.groups.plugins.mini_pick',
+    snacks = 'neg.groups.plugins.snacks',
   }) do
     if cfg.plugins[key] ~= false then safe_apply(mod) end
   end

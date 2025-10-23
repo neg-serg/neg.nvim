@@ -663,3 +663,12 @@ Release date: 2025-10-23 04:46:00 +0300
 Release date: 2025-10-23 04:53:00 +0300
 - Path separators scope expanded: when `ui.path_separator_blue` is enabled, also tint StartifySlash, NavicSeparator, and WhichKeySeparator (respecting plugin toggles).
 - Docs: clarify scope in Options/Commands.
+-
+## [4.55]
+Release date: 2025-10-23 15:41:00 +0300
+- Plugins: add neutral integrations (toggleable) for Phase 2 set:
+  glance.nvim, barbecue.nvim, vim-illuminate, hlslens.nvim, virt-column.nvim,
+  nvim-dap-virtual-text, mini.pick, snacks.nvim.
+- Setup: new flags under `plugins` for each; enabled by default.
+- Validator: include new modules.
+- Docs: README (EN/RU) plugin lists/options updated.

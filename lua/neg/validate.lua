@@ -77,6 +77,15 @@ local function load_tables()
     'neg.groups.plugins.flash',
     'neg.groups.plugins.ufo',
     'neg.groups.plugins.bqf',
+    -- phase 2 additions
+    'neg.groups.plugins.glance',
+    'neg.groups.plugins.barbecue',
+    'neg.groups.plugins.illuminate',
+    'neg.groups.plugins.hlslens',
+    'neg.groups.plugins.virt_column',
+    'neg.groups.plugins.dap_virtual_text',
+    'neg.groups.plugins.mini_pick',
+    'neg.groups.plugins.snacks',
   }
   local tables = {}
   for _, m in ipairs(mods) do
@@ -137,6 +146,15 @@ local function load_modules()
     'neg.groups.plugins.flash',
     'neg.groups.plugins.ufo',
     'neg.groups.plugins.bqf',
+    -- phase 2 additions
+    'neg.groups.plugins.glance',
+    'neg.groups.plugins.barbecue',
+    'neg.groups.plugins.illuminate',
+    'neg.groups.plugins.hlslens',
+    'neg.groups.plugins.virt_column',
+    'neg.groups.plugins.dap_virtual_text',
+    'neg.groups.plugins.mini_pick',
+    'neg.groups.plugins.snacks',
   }
   local modules = {}
   for _, m in ipairs(mods) do

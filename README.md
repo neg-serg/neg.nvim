@@ -15,7 +15,9 @@ clean setup API, plugin toggles, and a simple validator used in CI.
   mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
   notify, treesitter‑context, hop, rainbow‑delimiters, obsidian,
   diffview, fidget, toggleterm, dashboard‑nvim, heirline, oil.nvim,
-  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf
+  blink.cmp, leap.nvim, flash.nvim, nvim‑ufo, nvim‑bqf,
+  glance.nvim, barbecue.nvim, vim‑illuminate, hlslens.nvim, virt‑column.nvim,
+  nvim‑dap‑virtual‑text, mini.pick, snacks.nvim
 - Setup options: transparent backgrounds, terminal ANSI colors, extended style
   categories (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
 - Diagnostics with optional virtual text background (blend)
@@ -194,6 +196,15 @@ require('neg').setup({
     flash = true,
     ufo = true,
     bqf = true,
+    -- phase 2 additions
+    glance = true,
+    barbecue = true,
+    illuminate = true,
+    hlslens = true,
+    virt_column = true,
+    dap_virtual_text = true,
+    mini_pick = true,
+    snacks = true,
     -- additional supported plugins
     alpha = true,
     mini_statusline = true,
