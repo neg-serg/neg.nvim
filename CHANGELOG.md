@@ -605,3 +605,8 @@ Release date: 2025-10-23 03:50:20 +0300
 Release date: 2025-10-23 03:59:02 +0300
 - NormalFloat: remove bluish tint by deriving `bg_float`/`bg_panel`/`border_color` from base background (neutral lighten/darken) instead of tinted shades.
 - Impact: all float windows now use neutral backgrounds by default; Telescope already linked to Neutral in 4.43.
+
+## [4.45]
+Release date: 2025-10-23 04:01:02 +0300
+- NormalFloat: fully aligned with `Normal` (no separate gray tint). The float background now exactly matches the main background out of the box.
+- Rationale: previous gray shade was still visually distinct. This change restores the historic behavior of identical backgrounds.

@@ -15,7 +15,8 @@ return {
   -- Use explicit background when not in transparent mode; apply_transparent() can override to NONE
   Normal={bg=p.bg_default, fg=p.default_color},
   NormalNC={link='Normal'},
-  NormalFloat={bg=p.bg_float, fg=p.default_color},
+  -- Floats use the same background as Normal by default (no extra tint)
+  NormalFloat={link='Normal'},
   FloatTitle={fg=p.keyword3_color, bold=true},
   WinBar={fg=p.keyword3_color},
   WinBarNC={fg=p.comment_color},
