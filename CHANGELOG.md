@@ -681,3 +681,6 @@ Release date: 2025-10-23 16:02:00 +0300
 Release date: 2025-10-23 16:18:00 +0300
 - Apply order: make code match docs — accessibility first, then diagnostics virtual bg, then alpha overlay, then selection model; overrides remain last.
 - Docs: Known Interactions note about `dim_inactive` not overriding `WinSeparator` mappings and outlines keeping precedence (EN/RU).
+## [4.58]
+Release date: 2025-10-23 16:28:00 +0300
+- Docs: add concise “Plugin Flags — Quick Summary” (EN/RU) listing integration keys, defaults, and categories.

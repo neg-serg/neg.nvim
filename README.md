@@ -391,6 +391,22 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — print contrast ratio; accepts explicit bg, can target AA/AAA and print/apply a suggested :hi
 - :NegExport — export current core/diagnostics/syntax colors with quick tips
 
+### Plugin Flags — Quick Summary
+
+Defaults: all listed integrations are enabled unless noted. Toggle by setting `plugins.<key> = false` in setup.
+
+- Pickers: `telescope`, `fzf_lua`, `mini_pick`, `snacks` (on)
+- Completion: `cmp`, `blink` (on)
+- Git & Diff: `git`, `gitsigns`, `diffview` (on)
+- Files & Dashboards: `neo_tree` (on), `nvim_tree` (off), `oil` (on), `startify` (on), `alpha` (on), `dashboard` (on)
+- Status/Tab/Winbar: `bufferline`, `mini_statusline`, `mini_tabline`, `heirline`, `barbecue`, `navic`, `navbuddy` (on)
+- LSP/UI: `lspsaga`, `noice`, `notify`, `treesitter_context`, `treesitter_playground`, `glance`, `illuminate`, `hlslens` (on)
+- Navigation/Motion: `hop`, `leap`, `flash`, `harpoon`, `rainbow` (on)
+- Diagnostics/Tasks: `trouble`, `todo_comments`, `overseer` (on)
+- Debug: `dap`, `dapui`, `dap_virtual_text`, `bqf` (on)
+- Structure/Indent: `indent`, `virt_column`, `ufo` (on)
+- Notes/Testing: `obsidian`, `neotest`, `which_key`, `toggleterm` (on)
+
 ### Quick Toggles
 
 | Command | Effect | Default |

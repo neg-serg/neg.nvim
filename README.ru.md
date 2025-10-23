@@ -246,6 +246,22 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
 - :NegExport — экспорт текущих цветов (core/diagnostics/syntax) с подсказками
 
+### Флаги плагинов — Сводка
+
+По умолчанию все перечисленные интеграции включены (если не указано иное). Отключайте через `plugins.<ключ> = false` в setup.
+
+- Поисковые пикеры: `telescope`, `fzf_lua`, `mini_pick`, `snacks` (вкл)
+- Автодополнение: `cmp`, `blink` (вкл)
+- Git и Diff: `git`, `gitsigns`, `diffview` (вкл)
+- Файлы и дашборды: `neo_tree` (вкл), `nvim_tree` (выкл), `oil` (вкл), `startify` (вкл), `alpha` (вкл), `dashboard` (вкл)
+- Статус/табы/винбар: `bufferline`, `mini_statusline`, `mini_tabline`, `heirline`, `barbecue`, `navic`, `navbuddy` (вкл)
+- LSP/UI: `lspsaga`, `noice`, `notify`, `treesitter_context`, `treesitter_playground`, `glance`, `illuminate`, `hlslens` (вкл)
+- Навигация/переходы: `hop`, `leap`, `flash`, `harpoon`, `rainbow` (вкл)
+- Диагностика/задачи: `trouble`, `todo_comments`, `overseer` (вкл)
+- Отладка: `dap`, `dapui`, `dap_virtual_text`, `bqf` (вкл)
+- Структура/отступы: `indent`, `virt_column`, `ufo` (вкл)
+- Заметки/тесты: `obsidian`, `neotest`, `which_key`, `toggleterm` (вкл)
+
 ### Быстрые переключатели
 
 | Команда | Действие | По умолчанию |
