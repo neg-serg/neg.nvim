@@ -589,3 +589,9 @@ Release date: 2025-10-23 03:47:13 +0300
 - Focus caret: new `ui.focus_caret = true` (default on) and `:NegFocusCaret {on|off|toggle}` — slightly boosts `CursorLine` contrast when overall contrast is below AA (~4.5:1), with an autocmd that coexists with mode accents.
 - Docs: README/README.ru updated (options + commands).
 - Meta: bump version and header.
+
+## [4.42]
+Release date: 2025-10-23 03:48:40 +0300
+- Accessibility (achromatopsia): softly increase visibility of structure zones — `Folded` and `ColorColumn` now get slightly stronger backgrounds to stay readable without color cues.
+- Docs: README/README.ru note the behavior under `ui.accessibility.achromatopsia`.
+- Meta: bump version and header.

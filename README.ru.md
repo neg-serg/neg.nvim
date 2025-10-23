@@ -113,7 +113,7 @@ require('neg').setup({
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
       strong_undercurl = false,         -- более заметные undercurl (с underline‑fallback)
       -- удалено: strong_tui_cursor
-      achromatopsia = false,            -- монохром/высокий контраст (минимум зависимости от цвета)
+      achromatopsia = false,            -- монохром/высокий контраст (минимум зависимости от цвета); повышает читаемость Folded/ColorColumn
       hc = 'off',                       -- high‑contrast для achromatopsia: 'off' | 'soft' | 'strong'
     },
   },

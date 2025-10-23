@@ -133,7 +133,7 @@ require('neg').setup({
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
       -- removed: strong_tui_cursor
-      achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue
+      achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue; boosts Folded/ColorColumn visibility
       hc = 'off',                      -- high‑contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
     },
   },

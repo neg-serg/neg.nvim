@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.41
+-- Version:     4.42
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -711,6 +711,18 @@ local function apply_accessibility_opts(cfg)
     hi(0, 'DiffChange', { bg = U.lighten(p.bg_default, 8),  fg = 'NONE' })
     hi(0, 'DiffDelete', { bg = U.darken(p.bg_default, 10),  fg = 'NONE' })
     hi(0, 'DiffText',   { bg = U.lighten(p.bg_default, 16), fg = 'NONE', bold = true })
+    -- 4.1) Structure zones: make Folded/ColorColumn slightly more visible even without hue
+    do
+      local folded_base = (U.get_hl_colors and U.get_hl_colors('Folded')) or {}
+      local f_spec = { bg = U.darken(p.bg_default, 8) }
+      if folded_base.fg then f_spec.fg = folded_base.fg else f_spec.fg = p.default_color end
+      hi(0, 'Folded', f_spec)
+    end
+    do
+      local cc_base = (U.get_hl_colors and U.get_hl_colors('ColorColumn')) or {}
+      local cc_spec = { bg = U.darken(p.bg_default, 12) }
+      hi(0, 'ColorColumn', cc_spec)
+    end
     -- 5) Comments without italics
     hi(0, '@comment', { fg = p.comment_color, italic = false })
   end
