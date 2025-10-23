@@ -183,6 +183,22 @@ require('neg').setup({ preset = 'hard' })
 | presentation | Ярче акценты | Более видимые CursorLine/CursorLineNr; сильнее Title и поиск | Для демо/докладов |
 | none | Без пресета | Нет доп. изменений | Используйте явные опции |
 
+#### Быстрые примеры (пресет + 1–2 тумблера)
+
+```lua
+-- Focus + мягкие границы
+require('neg').setup({ preset = 'focus', ui = { soft_borders = true } })
+
+-- Presentation + нейтральный Telescope (без усиленных акцентов)
+require('neg').setup({ preset = 'presentation', ui = { telescope_accents = false } })
+
+-- Accessibility + мягкий high‑contrast
+require('neg').setup({ preset = 'accessibility', ui = { accessibility = { achromatopsia = true, hc = 'soft' } } })
+
+-- Pro (без курсива) + моно операторы
+require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
+```
+
 ## Команды
 
 - :NegToggleTransparent — переключить прозрачность и применить тему

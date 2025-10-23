@@ -308,6 +308,22 @@ require('neg').setup({ preset = 'hard' })
 | presentation | Brighter accents | Stronger CursorLine/CursorLineNr; Title and Search emphasized | For demos and talks |
 | none | No preset | No extra changes | Use explicit options only |
 
+#### Quick Examples (preset + 1–2 toggles)
+
+```lua
+-- Focus with soft borders
+require('neg').setup({ preset = 'focus', ui = { soft_borders = true } })
+
+-- Presentation with neutral Telescope (no extra accents)
+require('neg').setup({ preset = 'presentation', ui = { telescope_accents = false } })
+
+-- Accessibility with soft high‑contrast pack
+require('neg').setup({ preset = 'accessibility', ui = { accessibility = { achromatopsia = true, hc = 'soft' } } })
+
+-- Pro (no italics) with mono operators
+require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
+```
+
 ## Commands
 
 - :NegToggleTransparent — toggle transparency and re‑apply the theme
