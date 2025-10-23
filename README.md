@@ -20,7 +20,7 @@ clean setup API, plugin toggles, and a simple validator used in CI.
 - Overrides via table or function (receives palette)
 - Validator script and GitHub Actions workflow
 
-See the full history in CHANGELOG.md.
+See the full history in CHANGELOG.md and the thematic overview in RELEASE_NOTES.md (Russian: RELEASE_NOTES.ru.md).
 
 ## Installation
 
