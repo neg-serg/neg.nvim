@@ -243,8 +243,9 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegSearchVisibility {default|soft|strong} — видимость поиска/текущего совпадения
 - :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
 - :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
-- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — посчитать контраст; можно задать фон, выбрать цель (AA/AAA) и распечатать/применить :hi
+- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] [--json] [--notify=off|on] — посчитать контраст; есть JSON‑вывод и apply
 - :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — экспорт подсветок (выбор секций; доступен JSON)
+- :NegScenario {focus|presentation|screenreader|tui|gui|accessibility} — быстро применить готовый набор тумблеров
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — распечатать интеграции (фильтр по состоянию/подстроке; JSON-вывод и управление notify)
 
 ### Флаги плагинов — Сводка

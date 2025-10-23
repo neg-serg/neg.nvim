@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.62
+-- Version:     4.63
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1686,7 +1686,7 @@ define_commands = function()
   vim.api.nvim_create_user_command('NegContrast', function(opts)
     local raw = (opts.args or '')
     if raw == '' then
-      print("neg.nvim: usage: :NegContrast {Group|@capture} [vs {Group|#rrggbb}]")
+      print("neg.nvim: usage: :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] [--json] [--notify=off|on]")
       return
     end
     -- Parse "<group> [vs <bg>] [--target AA|AAA] [apply]"
@@ -1696,6 +1696,7 @@ define_commands = function()
     local bg_arg
     local target_label
     local apply_now = false
+    local use_json, use_notify = false, true
     for i = 2, #tokens do
       local t = tokens[i]
       local tl = t:lower()
@@ -1707,6 +1708,13 @@ define_commands = function()
         target_label = tostring(tokens[i+1]):upper()
       elseif tl:match('^%-%-target=') then
         target_label = tostring(t:sub(10)):upper()
+      elseif tl == '--json' then
+        use_json = true
+      elseif tl:match('^%-%-notify=') or tl == '--notify' then
+        local val = nil
+        if tl == '--notify' and tokens[i+1] and tokens[i+1]:match('^(on|off)$') then val = tokens[i+1] end
+        val = val or tl:match('^%-%-notify=(.+)$')
+        if val then use_notify = (val == 'on') end
       end
     end
     local function get_hl(name_, follow)
@@ -1772,12 +1780,23 @@ define_commands = function()
       end
     end
     if (not fg) or (not bg) then
-      print("neg.nvim: can't resolve colors for '" .. name .. "' (fg=" .. tostring(fg) .. ", bg=" .. tostring(bg) .. ")")
+      local err = "neg.nvim: can't resolve colors for '" .. name .. "' (fg=" .. tostring(fg) .. ", bg=" .. tostring(bg) .. ")"
+      if use_json then
+        local payload = vim.json_encode({ error = 'resolve_failed', group = name, fg = fg, bg = bg })
+        if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      else
+        print(err)
+      end
       return
     end
     local ratio = contrast_ratio(fg, bg)
     if not ratio then
-      print("neg.nvim: failed to compute contrast for '" .. name .. "'")
+      if use_json then
+        local payload = vim.json_encode({ error = 'compute_failed', group = name })
+        if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      else
+        print("neg.nvim: failed to compute contrast for '" .. name .. "'")
+      end
       return
     end
     local grade
@@ -1814,29 +1833,54 @@ define_commands = function()
       end
       return best, best_ratio, best_mode, best_pct
     end
+    local result = {
+      group = name,
+      bg_source = bg_arg or 'auto',
+      fg = fg,
+      bg = bg,
+      contrast = tonumber(string.format('%.2f', ratio)),
+      grade = grade,
+      target = (target_label or 'AA'),
+      meets = false,
+    }
     local vs_str = bg_arg and (' vs ' .. bg_arg) or ''
-    local msg = string.format("neg.nvim: %s%s — fg %s on bg %s → contrast %.2f (%s)", name, vs_str, fg, bg, ratio, grade)
-    print(msg)
+    if not use_json then
+      local msg = string.format("neg.nvim: %s%s — fg %s on bg %s → contrast %.2f (%s)", name, vs_str, fg, bg, ratio, grade)
+      print(msg)
+    end
     local target_ratio = 4.5
     if target_label == 'AAA' then target_ratio = 7.0
     elseif target_label == 'AA' or target_label == nil then target_ratio = 4.5
     end
     if ratio >= target_ratio then
-      print(string.format("  · OK: meets target %s (%.1f)", target_label or 'AA', target_ratio))
+      result.meets = true
+      if use_json then
+        local payload = vim.json_encode(result)
+        if use_notify and vim.notify then vim.notify(payload) else print(payload) end
+      else
+        print(string.format("  · OK: meets target %s (%.1f)", target_label or 'AA', target_ratio))
+      end
       return
     end
     local sug_fg, sug_r, sug_mode, sug_pct = find_suggestion(target_ratio)
     if sug_fg and sug_r then
-      print(string.format("  · suggestion (%s): set fg=%s (≈%.2f, %s %d%%)", target_label or 'AA', sug_fg, sug_r, sug_mode, sug_pct))
-      local hi_line = string.format(":hi %s guifg=%s", name, sug_fg)
-      print("    " .. hi_line)
+      result.suggestion = { fg = sug_fg, contrast = tonumber(string.format('%.2f', sug_r)), mode = sug_mode, percent = sug_pct }
+      if not use_json then
+        print(string.format("  · suggestion (%s): set fg=%s (≈%.2f, %s %d%%)", target_label or 'AA', sug_fg, sug_r, sug_mode, sug_pct))
+        local hi_line = string.format(":hi %s guifg=%s", name, sug_fg)
+        print("    " .. hi_line)
+      end
       if apply_now then
         local base = (U.get_hl_colors and U.get_hl_colors(name)) or {}
         local spec = { fg = sug_fg }
         if base.bg then spec.bg = base.bg end
         if base.sp then spec.sp = base.sp end
         hi(0, name, spec)
-        print("    applied")
+        if not use_json then print("    applied") end
+      end
+      if use_json then
+        local payload = vim.json_encode(result)
+        if use_notify and vim.notify then vim.notify(payload) else print(payload) end
       end
       return
     end
@@ -1844,13 +1888,22 @@ define_commands = function()
     if target_ratio >= 7.0 then
       local aa_fg, aa_r, aa_mode, aa_pct = find_suggestion(4.5)
       if aa_fg and aa_r then
-        print(string.format("  · can't reach AAA by fg alone (<=60%%). Closest AA: fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
-        print(string.format("    :hi %s guifg=%s", name, aa_fg))
+        result.suggestion = { fg = aa_fg, contrast = tonumber(string.format('%.2f', aa_r)), mode = aa_mode, percent = aa_pct, note = 'AA-fallback' }
+        if not use_json then
+          print(string.format("  · can't reach AAA by fg alone (<=60%%). Closest AA: fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
+          print(string.format("    :hi %s guifg=%s", name, aa_fg))
+        end
       else
-        print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong")
+        result.error = 'no_suggestion'
+        if not use_json then print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong") end
       end
     else
-      print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong")
+      result.error = 'no_suggestion'
+      if not use_json then print("  · no near fg-only solution found; consider adjusting background or use :NegHc soft|strong") end
+    end
+    if use_json then
+      local payload = vim.json_encode(result)
+      if use_notify and vim.notify then vim.notify(payload) else print(payload) end
     end
   end, { nargs = '+', desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"' })
 
@@ -2155,6 +2208,61 @@ define_commands = function()
     newcfg.alpha_overlay = v
     M.setup(newcfg)
   end, { nargs = 1, complete = function() return { '0','5','10','15','20','25','30' } end, desc = 'neg.nvim: Set global soft backgrounds alpha (0..30) for Search/Visual/VirtualText' })
+
+  -- Quick scenarios: apply curated combos beyond presets
+  -- Usage: :NegScenario {focus|presentation|screenreader|tui|gui|accessibility}
+  vim.api.nvim_create_user_command('NegScenario', function(opts)
+    local s = (opts.args or ''):lower()
+    local allowed = { focus=true, presentation=true, screenreader=true, tui=true, gui=true, accessibility=true }
+    if not allowed[s] then
+      print("neg.nvim: unknown scenario '" .. s .. "'. Use: focus|presentation|screenreader|tui|gui|accessibility")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    if s == 'focus' then
+      newcfg.preset = 'focus'
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, { selection_model = 'kitty', telescope_accents = false })
+    elseif s == 'presentation' then
+      newcfg.preset = 'presentation'
+      newcfg.number_colors = 'ramp-strong'
+      newcfg.operator_colors = 'mono+'
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, {
+        mode_accent = false, focus_caret = false, soft_borders = true,
+        search_visibility = 'strong', telescope_accents = false, diff_focus = false,
+      })
+    elseif s == 'screenreader' then
+      newcfg.preset = nil
+      newcfg.alpha_overlay = 0
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, {
+        screenreader_friendly = true, mode_accent = false, focus_caret = false,
+        diff_focus = false, search_visibility = 'soft', selection_model = 'kitty',
+        accessibility = vim.tbl_deep_extend('force', newcfg.ui and newcfg.ui.accessibility or {}, {
+          strong_undercurl = true, achromatopsia = true, hc = 'soft'
+        }),
+      })
+    elseif s == 'tui' then
+      newcfg.alpha_overlay = 0
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, {
+        thick_cursor = true, soft_borders = false, float_panel_bg = false,
+        diff_focus = true, light_signs = true, outlines = false,
+        telescope_accents = false, selection_model = 'kitty',
+      })
+    elseif s == 'gui' then
+      newcfg.saturation = 95
+      newcfg.alpha_overlay = 6
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, {
+        soft_borders = true, float_panel_bg = true, telescope_accents = true,
+        dim_inactive = false, outlines = false, selection_model = 'kitty', focus_caret = true,
+      })
+    elseif s == 'accessibility' then
+      newcfg.preset = 'accessibility'
+      newcfg.ui = vim.tbl_deep_extend('force', newcfg.ui or {}, {
+        accessibility = vim.tbl_deep_extend('force', newcfg.ui and newcfg.ui.accessibility or {}, { achromatopsia = true, hc = 'soft' }),
+      })
+    end
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'focus','presentation','screenreader','tui','gui','accessibility' } end, desc = 'neg.nvim: Apply quick scenario: focus|presentation|screenreader|tui|gui|accessibility' })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()

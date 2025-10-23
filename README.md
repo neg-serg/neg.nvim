@@ -388,8 +388,9 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegReadingMode {on|off|toggle} — near-monochrome reading mode
 - :NegSearchVisibility {default|soft|strong} — search/cursearch visibility
 - :NegHc {off|soft|strong} — high-contrast pack presets
-- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] — print contrast ratio; accepts explicit bg, can target AA/AAA and print/apply a suggested :hi
+- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] [--target AA|AAA] [apply] [--json] [--notify=off|on] — print contrast ratio; can output JSON and apply suggested :hi
 - :NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on] — export highlights (choose sections; JSON output available)
+- :NegScenario {focus|presentation|screenreader|tui|gui|accessibility} — apply a curated set of toggles quickly
 - :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on] — print plugin integrations (filter by state/substring; JSON output and notify control)
 
 ### Plugin Flags — Quick Summary

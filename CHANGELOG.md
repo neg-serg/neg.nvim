@@ -706,3 +706,8 @@ Release date: 2025-10-23 17:22:00 +0300
   `:NegExport [all|core|diff|diagnostics|syntax|hints] [--json] [--notify=off|on]`.
 - JSON contains `config` and selected `sections`; textual output respects chosen sections.
 - Docs: command synopsis updated (EN/RU).
+## [4.63]
+Release date: 2025-10-23 17:44:00 +0300
+- Command: `:NegContrast` — add `--json` and `--notify=off|on`, preserve `apply` and `--target`.
+- Command: `:NegScenario {focus|presentation|screenreader|tui|gui|accessibility}` — quick curated combinations beyond presets.
+- Docs: README (EN/RU) updated.
