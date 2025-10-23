@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.45
+-- Version:     4.46
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -51,6 +51,8 @@ local flags_from = U.flags_from
       focus_caret = true,
       -- Soft borders: lighten WinSeparator/FloatBorder to reduce visual noise
       soft_borders = false,
+      -- Float background model: when true, use a slightly lighter panel-like bg for NormalFloat
+      float_panel_bg = false,
       -- Auto-tune float/panel backgrounds when terminal background is transparent
       auto_transparent_panels = true,
       -- Diff focus: stronger Diff* backgrounds when any window is in :diff mode
@@ -459,6 +461,21 @@ local function apply_soft_borders(cfg)
     -- Restore default linking to VertSplit
     hi(0, 'WinSeparator', { link = 'VertSplit' })
     hi(0, 'FloatBorder',  { link = 'VertSplit' })
+  end
+end
+
+local function apply_float_panel_bg(cfg)
+  local ui = cfg and cfg.ui or {}
+  local enable = ui and ui.float_panel_bg == true
+  if enable then
+    local base = (U.get_hl_colors and U.get_hl_colors('NormalFloat')) or {}
+    local spec = { bg = p.bg_panel }
+    if base.fg then spec.fg = base.fg else spec.fg = (U.get_hl_colors and (U.get_hl_colors('Normal').fg)) or p.default_color end
+    if base.sp then spec.sp = base.sp end
+    hi(0, 'NormalFloat', spec)
+  else
+    -- Restore to inherit Normal (no extra tint)
+    hi(0, 'NormalFloat', { link = 'Normal' })
   end
 end
 
@@ -1214,6 +1231,7 @@ function M.setup(opts)
   apply_focus_caret(cfg)
   apply_soft_borders(cfg)
   apply_auto_transparent_panels(cfg)
+  apply_float_panel_bg(cfg)
   apply_diff_focus(cfg)
   apply_light_signs(cfg)
   apply_punct_family(cfg)
@@ -1445,6 +1463,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegFloatBg', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.float_panel_bg = true
+    elseif arg == 'off' then
+      newcfg.ui.float_panel_bg = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.float_panel_bg = not (cfg.ui and cfg.ui.float_panel_bg == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set float background model (Normal vs slightly lighter panel-like bg)'
   })
 
   vim.api.nvim_create_user_command('NegFocusCaret', function(opts)

@@ -610,3 +610,8 @@ Release date: 2025-10-23 03:59:02 +0300
 Release date: 2025-10-23 04:01:02 +0300
 - NormalFloat: fully aligned with `Normal` (no separate gray tint). The float background now exactly matches the main background out of the box.
 - Rationale: previous gray shade was still visually distinct. This change restores the historic behavior of identical backgrounds.
+
+## [4.46]
+Release date: 2025-10-23 04:02:15 +0300
+- Float background model: add `ui.float_panel_bg = false` (default off) and `:NegFloatBg {on|off|toggle}` to switch between `Normal`-aligned floats and a slightly lighter panel-like background.
+- Motivation: keep neutral by default; provide optional soft panel look for those who prefer subtle separation.

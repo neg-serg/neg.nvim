@@ -118,6 +118,7 @@ require('neg').setup({
     mode_accent = true,                -- change CursorLine/StatusLine accents by mode (Normal/Insert/Visual)
     focus_caret = true,                -- boost CursorLine visibility if overall contrast is low
     soft_borders = false,              -- lighten WinSeparator/FloatBorder to reduce visual noise
+    float_panel_bg = false,            -- use slightly lighter panel-like background for NormalFloat (off by default)
     auto_transparent_panels = true,    -- when terminal background is transparent and float transparency is off, give floats/panels a subtle backdrop
     diff_focus = true,                 -- stronger Diff* backgrounds when any window is in :diff mode
     light_signs = false,               -- soften sign icons (DiagnosticSign*, GitSigns*) without changing hue
@@ -302,6 +303,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegAlpha {0..30} — set global soft backgrounds alpha (Search/CurSearch/Visual/VirtualText)
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
+- :NegFloatBg {on|off|toggle} — float background model (Normal vs slightly lighter panel-like bg)
 - :NegFocusCaret {on|off|toggle} — boost CursorLine contrast when overall contrast is low
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
 - :NegDimInactive {on|off|toggle} — dim inactive windows
