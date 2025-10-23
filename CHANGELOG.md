@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.53]
+Release date: 2025-10-23 12:36:14 +0300
+- Telescope: remove path separator tint completely. The `TelescopePathSeparator` group is no longer set by the theme.
+- UI: `:NegPathSep` now affects Startify/Navic/WhichKey only; Telescope is excluded.
+- Docs: README (EN/RU) updated to reflect new scope; plugin coverage list no longer mentions `TelescopePathSeparator`.
+
 ## [4.04]
 Release date: 2025-10-23 02:02:37 +0300
 - Command: add `:NegOperatorColors {families|mono}` to switch operator coloring at runtime.

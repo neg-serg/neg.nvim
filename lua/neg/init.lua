@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.52
+-- Version:     4.53
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -82,7 +82,7 @@ local flags_from = U.flags_from
       screenreader_friendly = false,
       -- Enhanced accents for Telescope (matching/selection/borders); off by default
       telescope_accents = false,
-      -- Path separator tint (Telescope only): when true, color path separators in a kitty-like blue
+      -- Path separator tint (non-Telescope): when true, color path separators in a kitty-like blue
       path_separator_blue = false,
       -- Optional color override for path separators: '#rrggbb' or palette key (e.g. 'include_color').
       -- Applies only when path_separator_blue = true; when nil, uses include_color.
@@ -959,8 +959,6 @@ local function apply_path_separator(cfg)
         col = p[custom]
       end
     end
-    -- Telescope
-    hi(0, 'TelescopePathSeparator', { fg = col })
     -- Startify
     if not (cfg.plugins and cfg.plugins.startify == false) then
       hi(0, 'StartifySlash', { fg = col })
@@ -975,7 +973,6 @@ local function apply_path_separator(cfg)
     end
   else
     -- Restore neutral defaults
-    hi(0, 'TelescopePathSeparator', { link = 'Normal' })
     if not (cfg.plugins and cfg.plugins.startify == false) then
       hi(0, 'StartifySlash', { fg = p.comment_color })
     end
@@ -1848,7 +1845,7 @@ define_commands = function()
   end, {
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
-    desc = 'neg.nvim: Toggle/Set blue path separators (TelescopePathSeparator)'
+    desc = 'neg.nvim: Toggle/Set blue path separators (Startify/Navic/WhichKey)'
   })
 
   vim.api.nvim_create_user_command('NegPathSepColor', function(opts)

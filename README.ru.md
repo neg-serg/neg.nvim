@@ -109,7 +109,7 @@ require('neg').setup({
     search_visibility = 'default',      -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
     telescope_accents = false,          -- усиленные акценты для Telescope (совпадения/выделение/границы)
-    path_separator_blue = false,        -- голубые разделители путей (Telescope/Startify/Navic/WhichKey)
+    path_separator_blue = false,        -- голубые разделители путей (Startify/Navic/WhichKey)
     path_separator_color = nil,         -- необязательный '#rrggbb' или ключ палитры при включенном path_separator_blue
     selection_model = 'kitty',          -- 'default' (тема) или 'kitty' (как выделение в kitty)
 
@@ -226,7 +226,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegDiffFocus {on|off|toggle} — усилить фоны Diff* при :diff
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок
 - :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
-- :NegPathSep {on|off|toggle} — голубой цвет разделителей путей (Telescope/Startify/Navic/WhichKey)
+- :NegPathSep {on|off|toggle} — голубой цвет разделителей путей (Startify/Navic/WhichKey)
 - :NegPathSepColor {#rrggbb|palette_key|default} — задать/сбросить цвет разделителей (используется при включенном голубом)
 - :NegAccessibility {deuteranopia|strong_undercurl|achromatopsia} {on|off|toggle}
 - :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
@@ -252,7 +252,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegFloatBg {on|off|toggle}` | Слегка «панельный» фон флоатов | выкл |
 | `:NegLightSigns {on|off|toggle}` | «Лёгкие» значки SignColumn (DiagnosticSign*/GitSigns*) | выкл |
 | `:NegTelescopeAccents {on|off|toggle}` | Усиленные акценты Telescope (совпадения/выделение) | выкл |
-| `:NegPathSep {on|off|toggle}` | Голубые разделители путей (Telescope) | выкл |
+| `:NegPathSep {on|off|toggle}` | Голубые разделители путей (Startify/Navic/WhichKey) | выкл |
 | `:NegPathSepColor {#hex|key|default}` | Задать/сбросить цвет разделителей | — |
 | `:NegSelection {default|kitty}` | Модель выделения (тема/kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Различать семейства скобок | выкл |

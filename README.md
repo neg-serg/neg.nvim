@@ -130,7 +130,7 @@ require('neg').setup({
     search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
-    path_separator_blue = false,      -- blue path separators (Telescope/Startify/Navic/WhichKey)
+    path_separator_blue = false,      -- blue path separators (Startify/Navic/WhichKey)
     path_separator_color = nil,       -- optional '#rrggbb' or palette key when path_separator_blue = true
     selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
@@ -378,7 +378,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegFloatBg {on|off|toggle}` | Slightly lighter float “panel” background | off |
 | `:NegLightSigns {on|off|toggle}` | Softer sign icons (DiagnosticSign*/GitSigns*) | off |
 | `:NegTelescopeAccents {on|off|toggle}` | Enhanced Telescope matching/selection accents | off |
-| `:NegPathSep {on|off|toggle}` | Blue path separators (Telescope) | off |
+| `:NegPathSep {on|off|toggle}` | Blue path separators (Startify/Navic/WhichKey) | off |
 | `:NegPathSepColor {#hex|key|default}` | Set/reset path separator color | — |
 | `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Differentiate punctuation families | off |
@@ -824,8 +824,8 @@ require('neg').setup({
 
 ### Detailed Plugin Coverage
 
-- telescope.nvim
-  - Groups: `TelescopeMatching`, `TelescopeSelection`, `TelescopeBorder`, `TelescopePreviewBorder`, `TelescopePromptBorder`, `TelescopeResultsBorder`, `TelescopePathSeparator`
+ - telescope.nvim
+  - Groups: `TelescopeMatching`, `TelescopeSelection`, `TelescopeBorder`, `TelescopePreviewBorder`, `TelescopePromptBorder`, `TelescopeResultsBorder`
   - Transparent float zone also covers: `TelescopeNormal`, `TelescopePreviewNormal`, `TelescopePromptNormal`, `TelescopeResultsNormal`, and the corresponding `*Border`
 - mason.nvim
   - Transparent float zone also covers: `MasonNormal`, `MasonBorder`
