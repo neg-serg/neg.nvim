@@ -2,21 +2,21 @@
 
 All notable changes to this project are documented here.
 
-## [4.04] - 2025-10-22
+## [4.04] - 2025-10-23 02:02:37 +0300
 - Command: add `:NegOperatorColors {families|mono}` to switch operator coloring at runtime.
 - Meta: bump version.
 
-## [4.05] - 2025-10-22
+## [4.05] - 2025-10-23 02:03:52 +0300
 - Style/harmony: tune links — URLs now use `include_color` with underline to stay readable without shouting.
 - Numbers: add optional subtle single‑hue ramp via `number_colors = 'ramp'` (default stays `mono`).
 - Command: add `:NegNumberColors {mono|ramp}` to toggle number ramp at runtime.
 - Meta: bump version.
 
-## [4.06] - 2025-10-22
+## [4.06] - 2025-10-23 02:05:06 +0300
 - Numbers: change default `number_colors` to `ramp` (was `mono`).
 - Meta: bump version.
 
-## [4.07] - 2025-10-22
+## [4.07] - 2025-10-23 02:07:08 +0300
 - UI: add option `ui.core_enhancements = true` (default) to define extra baseline UI groups (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, LineNrAbove/Below, Question). Set to `false` to skip applying them.
 - Internal: moved these groups to `neg.groups.editor_extras` and apply conditionally.
 - Validator: include `neg.groups.editor_extras` in module scan.
@@ -313,12 +313,12 @@ All notable changes to this project are documented here.
 
 ## [3.23]
 - Previous version prior to the refactor documented above.
-## [4.08] - 2025-10-22
+## [4.08] - 2025-10-23 02:09:49 +0300
 - Treesitter: add option `treesitter.extras = true` (default) to enable subtle extra captures (math/environment, string.template, boolean true/false, nil/null, decorator/annotation, declaration/static/abstract links). Moved these into `neg.groups.treesitter_extras` and apply conditionally.
 - Validator: include `neg.groups.treesitter_extras` in module scan.
 - Meta: bump version.
 
-## [4.09] - 2025-10-22
+## [4.09] - 2025-10-23 02:13:25 +0300
 - Treesitter extras: add more subtle captures/links:
   - Markup: `@markup.link.text` → `@markup.link.label`
   - Punctuation families: `@punctuation.parenthesis`/`@punctuation.brace` → `@punctuation.bracket`
@@ -327,70 +327,70 @@ All notable changes to this project are documented here.
   - Constants: `@constant.builtin.{boolean,numeric}` → `@boolean`/`@number`
   - LSP typemod: `@lsp.typemod.enumMember.static` → `@constant`
 - Meta: bump version.
-## [4.10] - 2025-10-22
+## [4.10] - 2025-10-23 02:16:15 +0300
 - Preset: add `accessibility` profile with higher contrast, minimal italics, stronger separators and line numbers; disables soft diagnostic virtual backgrounds.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
 
-## [4.11] - 2025-10-22
+## [4.11] - 2025-10-23 02:17:41 +0300
 - Preset: add `focus` profile — dims inactive windows (stronger NormalNC/WinBarNC) and softens separators (`VertSplit`/`WinSeparator`) to reduce visual noise.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
 
-## [4.12] - 2025-10-22
+## [4.12] - 2025-10-23 02:18:52 +0300
 - Preset: add `presentation` profile — brighter accents with more visible `CursorLine`/`CursorLineNr`, and slightly emphasized search/title for demos and talks.
 - Docs: README updated (presets list and examples).
 - Meta: bump version.
-## [4.13] - 2025-10-22
+## [4.13] - 2025-10-23 02:20:50 +0300
 - UI: add `ui.dim_inactive` (default false) — dims non‑current windows via `NormalNC`/`WinBarNC` and maps `LineNr` to a dim variant using window‑local `winhighlight` (on `WinEnter/WinLeave`).
 - Docs: README updated (UI options).
 - Meta: bump version.
-## [4.14] - 2025-10-22
+## [4.14] - 2025-10-23 02:22:00 +0300
 - UI: add `ui.mode_accent` (default false) — mode-aware accents for `CursorLine` and `StatusLine` based on Vim mode (Normal/Insert/Visual). Implemented via `ModeChanged`/`WinEnter` autocmds with palette-derived hues.
 - Docs: README updated (UI options).
 - Meta: bump version.
-## [4.15] - 2025-10-22
+## [4.15] - 2025-10-23 02:22:54 +0300
 - Command: add `:NegModeAccent {on|off|toggle}` to switch mode-aware accents at runtime.
 - Docs: README updated (commands).
 - Meta: bump version.
-## [4.16] - 2025-10-22
+## [4.16] - 2025-10-23 02:23:57 +0300
 - UI: add `ui.soft_borders` (default false) — lighter `WinSeparator`/`FloatBorder` for softer boundaries.
 - Command: `:NegSoftBorders {on|off|toggle}` to switch at runtime.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
-## [4.17] - 2025-10-22
+## [4.17] - 2025-10-23 02:25:52 +0300
 - UI: auto-tune float/panel backgrounds for transparent terminals — when `Normal` bg is transparent and float transparency is off, set subtle backdrops for `NormalFloat`/`Pmenu`.
 - Option: `ui.auto_transparent_panels = true` (default) controls this behavior.
 - Docs: README updated (UI options).
 - Meta: bump version.
-## [4.18] - 2025-10-22
+## [4.18] - 2025-10-23 02:27:22 +0300
 - UI: add `ui.diff_focus` (default true) — strengthens `DiffAdd`/`DiffChange`/`DiffDelete`/`DiffText` backgrounds when any window is in `:diff` mode; restores baseline otherwise.
 - Implementation: global highlights toggled via autocmds; previous colors preserved and restored when leaving diff.
 - Docs: README updated (UI options).
 - Meta: bump version.
-## [4.19] - 2025-10-22
+## [4.19] - 2025-10-23 02:28:36 +0300
 - UI: add `ui.light_signs` (default false) — softens sign icons (`DiagnosticSign*`, `GitSigns*`) by blending their hue with background to reduce noise while keeping semantics.
 - Command: `:NegLightSigns {on|off|toggle}` to switch at runtime.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
-## [4.20] - 2025-10-22
+## [4.20] - 2025-10-23 02:29:45 +0300
 - Diagnostics: add quick commands `:NegDiagSoft` and `:NegDiagStrong` to set softer/stronger virtual text backgrounds (blend ≈ 20 / 10) without tweaking individual settings.
 - Docs: README updated (Commands).
 - Meta: bump version.
-## [4.21] - 2025-10-22
+## [4.21] - 2025-10-23 02:31:05 +0300
 - Treesitter operators: add `operator_colors = 'mono+'` preset — keeps single operator hue but with a slightly stronger accent; available via `:NegOperatorColors mono+`.
 - Docs: README updated (Options, command help).
 - Meta: bump version.
-## [4.22] - 2025-10-22
+## [4.22] - 2025-10-23 02:32:34 +0300
 - Treesitter punctuation: add `treesitter.punct_family` (default false) to differentiate `@punctuation.parenthesis`/`@punctuation.brace` from `@punctuation.bracket` with subtle hues.
 - Command: `:NegPunctFamily {on|off|toggle}` to switch at runtime.
 - Docs: README updated (Options + Commands).
 - Meta: bump version.
-## [4.23] - 2025-10-22
+## [4.23] - 2025-10-23 02:33:46 +0300
 - Numbers ramp: add presets — `ramp-soft` (very subtle), `ramp` (balanced, default), `ramp-strong` (higher contrast). Usable via `number_colors` option and `:NegNumberColors` command.
 - Docs: README updated (options + command).
 - Meta: bump version.
-## [4.24] - 2025-10-22
+## [4.24] - 2025-10-23 02:35:12 +0300
 - Accessibility options:
   - `ui.accessibility.deuteranopia` — shifts additions (ok/plus) toward blue for red/green deficiency; warnings remain orange.
   - `ui.accessibility.strong_undercurl` — makes diagnostic undercurls more visible (adds underline fallback).
@@ -398,22 +398,22 @@ All notable changes to this project are documented here.
 - Command: `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor} {on|off|toggle}`.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
-## [4.25] - 2025-10-22
+## [4.25] - 2025-10-23 02:36:12 +0300
 - UI: enable `ui.mode_accent` by default to provide mode-aware accents for `CursorLine`/`StatusLine` (Normal/Insert/Visual). Command `:NegModeAccent {on|off|toggle}` remains available to control it at runtime.
 - Docs: README updated (default changed to true).
 - Meta: bump version.
-## [4.26] - 2025-10-22
+## [4.26] - 2025-10-23 02:38:15 +0300
 - Preset: 'focus' now enables `ui.dim_inactive` and `ui.soft_borders` by default (as part of the profile) to reduce visual noise and emphasize the active window.
 - Meta: bump version.
-## [4.27] - 2025-10-22
+## [4.27] - 2025-10-23 02:44:25 +0300
 - Docs: add Russian quick guide `README.ru.md` covering new options and runtime commands; link from main README.
 - Meta: bump version.
-## [4.28] - 2025-10-22
+## [4.28] - 2025-10-23 02:46:21 +0300
 - Accessibility: add `ui.accessibility.achromatopsia` (monochrome/high-contrast assist). Reduces reliance on hue by normalizing syntax colors, uses style cues (bold/underline), grayscale diagnostics and neutral diff backgrounds.
 - Command: `:NegAccessibility achromatopsia {on|off|toggle}`.
 - Docs: README/README.ru updated (options + command).
 - Meta: bump version.
-## [4.29] - 2025-10-22
+## [4.29] - 2025-10-23 02:49:53 +0300
 - Accessibility pack extensions:
   - High-contrast presets for achromatopsia: `:NegHc {off|soft|strong}`; tune `Visual`/`ColorColumn`/`StatusLine`/`NormalFloat`/`Pmenu`.
   - Pattern-first diagnostics: `ui.diag_pattern = 'none'|'minimal'|'strong'` + `:NegDiagPattern` command.

@@ -1,121 +1,327 @@
-<!-- This file mirrors lua/neg/README.ru.md to expose a root-level Russian guide. -->
-<!-- Source of truth is the root file; the in-tree copy is for runtime packaging. -->
+# neg (полная русская документация)
 
-# neg (русская документация)
+Полноценная, современная цветовая схема для Neovim, частично основанная на miromiro Джейсона У. Райана:
+https://www.vim.org/scripts/script.php?script_id=3815
 
-Современная цветовая схема для Neovim с модульной структурой, расширенной поддержкой Tree‑sitter и удобными опциями для UX.
+Подсветка организована по модулям (ядро UI, диагностика, LSP/Tree‑sitter, интеграции с плагинами). Есть чистый API настройки, переключатели интеграций и простой валидатор, который запускается локально и в CI.
 
-- Установка и подробности на английском: см. `README.md`
-- Эта страница — краткий русскоязычный гид по ключевым опциям и быстрым командам (включая новые возможности).
+См. историю изменений в CHANGELOG.md.
 
-## Быстрый старт
+## Возможности
+
+- Модульные группы подсветки: базовые UI, синтаксис, диагностика, LSP, Tree‑sitter
+- Интеграции с популярными плагинами (можно отключать): telescope, cmp, gitsigns, indent‑blankline/ibl,
+  mini.indentscope, which‑key, neo‑tree, nvim‑tree, dap, dap‑ui, trouble,
+  notify, treesitter‑context, hop, rainbow‑delimiters, obsidian и др.
+- Опции конфигурации: прозрачные фоны, ANSI‑цвета терминала, расширенные стилевые категории
+  (keywords/functions/types/operators/numbers/booleans/constants/punctuation)
+- Диагностика с опциональным фоном виртуального текста (blend/alpha/lighten/darken)
+- Overrides таблицей или функцией (получает палитру)
+- Валидатор и workflow GitHub Actions
+
+## Установка
+
+lazy.nvim
+
+```lua
+{
+  'neg-serg/neg.nvim',
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require('neg').setup({
+      -- Выбор пресета (необязательно): 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation'
+      preset = nil,
+      -- Операторы: 'families' | 'mono' | 'mono+'
+      operator_colors = 'families',
+      -- Прозрачность: boolean или таблица зон
+      transparent = { float = false, sidebar = false, statusline = false },
+      terminal_colors = true,
+      diagnostics_virtual_bg = false,
+      diagnostics_virtual_bg_blend = 15,
+      styles = {
+        comments = 'italic',
+        keywords = 'none', functions = 'none', strings = 'none', variables = 'none',
+        types = 'none', operators = 'none', numbers = 'none', booleans = 'none',
+        constants = 'none', punctuation = 'none',
+      },
+      plugins = {
+        cmp = true, telescope = true, git = true, gitsigns = true,
+        noice = true, obsidian = true, rainbow = true, headline = true,
+        indent = true, which_key = true, nvim_tree = false, neo_tree = true,
+        dap = true, dapui = true, trouble = true, notify = true,
+        treesitter_context = true, hop = true,
+      },
+      overrides = function(colors)
+        return { NormalFloat = { bg = 'NONE' }, CursorLine = { underline = true } }
+      end,
+    })
+    vim.cmd.colorscheme('neg')
+  end,
+}
+```
+
+vim‑plug
+
+```vim
+Plug 'neg-serg/neg.nvim'
+lua << EOF
+require('neg').setup({})
+EOF
+colorscheme neg
+```
+
+## Опции (полный список с дефолтами)
 
 ```lua
 require('neg').setup({
-  preset = nil,          -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation'
-  operator_colors = 'families',      -- 'families' | 'mono' | 'mono+'
-  number_colors   = 'ramp',          -- 'mono' | 'ramp' | 'ramp-soft' | 'ramp-strong'
+  transparent = false,                  -- boolean или { float, sidebar, statusline }
+  terminal_colors = true,               -- задать 16 ANSI цветов терминала
+  preset = nil,                         -- 'soft' | 'hard' | 'pro' | 'writing' | 'accessibility' | 'focus' | 'presentation' | nil
+
+  operator_colors = 'families',         -- 'families' (семейства операторов) | 'mono' | 'mono+' (чуть сильнее акцент)
+  number_colors = 'ramp',               -- 'mono' или 'ramp'‑пресеты: 'ramp' (balanced, по умолчанию) | 'ramp-soft' | 'ramp-strong'
+
   treesitter = {
-    extras = true,                   -- доп. тонкие капчеры (math/environment, template, true/false, nil/null, decorator/annotation ...)
-    punct_family = false,            -- различать скобки (parenthesis/brace) от bracket
+    extras = true,                      -- доп. капчеры: math/environment/name, template, true/false, nil/null, decorator/annotation и типмоды
+    punct_family = false,               -- различать families скобок (parenthesis/brace) от bracket
   },
+
   ui = {
-    core_enhancements = true,        -- базовые полезные группы UI (Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, ...)
-    dim_inactive = false,            -- приглушать неактивные окна и номера строк
-    mode_accent = true,              -- акценты CursorLine/StatusLine по режимам (Normal/Insert/Visual)
-    soft_borders = false,            -- мягкие границы: WinSeparator/FloatBorder ближе к фону
-    auto_transparent_panels = true,  -- легкая подложка для float/panel в прозрачном терминале
-    diff_focus = true,               -- более явные фоны Diff* в режиме :diff
-    light_signs = false,             -- смягчить иконки SignColumn (DiagnosticSign*/GitSigns*) без смены оттенков
-    diag_pattern = 'none',           -- паттерны для диагностик: 'none' | 'minimal' | 'strong'
-    lexeme_cues = 'off',            -- подсказки для лексем: 'off' | 'minimal' | 'strong'
-    thick_cursor = false,           -- усиленный курсор/строка для TUI
-    outlines = false,               -- рамки активных/неактивных окон через winhighlight
-    reading_mode = false,           -- почти монохромный режим чтения
-    search_visibility = 'default',  -- видимость поиска: 'default' | 'soft' | 'strong'
-    screenreader_friendly = false,  -- уменьшить динамику акцентов для скринридера
+    core_enhancements = true,           -- Whitespace, EndOfBuffer, PmenuMatch*, FloatShadow*, Cursor*, VisualNOS, Question, LineNrAbove/Below
+    dim_inactive = false,               -- приглушать неактивные окна (NormalNC/WinBarNC) и LineNr по winhighlight
+    mode_accent = true,                 -- акцентировать CursorLine/StatusLine по режимам
+    soft_borders = false,               -- смягчить WinSeparator/FloatBorder
+    auto_transparent_panels = true,     -- мягкая подложка для float/panel при прозрачном терминале
+    diff_focus = true,                  -- усилить фоны Diff* при :diff
+    light_signs = false,                -- смягчить иконки SignColumn (DiagnosticSign*/GitSigns*)
+
+    -- Пакет доступности/UX‑улучшений
+    diag_pattern = 'none',              -- 'none' | 'minimal' | 'strong' (паттерны для Diagnostic*)
+    lexeme_cues = 'off',                -- 'off' | 'minimal' | 'strong' (подсказки для функций/типов)
+    thick_cursor = false,               -- «толстый» курсор/строка
+    outlines = false,                   -- рамки активных/неактивных окон
+    reading_mode = false,               -- режим чтения (почти монохром)
+    search_visibility = 'default',      -- 'default' | 'soft' | 'strong'
+    screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
+
     accessibility = {
-      deuteranopia = false,        -- дружественный режим для дальтонизма: «добавления» более сине‑голубые
-      strong_undercurl = false,    -- более заметные подчеркивания (undercurl/underline) у диагностик
-      strong_tui_cursor = false,   -- более заметный курсор/выделение в TUI
-      achromatopsia = false,       -- монохром/высокий контраст; минимальная зависимость от оттенков
-      hc = 'off',                  -- контраст для achromatopsia: 'off' | 'soft' | 'strong'
+      deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
+      strong_undercurl = false,         -- более заметные undercurl (с underline‑fallback)
+      strong_tui_cursor = false,        -- сильнее Cursor/TermCursor/Visual для TUI
+      achromatopsia = false,            -- монохром/высокий контраст (минимум зависимости от цвета)
+      hc = 'off',                       -- high‑contrast для achromatopsia: 'off' | 'soft' | 'strong'
     },
   },
+
+  styles = {
+    comments = 'italic', keywords = 'none', functions = 'none', strings = 'none',
+    variables = 'none', types = 'none', operators = 'none', numbers = 'none',
+    booleans = 'none', constants = 'none', punctuation = 'none',
+  },
+
+  plugins = {  -- поставить false чтобы отключить интеграцию
+    cmp = true, telescope = true, git = true, gitsigns = true,
+    bufferline = true, noice = true, obsidian = true, rainbow = true,
+    headline = true, indent = true, which_key = true, nvim_tree = false,
+    neo_tree = true, dap = true, dapui = true, trouble = true, notify = true,
+    treesitter_context = true, hop = true,
+    -- дополнительные
+    alpha = true, mini_statusline = true, mini_tabline = true,
+    todo_comments = true, navic = true, lspsaga = true, navbuddy = true,
+    neotest = true, harpoon = true, treesitter_playground = true, startify = true,
+    overseer = true,
+  },
 })
-vim.cmd.colorscheme('neg')
 ```
 
 ## Пресеты
 
-- soft — дефолт: деликатные акценты, курсив комментариев
-- hard — сильнее акценты; ключевые категории жирные, Title жирный
+- soft — по умолчанию: деликатные акценты, курсив комментариев
+- hard — более контрастные акценты; ключевые категории жирные; Title жирный
 - pro — без курсива (комменты, inlay hints, CodeLens, markup)
-- writing — акценты для Markdown/markup (заголовки/strong/italic)
-- accessibility — повышенный контраст, без мягких фонов диагностик, сильнее линии/номера
-- focus — приглушает неактивные окна и смягчает границы (включает dim_inactive + soft_borders)
-- presentation — ярче акценты, заметнее CursorLine/CursorLineNr, выразительнее поиск/заголовки
+- writing — акценты для Markdown/markup (жирные заголовки/strong, курсив)
+- accessibility — повышенный контраст, без мягкого фона диагностик, сильнее линии/номера
+- focus — приглушает неактивные окна (включает dim_inactive) и смягчает границы (soft_borders)
+- presentation — ярче акценты, более заметные CursorLine/CursorLineNr и поиск/Title
 
-## Ключевые опции
+Использование:
 
-- Операторы `operator_colors`:
-  - 'families' (по умолчанию): разные семействам операторов (assignment/comparison/…)
-  - 'mono': один оттенок для всех
-  - 'mono+': один оттенок с чуть более сильным акцентом
+```lua
+require('neg').setup({ preset = 'hard' })
+-- или в рантайме:
+-- :NegPreset hard
+-- :NegPreset none  -- сброс пресета
+```
 
-- Числа `number_colors`:
-  - 'mono': единый цвет
-  - 'ramp' | 'ramp-soft' | 'ramp-strong': мягкие одноцветные вариации для integer/hex/octal/binary (мягче/сбаланс./сильнее)
+## Команды
 
-- Tree‑sitter:
-  - `treesitter.extras = true` — включает «тонкие» капчеры: `@markup.math`, `@markup.environment(.name)`, `@string.template`, `@boolean.true/.false`, `@nil/@null`, LSP types (`decorator`, `annotation`) и распространённые typemods (declaration/static/abstract/readonly)
-  - `treesitter.punct_family = false` — различать `parenthesis/brace` от `bracket` (чуть светлее/темнее)
+- :NegToggleTransparent — переключить прозрачность и применить тему
+- :NegToggleTransparentZone {float|sidebar|statusline} — прозрачность по зоне
+- :NegPreset {soft|hard|pro|writing|accessibility|focus|presentation|none} — применить пресет
+- :NegReload — повторно применить подсветки с текущей конфигурацией
+- :NegInfo — краткая сводка опций (включая фон диагностик)
+- :NegDiagBgMode {blend|alpha|lighten|darken|off|on} — режим фона виртуального текста
+- :NegDiagBgStrength {0..1} — сила для alpha/lighten/darken
+- :NegDiagBgBlend {0..100} — blend‑значение при mode=blend
+- :NegDiagSoft / :NegDiagStrong — быстрые пресеты мягче/сильнее
+- :NegOperatorColors {families|mono|mono+} — режим окраски операторов
+- :NegNumberColors {mono|ramp|ramp-soft|ramp-strong} — пресеты ramp для чисел
+- :NegModeAccent {on|off|toggle} — акценты по режимам (CursorLine/StatusLine)
+- :NegSoftBorders {on|off|toggle} — мягкие границы (WinSeparator/FloatBorder)
+- :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
+- :NegPunctFamily {on|off|toggle} — различение семейства скобок
+- :NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}
+- :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
+- :NegLexemeCues {off|minimal|strong} — подсказки для функций/типов
+- :NegThickCursor {on|off|toggle} — «толстый» курсор/строка
+- :NegOutlines {on|off|toggle} — рамки активных/неактивных окон
+- :NegReadingMode {on|off|toggle} — режим чтения
+- :NegSearchVisibility {default|soft|strong} — видимость поиска/текущего совпадения
+- :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
 
-- UI:
-  - `ui.core_enhancements` — базовые недостающие группы UI (Whitespace, EndOfBuffer, FloatShadow*, Cursor*, PmenuMatch*, VisualNOS, Question, LineNrAbove/Below)
-  - `ui.dim_inactive` — приглушать неактивные окна и номера строк
-  - `ui.mode_accent` — акценты CursorLine/StatusLine в Normal/Insert/Visual (включено по умолчанию)
-  - `ui.soft_borders` — мягкие границы (WinSeparator/FloatBorder)
-  - `ui.auto_transparent_panels` — подложка float/Pmenu при прозрачном терминале
-  - `ui.diff_focus` — усилить фоны Diff* в :diff
-  - `ui.light_signs` — сделать SignColumn менее шумным (смягчить яркость без смены оттенков)
-  - `ui.diag_pattern` — паттерны для диагностик: 'none' | 'minimal' | 'strong'
-  - `ui.lexeme_cues` — подсказки для лексем: 'off' | 'minimal' | 'strong'
-  - `ui.thick_cursor` — усиленный курсор/строка для TUI
-  - `ui.outlines` — рамки активных/неактивных окон через winhighlight
-  - `ui.reading_mode` — почти монохромный режим чтения
-  - `ui.search_visibility` — видимость поиска: 'default' | 'soft' | 'strong'
-  - `ui.screenreader_friendly` — уменьшить динамику акцентов для скринридера
-  - `ui.accessibility.*` — независимые тумблеры доступности (см. выше)
+## Overrides
 
-## Быстрые команды
+Можно переопределять любые группы:
 
-- Общие
-  - `:NegPreset {soft|hard|pro|writing|accessibility|focus|presentation|none}`
-  - Прозрачность: `:NegToggleTransparent`, `:NegToggleTransparentZone {float|sidebar|statusline}`
+```lua
+require('neg').setup({
+  overrides = {
+    Normal = { fg = '#c0c0c0' },
+    NormalFloat = { bg = 'NONE' },
+  }
+})
+```
 
-- Операторы/числа
-  - `:NegOperatorColors {families|mono|mono+}`
-  - `:NegNumberColors {mono|ramp|ramp-soft|ramp-strong}`
+или передать функцию, получающую палитру:
 
-- Диагностика
-  - `:NegDiagBgMode {blend|alpha|lighten|darken|off|on}`
-  - `:NegDiagBgBlend {0..100}` и `:NegDiagBgStrength {0..1}`
-  - Быстрые пресеты: `:NegDiagSoft` (мягче), `:NegDiagStrong` (сильнее)
+```lua
+require('neg').setup({
+  overrides = function(c)
+    return { DiagnosticUnderlineWarn = { undercurl = true, sp = c.warning_color } }
+  end
+})
+```
 
-- UI/UX переключатели
-  - `:NegModeAccent {on|off|toggle}` — режимные акценты CursorLine/StatusLine
-  - `:NegSoftBorders {on|off|toggle}` — мягкие границы
-  - `:NegLightSigns {on|off|toggle}` — лёгкие знаки в SignColumn
-  - `:NegPunctFamily {on|off|toggle}` — различение семейства скобок
-  - `:NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}`
-  - `:NegDiagPattern {none|minimal|strong}` — паттерны для диагностик
-  - `:NegLexemeCues {off|minimal|strong}` — визуальные подсказки для функций/типов
-  - `:NegThickCursor {on|off|toggle}` — «толстый» курсор/строка
-  - `:NegOutlines {on|off|toggle}` — рамки активных окон/панелей
-  - `:NegReadingMode {on|off|toggle}` — режим чтения (почти монохром)
-  - `:NegSearchVisibility {default|soft|strong}` — видимость поиска/текущего совпадения
-  - `:NegHc {off|soft|strong}` — контраст для achromatopsia
+### Частые рецепты
+
+- Без курсива везде (альтернатива preset='pro'):
+
+```lua
+require('neg').setup({
+  overrides = function()
+    return {
+      Comment = { italic = false },
+      LspInlayHint = { italic = false },
+      LspCodeLens = { italic = false },
+      ['@markup.italic'] = { italic = false },
+    }
+  end,
+})
+```
+
+- Прозрачные float/sidebars (альтернатива transparent={ ... }):
+
+```lua
+require('neg').setup({
+  overrides = {
+    NormalFloat = { bg = 'NONE' }, Pmenu = { bg = 'NONE' }, FloatBorder = { bg = 'NONE' },
+    NvimTreeNormal = { bg = 'NONE' }, NeoTreeNormal = { bg = 'NONE' }, TroubleNormal = { bg = 'NONE' },
+  }
+})
+```
+
+- Более мягкий/заметный фон виртуального текста по уровням:
+
+```lua
+local U = require('neg.util')
+require('neg').setup({
+  overrides = function(c)
+    return {
+      DiagnosticVirtualTextError = { bg = U.alpha(c.diff_delete_color, c.bg_default, 0.16) },
+      DiagnosticVirtualTextWarn  = { bg = U.alpha(c.warning_color,      c.bg_default, 0.14) },
+      DiagnosticVirtualTextInfo  = { bg = U.alpha(c.preproc_light_color, c.bg_default, 0.12) },
+      DiagnosticVirtualTextHint  = { bg = U.alpha(c.identifier_color,   c.bg_default, 0.12) },
+    }
+  end,
+})
+```
+
+## Покрытие плагинов (кратко)
+
+- telescope.nvim — рамки, выбор, совпадения; учитывает прозрачные float‑зоны
+- nvim‑cmp — `CmpItemKind*` (расширенные виды), документы/границы; прозрачные float‑зоны
+- gitsigns/gitgutter/diff — знаки/дифф‑группы
+- indent‑blankline/ibl / mini.indentscope — символы/контекст/скоупы
+- which‑key — группы/бордеры/флоат
+- neo‑tree / nvim‑tree — основные группы, курсорлайны, статусы; float‑зоны
+- bufferline — *BufferLine*
+- lualine — тема `theme = 'neg'`
+- dap / dap‑ui — маркеры отладки + UI
+- trouble / notify / treesitter‑context / hop / rainbow‑delimiters / obsidian / alpha / startify / todo‑comments / lspsaga / overseer / navic / navbuddy / treesitter‑playground — покрытие основных групп
+
+Подробные списки см. в английском README (раздел Detailed Plugin Coverage).
+
+## Troubleshooting
+
+- Тема выглядит «смешанной»/частично применённой
+  - Убедитесь, что включена только одна тема; уберите лишние `colorscheme`.
+  - Для lazy.nvim — `priority = 1000` и `lazy = false`.
+  - Выполните `:colorscheme neg` после загрузки UI‑плагинов, если кто‑то поздно перезаписывает группы.
+- Прозрачность не работает
+  - Терминал должен поддерживать прозрачность. Опция `transparent` задаёт bg = `NONE`, а не изменяет фон терминала.
+  - Для отдельных зон используйте `transparent = { float = true, sidebar = true, statusline = true }` или `:NegToggleTransparentZone`.
+  - Проверьте `overrides` — они применяются последними. Используйте `:NegInfo`.
+- Переопределение связанной группы не действует
+  - Если группа `link`‑связана, её атрибуты игнорируются. Укажите любые атрибуты, чтобы разбить связь.
+  - Пример: `NormalFloat = { bg = 'NONE' }`.
+- Цвета выглядят «неправильно»
+  - Включите `:set termguicolors` и оставьте `terminal_colors = true` (или настройте в overrides).
+- Несовпадение Tree‑sitter/LSP подсветки
+  - Проверьте `:Inspect` на токене. Капчеры в 0.9/0.10 могут отличаться.
+  - Тема мапит современные капчеры; обновите Neovim/парсеры.
+- Диагностика слишком сильная/слабая
+  - `diagnostics_virtual_bg = false` или настройте `diagnostics_virtual_bg_blend`.
+  - Либо переопределите по уровню.
+- Курсив не виден
+  - Шрифт терминала может не поддерживать курсив. Попробуйте GUI или другой шрифт.
+- Светлый фон?
+  - Тема тёмная. `set background=light` сейчас не поддерживается.
+
+## FAQ
+
+- Как использовать с `:colorscheme`?
+  - Плагин кладёт `colors/neg.lua`. Вызовите `:colorscheme neg` после `require('neg').setup(...)`.
+- Как отключить интеграцию для конкретного плагина?
+  - Поставьте `false` в таблице `plugins`.
+- Можно ли кастомизировать палитру?
+  - Используйте `overrides` для групп и `require('neg.palette')` при необходимости.
+- Как переключать пресеты/прозрачность на лету?
+  - `:NegPreset ...` и `:NegToggleTransparent`/`:NegToggleTransparentZone`.
+- Группа плагина не покрыта — что делать?
+  - Добавьте `overrides` для этой группы. PR‑ы приветствуются.
+
+## Валидатор и CI
+
+- Локально: `./scripts/validate.sh`
+- Строгий режим: `NEG_VALIDATE_STRICT=1 ./scripts/validate.sh`
+- GitHub Actions: `.github/workflows/validate.yml`
+- Проверка контраста (необязательно): `NEG_VALIDATE_CONTRAST=1 NEG_VALIDATE_CONTRAST_MIN=3.0 ./scripts/validate.sh`
+  - Предупреждает, если контраст (fg vs bg) ниже порога.
+  - Включайте при настройке цветов; строгий режим упадёт на предупреждениях.
+- Подробная сводка: `NEG_VALIDATE_VERBOSE=1 ./scripts/validate.sh`
+
+- Листинг покрытия (необязательно):
+  - `NEG_VALIDATE_LIST=1` — вывести все определённые группы `DEF: <name>`
+  - `NEG_VALIDATE_LIST_FILTER='^CmpItem'` — отфильтровать по Lua‑шаблону
+  - `NEG_VALIDATE_LIST_LIMIT=200` — ограничить количество
+- Статистика по модулям и дубликаты:
+  - `NEG_VALIDATE_MODULE_STATS=1` — количество групп на модуль
+  - `NEG_VALIDATE_DUP_SOURCES=1` — показать дубликаты источников
+
+## Примеры (скриншоты)
+
+См. раздел Demo shots в README.md (англ.).
 
 ## Рекомендованные сочетания
 
@@ -123,14 +329,8 @@ vim.cmd.colorscheme('neg')
 
 ```lua
 require('neg').setup({
-  preset = 'soft',
-  operator_colors = 'families',
-  number_colors = 'ramp-soft',
-  ui = {
-    soft_borders = true,
-    light_signs = true,
-    dim_inactive = true,
-  },
+  preset = 'soft', operator_colors = 'families', number_colors = 'ramp-soft',
+  ui = { soft_borders = true, light_signs = true, dim_inactive = true },
 })
 ```
 
@@ -138,8 +338,8 @@ require('neg').setup({
 
 ```lua
 require('neg').setup({
-  preset = 'focus',          -- включает dim_inactive + soft_borders
-  operator_colors = 'mono+', -- чуть сильнее акцент операторов
+  preset = 'focus',              -- включает dim_inactive + soft_borders
+  operator_colors = 'mono+',
   treesitter = { punct_family = true },
 })
 ```
@@ -148,11 +348,7 @@ require('neg').setup({
 
 ```lua
 require('neg').setup({
-  preset = 'presentation',
-  operator_colors = 'mono+',
-  number_colors = 'ramp-strong',
+  preset = 'presentation', operator_colors = 'mono+', number_colors = 'ramp-strong',
 })
--- Для более выразительных диагностик:
--- :NegDiagStrong
+-- для более выразительной диагностики: :NegDiagStrong
 ```
-
