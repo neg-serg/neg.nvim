@@ -536,6 +536,84 @@ require('neg').setup({
 })
 ```
 
+#### Environment Recipes (terminal / GUI / presentation / screenreader)
+
+- Terminal (TUI)
+
+```lua
+-- Tip: ensure Neovim uses truecolor: :set termguicolors
+require('neg').setup({
+  alpha_overlay = 0,
+  ui = {
+    thick_cursor = true,
+    soft_borders = false,
+    float_panel_bg = false,
+    diff_focus = true,
+    light_signs = true,
+    outlines = false,
+    telescope_accents = false,
+    selection_model = 'kitty',
+  },
+})
+```
+
+- GUI (Neovide/Goneovim, etc.)
+
+```lua
+require('neg').setup({
+  saturation = 95,
+  alpha_overlay = 6,
+  ui = {
+    soft_borders = true,
+    float_panel_bg = true,
+    telescope_accents = true,
+    dim_inactive = false,
+    outlines = false,
+    selection_model = 'kitty',
+    focus_caret = true,
+  },
+})
+```
+
+- Bright presentation
+
+```lua
+require('neg').setup({
+  preset = 'presentation',
+  number_colors = 'ramp-strong',
+  operator_colors = 'mono+',
+  ui = {
+    mode_accent = false,
+    focus_caret = false,
+    soft_borders = true,
+    search_visibility = 'strong',
+    telescope_accents = false,
+    diff_focus = false,
+  },
+})
+```
+
+- Screenreader‑friendly
+
+```lua
+require('neg').setup({
+  alpha_overlay = 0,
+  ui = {
+    screenreader_friendly = true,
+    mode_accent = false,
+    focus_caret = false,
+    diff_focus = false,
+    search_visibility = 'soft',
+    selection_model = 'kitty',
+    accessibility = {
+      strong_undercurl = true,
+      achromatopsia = true,
+      hc = 'soft',
+    },
+  },
+})
+```
+
 ## Overrides
 
 You can override any highlight groups:
