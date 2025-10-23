@@ -130,6 +130,7 @@ require('neg').setup({
     search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
+    path_separator_blue = false,      -- blue path separators (TelescopePathSeparator)
     selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
@@ -350,6 +351,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
+- :NegPathSep {on|off|toggle} — toggle blue path separators (Telescope)
 - :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues
@@ -374,6 +376,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegFloatBg {on|off|toggle}` | Slightly lighter float “panel” background | off |
 | `:NegLightSigns {on|off|toggle}` | Softer sign icons (DiagnosticSign*/GitSigns*) | off |
 | `:NegTelescopeAccents {on|off|toggle}` | Enhanced Telescope matching/selection accents | off |
+| `:NegPathSep {on|off|toggle}` | Blue path separators (Telescope) | off |
 | `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Differentiate punctuation families | off |
 | `:NegReadingMode {on|off|toggle}` | Near‑monochrome reading mode | off |

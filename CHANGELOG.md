@@ -632,3 +632,8 @@ Release date: 2025-10-23 04:17:59 +0300
 Release date: 2025-10-23 04:31:00 +0300
 - Selection model: default changed to kitty — `ui.selection_model = 'kitty'`. This makes Visual/VisualNOS use kitty‑style selection out of the box. Use `:NegSelection default` or set `selection_model = 'default'` to revert to the theme selection.
 - Docs: update Options defaults, Quick Toggles default, and selection section (EN/RU).
+
+## [4.50]
+Release date: 2025-10-23 04:39:00 +0300
+- Telescope path separators: add `ui.path_separator_blue = false` (default off) and runtime `:NegPathSep {on|off|toggle}` to color `TelescopePathSeparator` in a zsh‑like blue.
+- Docs: Options/Commands/Quick Toggles updated (EN/RU).

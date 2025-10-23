@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.49
+-- Version:     4.50
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -82,6 +82,8 @@ local flags_from = U.flags_from
       screenreader_friendly = false,
       -- Enhanced accents for Telescope (matching/selection/borders); off by default
       telescope_accents = false,
+      -- Path separator tint (Telescope only): when true, color path separators in a kitty-like blue
+      path_separator_blue = false,
       -- Selection model: 'default' (theme) or 'kitty' (match kitty selection colors)
       selection_model = 'kitty',
     },
@@ -941,6 +943,17 @@ local function apply_telescope_accents(cfg)
   -- Borders: if soft_borders already set WinSeparator, leave links; nothing to do here
 end
 
+-- Optional blue path separators (TelescopePathSeparator)
+local function apply_path_separator(cfg)
+  local ui = cfg and cfg.ui or {}
+  if ui and ui.path_separator_blue then
+    local col = p.include_color or p.keyword3_color
+    hi(0, 'TelescopePathSeparator', { fg = col })
+  else
+    hi(0, 'TelescopePathSeparator', { link = 'Normal' })
+  end
+end
+
 local function apply_dim_inactive(cfg)
   local ui = cfg and cfg.ui or {}
   local enable = ui and ui.dim_inactive == true
@@ -1256,6 +1269,7 @@ function M.setup(opts)
   apply_search_visibility(cfg)
   apply_screenreader(cfg)
   apply_telescope_accents(cfg)
+  apply_path_separator(cfg)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
   apply_selection_model(cfg)
   apply_alpha_overlay(cfg)
@@ -1779,6 +1793,28 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set enhanced Telescope accents (matching/selection/borders)'
+  })
+
+  vim.api.nvim_create_user_command('NegPathSep', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.path_separator_blue = true
+    elseif arg == 'off' then
+      newcfg.ui.path_separator_blue = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.path_separator_blue = not (cfg.ui and cfg.ui.path_separator_blue == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set blue path separators (TelescopePathSeparator)'
   })
 
   vim.api.nvim_create_user_command('NegDiagSoft', function()
