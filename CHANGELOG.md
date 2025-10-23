@@ -539,3 +539,10 @@ Release date: 2025-10-23 03:32:10 +0300
   - Prints a nearest suggested foreground to reach AA / AA (large) and the operation (lighten/darken, approx. %).
   - Tips to try `:NegHc soft|strong` or `:NegPreset accessibility|presentation`, and a minimal overrides snippet.
 - Meta: bump version.
+
+## [4.34]
+Release date: 2025-10-23 03:33:25 +0300
+- :NegContrast: add optional background argument: `:NegContrast Group [vs {Group|#rrggbb}]`.
+- :NegContrast: print a ready `:hi {Group} guifg=#rrggbb` line for the suggested AA/AA-large foreground.
+- Docs: README/README.ru updated with new usage.
+- Meta: bump version.

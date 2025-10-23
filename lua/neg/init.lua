@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.33
+-- Version:     4.34
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1324,10 +1324,21 @@ define_commands = function()
   })
 
   vim.api.nvim_create_user_command('NegContrast', function(opts)
-    local name = (opts.args or '')
-    if name == '' then
-      print("neg.nvim: usage: :NegContrast {Group|@capture}")
+    local raw = (opts.args or '')
+    if raw == '' then
+      print("neg.nvim: usage: :NegContrast {Group|@capture} [vs {Group|#rrggbb}]")
       return
+    end
+    -- Parse "<group> [vs <bg>]"
+    local tokens = {}
+    for w in raw:gmatch('%S+') do tokens[#tokens+1] = w end
+    local name = tokens[1]
+    local bg_arg
+    for i = 2, #tokens do
+      if tokens[i]:lower() == 'vs' and tokens[i+1] then
+        bg_arg = tokens[i+1]
+        break
+      end
     end
     local function get_hl(name_, follow)
       local function as_hex(v)
@@ -1373,10 +1384,23 @@ define_commands = function()
     end
     local g = get_hl(name, true)
     local fg = g.fg
-    local bg = g.bg
-    if (not bg) or bg == '' or bg == 'NONE' then
-      local n = get_hl('Normal', true)
-      bg = n.bg
+    local bg
+    if type(bg_arg) == 'string' and bg_arg:match('^#%x%x%x%x%x%x$') then
+      bg = bg_arg
+    elseif type(bg_arg) == 'string' and bg_arg ~= '' then
+      local gb = get_hl(bg_arg, true)
+      bg = gb.bg or gb.fg -- fallback: if group has no bg, try its fg (rare)
+      if (not bg) or bg == '' or bg == 'NONE' then
+        local n = get_hl('Normal', true)
+        bg = n.bg
+      end
+    else
+      local gb = g
+      bg = gb.bg
+      if (not bg) or bg == '' or bg == 'NONE' then
+        local n = get_hl('Normal', true)
+        bg = n.bg
+      end
     end
     if (not fg) or (not bg) then
       print("neg.nvim: can't resolve colors for '" .. name .. "' (fg=" .. tostring(fg) .. ", bg=" .. tostring(bg) .. ")")
@@ -1421,21 +1445,24 @@ define_commands = function()
       end
       return best, best_ratio, best_mode, best_pct
     end
-    local msg = string.format("neg.nvim: %s — fg %s on bg %s → contrast %.2f (%s)", name, fg, bg, ratio, grade)
+    local vs_str = bg_arg and (' vs ' .. bg_arg) or ''
+    local msg = string.format("neg.nvim: %s%s — fg %s on bg %s → contrast %.2f (%s)", name, vs_str, fg, bg, ratio, grade)
     print(msg)
     if ratio < 4.5 then
       local aa_fg, aa_r, aa_mode, aa_pct = find_suggestion(4.5)
       local aal_fg, aal_r, aal_mode, aal_pct = find_suggestion(3.0)
       if aa_fg and aa_r then
         print(string.format("  · suggestion (AA): set fg=%s (≈%.2f, %s %d%%)", aa_fg, aa_r, aa_mode, aa_pct))
+        print(string.format("    :hi %s guifg=%s", name, aa_fg))
       elseif aal_fg and aal_r then
         print(string.format("  · suggestion (AA large): set fg=%s (≈%.2f, %s %d%%)", aal_fg, aal_r, aal_mode, aal_pct))
+        print(string.format("    :hi %s guifg=%s", name, aal_fg))
       end
       -- Quick tips
       print("  · tips: try :NegHc soft|strong or :NegPreset accessibility|presentation for higher contrast")
       print("          or override: require('neg').setup({ overrides = { [" .. string.format("'%s'", name) .. "] = { fg = '#rrggbb' } } })")
     end
-  end, { nargs = 1, desc = 'neg.nvim: Show contrast ratio for a group/capture vs background' })
+  end, { nargs = '+', desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"' })
 
   vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)
     local arg = (opts.args or ''):lower()

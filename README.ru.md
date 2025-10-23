@@ -184,7 +184,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegSearchVisibility {default|soft|strong} — видимость поиска/текущего совпадения
 - :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
 - :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
-- :NegContrast {Group|@capture} — посчитать контраст (отношение) текста к фону
+- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] — посчитать контраст текста к фону; можно задать фон и получить готовую команду :hi
 
 ## Overrides
 

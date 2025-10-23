@@ -310,7 +310,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegReadingMode {on|off|toggle} — near-monochrome reading mode
 - :NegSearchVisibility {default|soft|strong} — search/cursearch visibility
 - :NegHc {off|soft|strong} — high-contrast pack presets
-- :NegContrast {Group|@capture} — print contrast ratio of foreground vs background
+- :NegContrast {Group|@capture} [vs {Group|#rrggbb}] — print contrast ratio of foreground vs background; accepts explicit bg and prints a ready :hi suggestion
 
 ## Overrides
 
