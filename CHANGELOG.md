@@ -643,3 +643,8 @@ Release date: 2025-10-23 04:46:00 +0300
 - Path separator color override: add `ui.path_separator_color` to choose exact color (`#rrggbb` or palette key) when `path_separator_blue` is on.
 - Command: `:NegPathSepColor {#rrggbb|palette_key|default}` to set/reset the color at runtime.
 - Docs: Options/Commands tables updated (EN/RU).
+
+## [4.52]
+Release date: 2025-10-23 04:53:00 +0300
+- Path separators scope expanded: when `ui.path_separator_blue` is enabled, also tint StartifySlash, NavicSeparator, and WhichKeySeparator (respecting plugin toggles).
+- Docs: clarify scope in Options/Commands.

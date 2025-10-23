@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.51
+-- Version:     4.52
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -959,9 +959,32 @@ local function apply_path_separator(cfg)
         col = p[custom]
       end
     end
+    -- Telescope
     hi(0, 'TelescopePathSeparator', { fg = col })
+    -- Startify
+    if not (cfg.plugins and cfg.plugins.startify == false) then
+      hi(0, 'StartifySlash', { fg = col })
+    end
+    -- Navic breadcrumbs
+    if not (cfg.plugins and cfg.plugins.navic == false) then
+      hi(0, 'NavicSeparator', { fg = col })
+    end
+    -- which-key separator
+    if not (cfg.plugins and cfg.plugins.which_key == false) then
+      hi(0, 'WhichKeySeparator', { fg = col })
+    end
   else
+    -- Restore neutral defaults
     hi(0, 'TelescopePathSeparator', { link = 'Normal' })
+    if not (cfg.plugins and cfg.plugins.startify == false) then
+      hi(0, 'StartifySlash', { fg = p.comment_color })
+    end
+    if not (cfg.plugins and cfg.plugins.navic == false) then
+      hi(0, 'NavicSeparator', { fg = p.dark_color })
+    end
+    if not (cfg.plugins and cfg.plugins.which_key == false) then
+      hi(0, 'WhichKeySeparator', { fg = p.comment_color })
+    end
   end
 end
 

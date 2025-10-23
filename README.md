@@ -130,7 +130,7 @@ require('neg').setup({
     search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
-    path_separator_blue = false,      -- blue path separators (TelescopePathSeparator)
+    path_separator_blue = false,      -- blue path separators (Telescope/Startify/Navic/WhichKey)
     path_separator_color = nil,       -- optional '#rrggbb' or palette key when path_separator_blue = true
     selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
@@ -352,7 +352,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
-- :NegPathSep {on|off|toggle} — toggle blue path separators (Telescope)
+- :NegPathSep {on|off|toggle} — toggle blue path separators (Telescope/Startify/Navic/WhichKey)
 - :NegPathSepColor {#rrggbb|palette_key|default} — set/reset path separator color (used when blue is on)
 - :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
