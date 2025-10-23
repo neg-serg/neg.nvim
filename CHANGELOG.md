@@ -637,3 +637,9 @@ Release date: 2025-10-23 04:31:00 +0300
 Release date: 2025-10-23 04:39:00 +0300
 - Telescope path separators: add `ui.path_separator_blue = false` (default off) and runtime `:NegPathSep {on|off|toggle}` to color `TelescopePathSeparator` in a zsh‑like blue.
 - Docs: Options/Commands/Quick Toggles updated (EN/RU).
+
+## [4.51]
+Release date: 2025-10-23 04:46:00 +0300
+- Path separator color override: add `ui.path_separator_color` to choose exact color (`#rrggbb` or palette key) when `path_separator_blue` is on.
+- Command: `:NegPathSepColor {#rrggbb|palette_key|default}` to set/reset the color at runtime.
+- Docs: Options/Commands tables updated (EN/RU).

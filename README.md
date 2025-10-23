@@ -131,6 +131,7 @@ require('neg').setup({
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
     path_separator_blue = false,      -- blue path separators (TelescopePathSeparator)
+    path_separator_color = nil,       -- optional '#rrggbb' or palette key when path_separator_blue = true
     selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
@@ -352,6 +353,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
 - :NegPathSep {on|off|toggle} — toggle blue path separators (Telescope)
+- :NegPathSepColor {#rrggbb|palette_key|default} — set/reset path separator color (used when blue is on)
 - :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues
@@ -377,6 +379,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegLightSigns {on|off|toggle}` | Softer sign icons (DiagnosticSign*/GitSigns*) | off |
 | `:NegTelescopeAccents {on|off|toggle}` | Enhanced Telescope matching/selection accents | off |
 | `:NegPathSep {on|off|toggle}` | Blue path separators (Telescope) | off |
+| `:NegPathSepColor {#hex|key|default}` | Set/reset path separator color | — |
 | `:NegSelection {default|kitty}` | Selection model (theme vs kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Differentiate punctuation families | off |
 | `:NegReadingMode {on|off|toggle}` | Near‑monochrome reading mode | off |

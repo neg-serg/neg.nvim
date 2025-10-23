@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.50
+-- Version:     4.51
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -84,6 +84,9 @@ local flags_from = U.flags_from
       telescope_accents = false,
       -- Path separator tint (Telescope only): when true, color path separators in a kitty-like blue
       path_separator_blue = false,
+      -- Optional color override for path separators: '#rrggbb' or palette key (e.g. 'include_color').
+      -- Applies only when path_separator_blue = true; when nil, uses include_color.
+      path_separator_color = nil,
       -- Selection model: 'default' (theme) or 'kitty' (match kitty selection colors)
       selection_model = 'kitty',
     },
@@ -948,6 +951,14 @@ local function apply_path_separator(cfg)
   local ui = cfg and cfg.ui or {}
   if ui and ui.path_separator_blue then
     local col = p.include_color or p.keyword3_color
+    local custom = ui.path_separator_color
+    if type(custom) == 'string' and custom ~= '' then
+      if custom:match('^#%x%x%x%x%x%x$') then
+        col = custom
+      elseif p[custom] and type(p[custom]) == 'string' then
+        col = p[custom]
+      end
+    end
     hi(0, 'TelescopePathSeparator', { fg = col })
   else
     hi(0, 'TelescopePathSeparator', { link = 'Normal' })
@@ -1815,6 +1826,25 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set blue path separators (TelescopePathSeparator)'
+  })
+
+  vim.api.nvim_create_user_command('NegPathSepColor', function(opts)
+    local arg = tostring(opts.args or '')
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == '' or arg:lower() == 'default' or arg:lower() == 'clear' then
+      newcfg.ui.path_separator_color = nil
+    else
+      newcfg.ui.path_separator_color = arg
+    end
+    M.setup(newcfg)
+    if not (newcfg.ui.path_separator_blue) then
+      print('neg.nvim: note — path separators tint is off; use :NegPathSep on')
+    end
+  end, {
+    nargs = '?',
+    desc = 'neg.nvim: Set path separator color (#rrggbb or palette key); use "default" to clear'
   })
 
   vim.api.nvim_create_user_command('NegDiagSoft', function()

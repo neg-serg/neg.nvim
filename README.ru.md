@@ -110,6 +110,7 @@ require('neg').setup({
     screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
     telescope_accents = false,          -- усиленные акценты для Telescope (совпадения/выделение/границы)
     path_separator_blue = false,        -- голубые разделители путей (TelescopePathSeparator)
+    path_separator_color = nil,         -- необязательный '#rrggbb' или ключ палитры при включенном path_separator_blue
     selection_model = 'kitty',          -- 'default' (тема) или 'kitty' (как выделение в kitty)
 
     accessibility = {
@@ -226,6 +227,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок
 - :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
 - :NegPathSep {on|off|toggle} — голубой цвет разделителей путей (Telescope)
+- :NegPathSepColor {#rrggbb|palette_key|default} — задать/сбросить цвет разделителей (используется при включенном голубом)
 - :NegAccessibility {deuteranopia|strong_undercurl|achromatopsia} {on|off|toggle}
 - :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
 - :NegLexemeCues {off|minimal|strong} — подсказки для функций/типов
@@ -251,6 +253,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegLightSigns {on|off|toggle}` | «Лёгкие» значки SignColumn (DiagnosticSign*/GitSigns*) | выкл |
 | `:NegTelescopeAccents {on|off|toggle}` | Усиленные акценты Telescope (совпадения/выделение) | выкл |
 | `:NegPathSep {on|off|toggle}` | Голубые разделители путей (Telescope) | выкл |
+| `:NegPathSepColor {#hex|key|default}` | Задать/сбросить цвет разделителей | — |
 | `:NegSelection {default|kitty}` | Модель выделения (тема/kitty) | kitty |
 | `:NegPunctFamily {on|off|toggle}` | Различать семейства скобок | выкл |
 | `:NegReadingMode {on|off|toggle}` | Режим чтения (почти монохром) | выкл |
