@@ -198,4 +198,8 @@ colors.accent_primary = colors.include_color
 colors.accent_secondary = colors.keyword3_color
 colors.accent_tertiary = colors.keyword1_color
 
+-- Selection (kitty-inspired defaults, optional usage)
+colors.selection_bg = '#0d1824'
+colors.selection_fg = '#367bbf'
+
 return colors

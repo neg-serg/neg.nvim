@@ -130,6 +130,7 @@ require('neg').setup({
     search_visibility = 'default',    -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,    -- minimize dynamic accents and colored backgrounds
     telescope_accents = false,        -- enhanced accents for Telescope (matching/selection/borders)
+    selection_model = 'default',      -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
       strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
@@ -306,6 +307,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegFloatBg {on|off|toggle} — float background model (Normal vs slightly lighter panel-like bg)
 - :NegFocusCaret {on|off|toggle} — boost CursorLine contrast when overall contrast is low
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
+- :NegSelection {default|kitty} — set selection model (theme default vs kitty-style selection colors)
 - :NegDimInactive {on|off|toggle} — dim inactive windows
 - :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation

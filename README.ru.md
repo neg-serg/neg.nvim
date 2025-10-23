@@ -109,6 +109,7 @@ require('neg').setup({
     search_visibility = 'default',      -- 'default' | 'soft' | 'strong'
     screenreader_friendly = false,      -- минимизировать динамические акценты/цветные фоны
     telescope_accents = false,          -- усиленные акценты для Telescope (совпадения/выделение/границы)
+    selection_model = 'default',        -- 'default' (тема) или 'kitty' (как выделение в kitty)
 
     accessibility = {
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
@@ -180,6 +181,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegFloatBg {on|off|toggle} — модель фона флоатов (Normal vs слегка осветлённый «панельный»)
 - :NegFocusCaret {on|off|toggle} — повысить контраст CursorLine при низком общем контрасте
 - :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
+- :NegSelection {default|kitty} — модель подсветки выделения (тема/kitty)
 - :NegDimInactive {on|off|toggle} — приглушить неактивные окна
 - :NegDiffFocus {on|off|toggle} — усилить фоны Diff* при :diff
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок

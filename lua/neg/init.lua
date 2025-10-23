@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.46
+-- Version:     4.47
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -82,6 +82,8 @@ local flags_from = U.flags_from
       screenreader_friendly = false,
       -- Enhanced accents for Telescope (matching/selection/borders); off by default
       telescope_accents = false,
+      -- Selection model: 'default' (theme) or 'kitty' (match kitty selection colors)
+      selection_model = 'default',
     },
     treesitter = {
       -- When true, apply subtle extra captures (math/environment, string.template,
@@ -340,6 +342,16 @@ local function set_palette_saturation(percent)
       p[k] = val
     end
   end
+end
+
+-- Selection coloring model
+local function apply_selection_model(cfg)
+  local ui = cfg and cfg.ui or {}
+  local model = ui and ui.selection_model or 'default'
+  if model ~= 'kitty' then return end
+  -- Match kitty selection: foreground/background from palette (selection_fg/bg)
+  hi(0, 'Visual',   { bg = p.selection_bg, fg = p.selection_fg, bold = false, underline = false })
+  hi(0, 'VisualNOS',{ bg = p.selection_bg, fg = p.selection_fg })
 end
 
 -- Global soft backgrounds alpha for Search/CurSearch/Visual and DiagnosticVirtualText*
@@ -1245,6 +1257,7 @@ function M.setup(opts)
   apply_screenreader(cfg)
   apply_telescope_accents(cfg)
   if cfg.diagnostics_virtual_bg then apply_diagnostics_virtual_bg(cfg) end
+  apply_selection_model(cfg)
   apply_alpha_overlay(cfg)
   apply_overrides(cfg.overrides)
   define_commands()
@@ -2024,6 +2037,20 @@ define_commands = function()
     complete = function() return { 'families', 'mono', 'mono+' } end,
     desc = 'neg.nvim: Set operator colors mode (families|mono|mono+)'
   })
+
+  vim.api.nvim_create_user_command('NegSelection', function(opts)
+    local m = (opts.args or ''):lower()
+    local allowed = { default = true, kitty = true }
+    if not allowed[m] then
+      print("neg.nvim: unknown selection model '" .. m .. "'. Use: default|kitty")
+      return
+    end
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    newcfg.ui.selection_model = m
+    M.setup(newcfg)
+  end, { nargs = 1, complete = function() return { 'default','kitty' } end, desc = 'neg.nvim: Set selection model (default|kitty)' })
 
   vim.api.nvim_create_user_command('NegExport', function()
     local function get_hl(name_, follow)

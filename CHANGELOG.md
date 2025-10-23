@@ -615,3 +615,9 @@ Release date: 2025-10-23 04:01:02 +0300
 Release date: 2025-10-23 04:02:15 +0300
 - Float background model: add `ui.float_panel_bg = false` (default off) and `:NegFloatBg {on|off|toggle}` to switch between `Normal`-aligned floats and a slightly lighter panel-like background.
 - Motivation: keep neutral by default; provide optional soft panel look for those who prefer subtle separation.
+
+## [4.47]
+Release date: 2025-10-23 04:04:42 +0300
+- Selection model: add `ui.selection_model = 'default'|'kitty'` (default 'default') and `:NegSelection {default|kitty}` to match kitty's selection colors in Visual/VisualNOS when requested.
+- Palette: add `selection_bg = '#0d1824'` and `selection_fg = '#367bbf'` (derived from kitty config) used when model = 'kitty'.
+- Note: to preserve exact kitty look, keep `alpha_overlay = 0`.
