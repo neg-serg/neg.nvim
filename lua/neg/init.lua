@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.30
+-- Version:     4.31
 -- Last Change: 23-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -1255,6 +1255,72 @@ define_commands = function()
     nargs = '?',
     complete = function() return { 'on', 'off', 'toggle' } end,
     desc = 'neg.nvim: Toggle/Set soft borders (WinSeparator/FloatBorder) (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegDimInactive', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.dim_inactive = true
+    elseif arg == 'off' then
+      newcfg.ui.dim_inactive = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.dim_inactive = not (cfg.ui and cfg.ui.dim_inactive == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set dim inactive windows (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegDiffFocus', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.diff_focus = true
+    elseif arg == 'off' then
+      newcfg.ui.diff_focus = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.diff_focus = not (cfg.ui and cfg.ui.diff_focus ~= false)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set stronger Diff* backgrounds in :diff (on|off|toggle)'
+  })
+
+  vim.api.nvim_create_user_command('NegScreenreader', function(opts)
+    local arg = (opts.args or ''):lower()
+    local cfg = M._config or default_config
+    local newcfg = vim.deepcopy(cfg)
+    newcfg.ui = newcfg.ui or {}
+    if arg == 'on' then
+      newcfg.ui.screenreader_friendly = true
+    elseif arg == 'off' then
+      newcfg.ui.screenreader_friendly = false
+    elseif arg == 'toggle' or arg == '' then
+      newcfg.ui.screenreader_friendly = not (cfg.ui and cfg.ui.screenreader_friendly == true)
+    else
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
+      return
+    end
+    M.setup(newcfg)
+  end, {
+    nargs = '?',
+    complete = function() return { 'on', 'off', 'toggle' } end,
+    desc = 'neg.nvim: Toggle/Set screenreader-friendly mode (on|off|toggle)'
   })
 
   vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)

@@ -297,6 +297,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegModeAccent {on|off|toggle} — enable/disable or toggle mode-aware accents for CursorLine/StatusLine
 - :NegSoftBorders {on|off|toggle} — enable/disable or toggle soft borders (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — enable/disable or toggle light sign icons (DiagnosticSign*/GitSigns*)
+- :NegDimInactive {on|off|toggle} — dim inactive windows
+- :NegDiffFocus {on|off|toggle} — stronger Diff* backgrounds in :diff
 - :NegPunctFamily {on|off|toggle} — enable/disable or toggle punctuation family differentiation
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
 - :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia)
@@ -304,6 +306,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues
 - :NegThickCursor {on|off|toggle} — thicker CursorLine/CursorLineNr
 - :NegOutlines {on|off|toggle} — window outlines
+- :NegScreenreader {on|off|toggle} — screenreader-friendly mode
 - :NegReadingMode {on|off|toggle} — near-monochrome reading mode
 - :NegSearchVisibility {default|soft|strong} — search/cursearch visibility
 - :NegHc {off|soft|strong} — high-contrast pack presets

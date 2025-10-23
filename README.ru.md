@@ -171,6 +171,8 @@ require('neg').setup({ preset = 'hard' })
 - :NegModeAccent {on|off|toggle} — акценты по режимам (CursorLine/StatusLine)
 - :NegSoftBorders {on|off|toggle} — мягкие границы (WinSeparator/FloatBorder)
 - :NegLightSigns {on|off|toggle} — «легкие» знаки в SignColumn
+- :NegDimInactive {on|off|toggle} — приглушить неактивные окна
+- :NegDiffFocus {on|off|toggle} — усилить фоны Diff* при :diff
 - :NegPunctFamily {on|off|toggle} — различение семейства скобок
 - :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
 - :NegAccessibility {deuteranopia|strong_undercurl|strong_tui_cursor|achromatopsia} {on|off|toggle}
@@ -181,6 +183,7 @@ require('neg').setup({ preset = 'hard' })
 - :NegReadingMode {on|off|toggle} — режим чтения
 - :NegSearchVisibility {default|soft|strong} — видимость поиска/текущего совпадения
 - :NegHc {off|soft|strong} — пресеты контраста (achromatopsia)
+- :NegScreenreader {on|off|toggle} — режим, дружелюбный к скринридеру
 
 ## Overrides
 

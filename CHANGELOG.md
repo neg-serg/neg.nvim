@@ -517,3 +517,12 @@ Release date: 2025-10-23 03:19:51 +0300
 - Command: add `:NegTelescopeAccents {on|off|toggle}` to control enhanced Telescope accents at runtime.
 - Docs: README/README.ru updated (options + commands). Clarified accessibility high‑contrast `ui.accessibility.hc` option in English README.
 - Meta: bump version and update `Last Change` header in `lua/neg/init.lua`.
+
+## [4.31]
+Release date: 2025-10-23 03:27:24 +0300
+- Commands: add quick toggles for core UX features:
+  - `:NegDimInactive {on|off|toggle}` — dim inactive windows.
+  - `:NegDiffFocus {on|off|toggle}` — stronger Diff* backgrounds in :diff.
+  - `:NegScreenreader {on|off|toggle}` — screenreader‑friendly mode.
+- Docs: README/README.ru — Commands section updated.
+- Meta: bump version.
