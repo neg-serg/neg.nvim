@@ -116,7 +116,6 @@ end
       -- Accessibility options (independent toggles)
       accessibility = {
         deuteranopia = false,      -- shift additions to blue‑ish hue; keep warnings distinct
-        strong_undercurl = false,  -- stronger/more visible diagnostic undercurls
         achromatopsia = false,     -- monochrome/high-contrast assist: reduce reliance on hue
         hc = 'off',                -- high-contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
       },
@@ -772,20 +771,7 @@ local function apply_accessibility_opts(cfg)
     hi(0, 'DiffAdd', { fg = add, bg = add_bg })
     for _, g in ipairs({ 'GitSignsAdd','GitGutterAdd','DiagnosticOk','DiagnosticSignOk','DiagnosticVirtualTextOk' }) do hi(0, g, { fg = add }) end
   end
-  -- Stronger undercurls for diagnostics
-  if acc.strong_undercurl then
-    local map = {
-      { 'DiagnosticUnderlineError', p.diff_delete_color },
-      { 'DiagnosticUnderlineWarn',  p.warning_color },
-      { 'DiagnosticUnderlineInfo',  p.preproc_light_color },
-      { 'DiagnosticUnderlineHint',  p.identifier_color },
-      { 'DiagnosticUnderlineOk',    p.diff_add_color },
-    }
-    for _, entry in ipairs(map) do
-      local name, col = entry[1], entry[2]
-      hi(0, name, { undercurl = true, underline = true, sp = col })
-    end
-  end
+  -- (removed) strong_undercurl option
   -- (removed) strong_tui_cursor
   -- Achromatopsia-friendly adjustments: try to remove hue reliance
   if acc.achromatopsia then
@@ -2151,15 +2137,15 @@ define_commands = function()
     for w in arg:gmatch("%S+") do parts[#parts+1] = w end
     local feature = parts[1]
     local state = (parts[2] or 'toggle')
-    local features = { deuteranopia=true, strong_undercurl=true, achromatopsia=true }
+    local features = { deuteranopia=true, achromatopsia=true }
     if not features[feature or ''] then
-      print("neg.nvim: unknown feature '" .. tostring(feature) .. "'. Use: deuteranopia|strong_undercurl|achromatopsia [on|off|toggle]")
+      print("neg.nvim: unknown feature '" .. tostring(feature) .. "'. Use: deuteranopia|achromatopsia [on|off|toggle]")
       return
     end
     local cfg = M._config or default_config
     local newcfg = vim.deepcopy(cfg)
     newcfg.ui = newcfg.ui or {}
-    newcfg.ui.accessibility = vim.tbl_deep_extend('force', { deuteranopia=false, strong_undercurl=false }, newcfg.ui.accessibility or {})
+    newcfg.ui.accessibility = vim.tbl_deep_extend('force', { deuteranopia=false }, newcfg.ui.accessibility or {})
     local cur = newcfg.ui.accessibility[feature] == true
     if state == 'on' then newcfg.ui.accessibility[feature] = true
     elseif state == 'off' then newcfg.ui.accessibility[feature] = false
@@ -2174,10 +2160,10 @@ define_commands = function()
     complete = function(_, line)
       local toks = {}
       for w in line:gmatch('%S+') do toks[#toks+1] = w end
-      if #toks <= 2 then return { 'deuteranopia', 'strong_undercurl', 'achromatopsia' } end
+      if #toks <= 2 then return { 'deuteranopia', 'achromatopsia' } end
       return { 'on', 'off', 'toggle' }
     end,
-    desc = 'neg.nvim: Accessibility toggles: deuteranopia|strong_undercurl|achromatopsia [on|off|toggle]'
+    desc = 'neg.nvim: Accessibility toggles: deuteranopia|achromatopsia [on|off|toggle]'
   })
 
   vim.api.nvim_create_user_command('NegDiagPattern', function(opts)
@@ -2351,7 +2337,7 @@ define_commands = function()
         screenreader_friendly = true, mode_accent = false, focus_caret = false,
         diff_focus = false, search_visibility = 'soft', selection_model = 'kitty',
         accessibility = vim.tbl_deep_extend('force', newcfg.ui and newcfg.ui.accessibility or {}, {
-          strong_undercurl = true, achromatopsia = true, hc = 'soft'
+          achromatopsia = true, hc = 'soft'
         }),
       })
     elseif s == 'tui' then

@@ -488,8 +488,7 @@ Release date: 2025-10-23 02:33:46 +0300
 Release date: 2025-10-23 02:35:12 +0300
 - Accessibility options:
   - `ui.accessibility.deuteranopia` — shifts additions (ok/plus) toward blue for red/green deficiency; warnings remain orange.
-  - `ui.accessibility.strong_undercurl` — makes diagnostic undercurls more visible (adds underline fallback).
-  - Command: `:NegAccessibility {deuteranopia|strong_undercurl} {on|off|toggle}`.
+  - Command: `:NegAccessibility {deuteranopia} {on|off|toggle}`.
 - Docs: README updated (UI options + Commands).
 - Meta: bump version.
 ## [4.25]

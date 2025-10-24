@@ -121,7 +121,6 @@ require('neg').setup({
 
     accessibility = {
       deuteranopia = false,             -- сдвиг «добавлений» в синеву, варны остаются различимыми
-      strong_undercurl = false,         -- более заметные undercurl (с underline‑fallback)
       -- удалено: strong_tui_cursor
       achromatopsia = false,            -- монохром/высокий контраст (минимум зависимости от цвета); повышает читаемость Folded/ColorColumn
       hc = 'off',                       -- high‑contrast для achromatopsia: 'off' | 'soft' | 'strong'
@@ -234,7 +233,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegTelescopeAccents {on|off|toggle} — усиленные акценты для Telescope (совпадения/выделение/границы)
 - :NegPathSep {on|off|toggle} — голубой цвет разделителей путей (Startify/Navic/WhichKey)
 - :NegPathSepColor {#rrggbb|palette_key|default} — задать/сбросить цвет разделителей (используется при включенном голубом)
-- :NegAccessibility {deuteranopia|strong_undercurl|achromatopsia} {on|off|toggle}
+- :NegAccessibility {deuteranopia|achromatopsia} {on|off|toggle}
 - :NegDiagPattern {none|minimal|strong} — паттерны для Diagnostic*
 - :NegLexemeCues {off|minimal|strong} — подсказки для функций/типов
 - :NegThickCursor {on|off|toggle} — «толстый» курсор/строка
@@ -293,7 +292,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 | `:NegThickCursor {on|off|toggle}` | Более «толстая» строка курсора | выкл |
 | `:NegSearchVisibility {default|soft|strong}` | Видимость поиска/текущего совпадения | default |
 | `:NegScreenreader {on|off|toggle}` | Режим, дружелюбный к скринридеру | выкл |
-| `:NegAccessibility {deuteranopia|strong_undercurl|achromatopsia}` | Флаги доступности | все выкл |
+| `:NegAccessibility {deuteranopia|achromatopsia}` | Флаги доступности | все выкл |
 | `:NegHc {off|soft|strong}` | Пакет высокого контраста (achromatopsia) | off |
 | `:NegDiagPattern {none|minimal|strong}` | Паттерны Diagnostic* | none |
 | `:NegDiagSoft` / `:NegDiagStrong` | Быстрые пресеты фонов виртуального текста | выкл |
@@ -513,7 +512,7 @@ require('neg').setup({
 - Дружелюбно к скринридеру
 
   - Когда: пользователи скринридера или тем, кому важна стабильная картинка.
-  - Что меняется: стабилизируем акценты, achromatopsia + мягкий high‑contrast, сильные undercurl, без diff focus.
+  - Что меняется: стабилизируем акценты, achromatopsia + мягкий high‑contrast, без diff focus.
 
 ```lua
 require('neg').setup({
@@ -526,7 +525,6 @@ require('neg').setup({
     search_visibility = 'soft',
     selection_model = 'kitty',
     accessibility = {
-      strong_undercurl = true,
       achromatopsia = true,
       hc = 'soft',
     },

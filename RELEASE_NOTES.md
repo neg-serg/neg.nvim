@@ -59,7 +59,7 @@ This document summarizes the changes across the 4.x line in a thematic, free‑f
 - Presets: accessibility, focus, presentation (plus soft/hard/pro/writing).
 - Achromatopsia support: achromatopsia flag plus high‑contrast pack ui.accessibility.hc ('off'|'soft'|'strong').
 - Deuteranopia option: gentle hue shift to keep additions/warnings distinct.
-- Strong undercurls for diagnostics, and calmer structure zones (Folded/ColorColumn) under achromatopsia.
+  
 - Reading mode: near‑monochrome syntax with clearer structure and low noise.
 - Lexeme cues: underline functions and emphasize types (off|minimal|strong).
 
@@ -91,4 +91,3 @@ This document summarizes the changes across the 4.x line in a thematic, free‑f
 ## Credits and approach
 
 The 4.x line focuses on clarity, gentle defaults, optional accents behind toggles, and strong accessibility tooling. We keep user overrides last in the pipeline and document known interactions so your preferences win consistently.
-

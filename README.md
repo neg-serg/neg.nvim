@@ -139,7 +139,6 @@ require('neg').setup({
     selection_model = 'kitty',        -- 'default' (theme) or 'kitty' (match kitty selection colors)
     accessibility = {                  -- independent toggles
       deuteranopia = false,            -- shift additions to blue‑ish hue; keep warnings distinct
-      strong_undercurl = false,        -- stronger/more visible diagnostic undercurls
       -- removed: strong_tui_cursor
       achromatopsia = false,           -- monochrome/high-contrast assist; reduce reliance on hue; boosts Folded/ColorColumn visibility
       hc = 'off',                      -- high‑contrast pack for achromatopsia: 'off' | 'soft' | 'strong'
@@ -379,7 +378,7 @@ require('neg').setup({ preset = 'pro', operator_colors = 'mono' })
 - :NegTelescopeAccents {on|off|toggle} — toggle enhanced Telescope accents (matching/selection/borders)
 - :NegPathSep {on|off|toggle} — toggle blue path separators (Telescope/Startify/Navic/WhichKey)
 - :NegPathSepColor {#rrggbb|palette_key|default} — set/reset path separator color (used when blue is on)
-- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|strong_undercurl|achromatopsia)
+- :NegAccessibility {feature} {on|off|toggle} — toggle accessibility features (deuteranopia|achromatopsia)
 - :NegDiagPattern {none|minimal|strong} — set diagnostics pattern preset
 - :NegLexemeCues {off|minimal|strong} — set lexeme cues
 - :NegThickCursor {on|off|toggle} — thicker CursorLine/CursorLineNr
@@ -438,7 +437,7 @@ Defaults: all listed integrations are enabled unless noted. Toggle by setting `p
 | `:NegThickCursor {on|off|toggle}` | Thicker CursorLine/CursorLineNr | off |
 | `:NegSearchVisibility {default|soft|strong}` | Tune Search/CurSearch visibility | default |
 | `:NegScreenreader {on|off|toggle}` | Reduce dynamic accents and colored backgrounds | off |
-| `:NegAccessibility {deuteranopia|strong_undercurl|achromatopsia}` | Toggle accessibility features | all off |
+| `:NegAccessibility {deuteranopia|achromatopsia}` | Toggle accessibility features | all off |
 | `:NegHc {off|soft|strong}` | High‑contrast pack (achromatopsia) | off |
 | `:NegDiagPattern {none|minimal|strong}` | Diagnostics pattern presets | none |
 | `:NegDiagSoft` / `:NegDiagStrong` | Quick soft/strong DiagnosticVirtualText bg | off |
@@ -563,7 +562,6 @@ require('neg').setup({
     diag_pattern = 'strong',
     accessibility = {
       achromatopsia = true,
-      strong_undercurl = true,
       hc = 'strong',
     },
   },
@@ -658,7 +656,7 @@ require('neg').setup({
 - Screenreader‑friendly
 
   - When: screenreader users or anyone preferring very stable visuals.
-  - Changes: stabilizes accents, achromatopsia + soft high‑contrast, strong undercurls, no diff focus.
+  - Changes: stabilizes accents, achromatopsia + soft high‑contrast, no diff focus.
 
 ```lua
 require('neg').setup({
@@ -671,7 +669,6 @@ require('neg').setup({
     search_visibility = 'soft',
     selection_model = 'kitty',
     accessibility = {
-      strong_undercurl = true,
       achromatopsia = true,
       hc = 'soft',
     },
