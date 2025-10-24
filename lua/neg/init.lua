@@ -1565,6 +1565,9 @@ define_commands = function()
     M.setup(newcfg)
   end, {
     nargs = 1,
+    complete = function()
+      return { '0','0.05','0.1','0.15','0.2','0.25','0.3','0.4','0.5','0.6','0.75','1' }
+    end,
     desc = 'neg.nvim: Set diagnostics bg strength (0..1) for alpha/lighten/darken modes'
   })
 
@@ -1582,6 +1585,9 @@ define_commands = function()
     M.setup(newcfg)
   end, {
     nargs = 1,
+    complete = function()
+      return { '0','5','10','15','20','25','30','40','50','60','70','80','90','100' }
+    end,
     desc = 'neg.nvim: Set diagnostics bg blend (0..100) when mode=blend'
   })
 
@@ -1961,7 +1967,42 @@ define_commands = function()
       local payload = vim.json_encode(result)
       if use_notify and vim.notify then vim.notify(payload) else print(payload) end
     end
-  end, { nargs = '+', desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"' })
+  end, {
+    nargs = '+',
+    complete = function(arglead, cmdline)
+      local lead = tostring(arglead or '')
+      local args = vim.split(cmdline or '', '%s+', { trimempty = true })
+      local flags = { 'apply', '--target=AA', '--target=AAA', '--json', '--notify=off', '--notify=on' }
+      if #args <= 2 then
+        local groups = vim.fn.getcompletion(lead, 'highlight') or {}
+        if lead == '' then
+          local res = {}
+          for i, v in ipairs(groups) do if i <= 50 then res[#res+1] = v end end
+          return res
+        end
+        return groups
+      end
+      local line = table.concat(args, ' ')
+      if not line:find('%svs%s') and lead ~= '' and lead:lower():find('^v') then return { 'vs' } end
+      if lead == 'vs' then return { 'vs' } end
+      local saw_vs = false
+      for i = 1, #args do if args[i] == 'vs' then saw_vs = true break end end
+      if saw_vs and (#args <= 4 || args[#args-1] == 'vs') then
+        local groups = vim.fn.getcompletion(lead, 'highlight') or {}
+        local out = {}
+        if lead == '' or lead:sub(1,1) == '#' then out[#out+1] = '#' end
+        for _, g in ipairs(groups) do if lead == '' or g:find(lead, 1, true) == 1 then out[#out+1] = g end end
+        return out
+      end
+      if lead:sub(1,1) == '-' or lead == '' or lead == 'apply' then
+        local res = {}
+        for _, f in ipairs(flags) do if lead == '' or f:find(lead, 1, true) == 1 then res[#res+1] = f end end
+        return res
+      end
+      return {}
+    end,
+    desc = 'neg.nvim: Show contrast ratio for a group/capture vs background; supports "vs Group|#hex"'
+  })
 
   vim.api.nvim_create_user_command('NegTelescopeAccents', function(opts)
     local arg = (opts.args or ''):lower()
@@ -2023,6 +2064,22 @@ define_commands = function()
     end
   end, {
     nargs = '?',
+    complete = function(arglead)
+      local out = { 'default', 'clear' }
+      local ok, pal = pcall(require, 'neg.palette')
+      if ok and type(pal) == 'table' then
+        for k, v in pairs(pal) do
+          if type(k) == 'string' and type(v) == 'string' and v:match('^#%x%x%x%x%x%x$') then
+            out[#out+1] = k
+          end
+        end
+      end
+      local lead = tostring(arglead or '')
+      if lead == '' then return out end
+      local res = {}
+      for _, v in ipairs(out) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
     desc = 'neg.nvim: Set path separator color (#rrggbb or palette key); use "default" to clear'
   })
 
@@ -2330,7 +2387,22 @@ define_commands = function()
     local cfg = M._config or default_config
     M._scenarios[name] = pick_scenario_fields(cfg)
     print("neg.nvim: scenario saved: " .. name)
-  end, { nargs = 1, desc = 'neg.nvim: Save current config to a named scenario (memory)' })
+  end, {
+    nargs = 1,
+    complete = function(arglead)
+      local builtins = { 'focus','presentation','screenreader','tui','gui','accessibility' }
+      local names = {}
+      for _, v in ipairs(builtins) do names[#names+1] = v end
+      for k, _ in pairs(M._scenarios or {}) do names[#names+1] = k end
+      table.sort(names)
+      local lead = tostring(arglead or '')
+      if lead == '' then return names end
+      local res = {}
+      for _, v in ipairs(names) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Save current config to a named scenario (memory)'
+  })
 
   vim.api.nvim_create_user_command('NegScenarioList', function()
     local builtins = { 'focus','presentation','screenreader','tui','gui','accessibility' }
@@ -2354,7 +2426,20 @@ define_commands = function()
     else
       print('neg.nvim: scenario not found: ' .. name)
     end
-  end, { nargs = 1, desc = 'neg.nvim: Delete saved user scenario (memory)' })
+  end, {
+    nargs = 1,
+    complete = function(arglead)
+      local names = {}
+      for k, _ in pairs(M._scenarios or {}) do names[#names+1] = k end
+      table.sort(names)
+      local lead = tostring(arglead or '')
+      if lead == '' then return names end
+      local res = {}
+      for _, v in ipairs(names) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Delete saved user scenario (memory)'
+  })
 
   vim.api.nvim_create_user_command('NegScenarioExport', function(opts)
     local raw = (opts.args or '')
@@ -2386,7 +2471,20 @@ define_commands = function()
     end
     local payload = vim.json_encode({ name = name, scenario = obj })
     if use_notify and vim.notify then vim.notify(payload) else print(payload) end
-  end, { nargs = '*', desc = 'neg.nvim: Export scenario JSON (name or "current")' })
+  end, {
+    nargs = '*',
+    complete = function(arglead)
+      local out = { 'current', '--json', '--notify=off', '--notify=on' }
+      for k, _ in pairs(M._scenarios or {}) do out[#out+1] = k end
+      table.sort(out)
+      local lead = tostring(arglead or '')
+      if lead == '' then return out end
+      local res = {}
+      for _, v in ipairs(out) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Export scenario JSON (name or "current")'
+  })
 
   vim.api.nvim_create_user_command('NegScenarioImport', function(opts)
     local raw = (opts.args or '')
@@ -2430,7 +2528,27 @@ define_commands = function()
     end
     apply_scenario_tbl(decoded, mode)
     if use_notify and vim.notify then vim.notify('neg.nvim: scenario imported (' .. mode .. ')') else print('neg.nvim: scenario imported (' .. mode .. ')') end
-  end, { nargs = '+', desc = 'neg.nvim: Import scenario from JSON string or file (@/path); merge or replace' })
+  end, {
+    nargs = '+',
+    complete = function(arglead, cmdline)
+      local lead = tostring(arglead or '')
+      local out = { '--merge', '--replace', '--notify=off', '--notify=on' }
+      if lead:sub(1,1) == '@' then
+        local pat = lead:sub(2)
+        local files = vim.fn.getcompletion(pat, 'file') or {}
+        local res = {}
+        for _, f in ipairs(files) do res[#res+1] = '@' .. f end
+        return res
+      end
+      local toks = {}
+      for w in tostring(cmdline or ''):gmatch('%S+') do toks[#toks+1] = w end
+      if #toks <= 2 then return out end
+      local res = {}
+      for _, v in ipairs(out) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Import scenario from JSON string or file (@/path); merge or replace'
+  })
 
   -- ScenarioWrite: persist all user scenarios to a JSON file
   -- Usage: :NegScenarioWrite [@/path] [--notify=off|on]
@@ -2465,7 +2583,24 @@ define_commands = function()
     local ok_write = pcall(vim.fn.writefile, { payload }, path)
     local msg = ok_write and ('neg.nvim: scenarios written to ' .. path) or ('neg.nvim: failed to write ' .. path)
     if use_notify and vim.notify then vim.notify(msg) else print(msg) end
-  end, { nargs = '*', desc = 'neg.nvim: Write user scenarios to JSON (@path optional; defaults to stdpath(\'config\')/neg/scenarios.json)' })
+  end, {
+    nargs = '*',
+    complete = function(arglead)
+      local lead = tostring(arglead or '')
+      local flags = { '--notify=off', '--notify=on' }
+      if lead:sub(1,1) == '@' then
+        local pat = lead:sub(2)
+        local files = vim.fn.getcompletion(pat, 'file') or {}
+        local res = {}
+        for _, f in ipairs(files) do res[#res+1] = '@' .. f end
+        return res
+      end
+      local res = {}
+      for _, v in ipairs(flags) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Write user scenarios to JSON (@path optional; defaults to stdpath(\'config\')/neg/scenarios.json)'
+  })
 
   -- ScenarioRead: load scenarios from JSON file into memory (merge/replace)
   -- Usage: :NegScenarioRead [@/path] [--merge|--replace] [--notify=off|on]
@@ -2512,7 +2647,25 @@ define_commands = function()
     end
     local msg = ('neg.nvim: scenarios loaded (%s) from %s'):format(mode, path)
     if use_notify and vim.notify then vim.notify(msg) else print(msg) end
-  end, { nargs = '*', desc = 'neg.nvim: Read scenarios from JSON (@path optional; merge or replace memory)' })
+  end, {
+    nargs = '*',
+    complete = function(arglead)
+      local lead = tostring(arglead or '')
+      local out = { '--merge', '--replace', '--notify=off', '--notify=on' }
+      if lead:sub(1,1) == '@' then
+        local pat = lead:sub(2)
+        local files = vim.fn.getcompletion(pat, 'file') or {}
+        local res = {}
+        for _, f in ipairs(files) do res[#res+1] = '@' .. f end
+        return res
+      end
+      if lead == '' then return out end
+      local res = {}
+      for _, v in ipairs(out) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = 'neg.nvim: Read scenarios from JSON (@path optional; merge or replace memory)'
+  })
 
   vim.api.nvim_create_user_command('NegOperatorColors', function(opts)
     local mode = (opts.args or ''):lower()
@@ -2719,7 +2872,31 @@ define_commands = function()
       header('Hints')
       for _, m in ipairs(hints) do print('· ' .. m) end
     end
-  end, { desc = 'neg.nvim: Export highlights (supports sections + --json + --notify)' })
+  end, {
+    nargs = '*',
+    complete = function(arglead, cmdline)
+      local sections = { 'all','core','diff','diagnostics','syntax','hints' }
+      local flags = { '--json', '--notify=off', '--notify=on' }
+      local lead = tostring(arglead or '')
+      local toks = {}
+      for w in tostring(cmdline or ''):gmatch('%S+') do toks[#toks+1] = w end
+      local last = toks[#toks] or ''
+      if lead:sub(1,1) == '-' or last:sub(1,1) == '-' then
+        local res = {}
+        for _, f in ipairs(flags) do if f:find(lead, 1, true) == 1 then res[#res+1] = f end end
+        return res
+      end
+      local picked = {}
+      for part in (last or ''):gmatch('[^,]+') do picked[part] = true end
+      local base = {}
+      for _, s in ipairs(sections) do if not picked[s] then base[#base+1] = s end end
+      if lead == '' and last:find(',') then return base end
+      local res = {}
+      for _, s in ipairs(base) do if s:find(lead, 1, true) == 1 then res[#res+1] = s end end
+      return (#res > 0) and res or sections
+    end,
+    desc = 'neg.nvim: Export highlights (supports sections + --json + --notify)'
+  })
 
   -- List plugin integrations and their state
   -- Usage: :NegPlugins [enabled|disabled|all] [filter] [--json] [--notify=off|on]
@@ -2800,11 +2977,31 @@ define_commands = function()
     end
   end, {
     nargs = '*',
-    complete = function(_, line)
-      local args = vim.split(line, '%s+', { trimempty = true })
-      local opts = { 'enabled', 'disabled', 'all', '--json', '--notify=off', '--notify=on' }
-      if #args <= 2 then return opts end
-      return opts
+    complete = function(arglead, cmdline)
+      local lead = tostring(arglead or '')
+      local args = vim.split(cmdline or '', '%s+', { trimempty = true })
+      local flags = { '--json', '--notify=off', '--notify=on' }
+      local states = { 'enabled', 'disabled', 'all' }
+      local cfg = M._config or default_config
+      local plugs = {}
+      if cfg and cfg.plugins then for k, _ in pairs(cfg.plugins) do plugs[#plugs+1] = tostring(k) end end
+      table.sort(plugs)
+      if #args <= 2 then
+        local pool = {}
+        for _, v in ipairs(states) do pool[#pool+1] = v end
+        for _, v in ipairs(flags) do pool[#pool+1] = v end
+        local res = {}
+        for _, v in ipairs(pool) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+        return res
+      end
+      if lead:sub(1,1) == '-' then
+        local res = {}
+        for _, v in ipairs(flags) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+        return res
+      end
+      local res = {}
+      for _, v in ipairs(plugs) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return (#res > 0) and res or plugs
     end,
     desc = 'neg.nvim: List plugin integrations and their state (filterable, --json, --notify=off|on)'
   })
@@ -2866,7 +3063,18 @@ define_commands = function()
     lines[#lines+1] = '}'
     local msg = table.concat(lines, '\n')
     if use_notify and vim.notify then vim.notify(msg) else print(msg) end
-  end, { nargs = '*', desc = "neg.nvim: Suggest a 'plugins = { ... }' block from installed lazy plugins" })
+  end, {
+    nargs = '*',
+    complete = function(arglead)
+      local out = { '--json', '--notify=off', '--notify=on' }
+      local lead = tostring(arglead or '')
+      if lead == '' then return out end
+      local res = {}
+      for _, v in ipairs(out) do if v:find(lead, 1, true) == 1 then res[#res+1] = v end end
+      return res
+    end,
+    desc = "neg.nvim: Suggest a 'plugins = { ... }' block from installed lazy plugins"
+  })
 end
 
 return M
