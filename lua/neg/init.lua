@@ -68,6 +68,16 @@ end
 
 local flags_from = U.flags_from
 
+-- Invalidate cached group modules so they recompute with the current palette
+local function invalidate_group_modules()
+  local loaded = package.loaded or {}
+  for name, _ in pairs(loaded) do
+    if type(name) == 'string' and name:match('^neg%.groups') then
+      package.loaded[name] = nil
+    end
+  end
+end
+
   local default_config = {
     -- Global saturation scale (0..100). 100 = original palette, 0 = grayscale.
     saturation = 100,
@@ -1285,6 +1295,8 @@ function M.setup(opts)
 
   -- Apply palette saturation before any highlight tables are required
   set_palette_saturation(cfg.saturation or 100)
+  -- Ensure group modules are re-evaluated against the updated palette
+  invalidate_group_modules()
 
   -- Idempotent apply: skip if no changes and no function overrides
   if not force_apply and M._applied_key and type(cfg.overrides) ~= 'function' then
