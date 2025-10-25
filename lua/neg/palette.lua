@@ -21,7 +21,8 @@ local colors = {
     ops3='#005faf', -- operations color 3
     ops4='#395573', -- operations color 4
     otag='#357b63', -- tag highlight color
-    lstr='#54667a', -- literal string highlight
+    -- String: cool, subdued steel-blue tuned for readability on dark bg
+    lstr='#6e879f', -- literal string highlight
     incl='#005f87', -- include color
     dlim='#4779b3', -- delimiter color
     blod='#5f0000', -- bloody red

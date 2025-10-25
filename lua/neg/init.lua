@@ -1,6 +1,6 @@
 -- Name:        neg
--- Version:     4.66
--- Last Change: 23-10-2025
+-- Version:     4.67
+-- Last Change: 25-10-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
 -- About:       neg theme extends Jason W Ryan's miromiro(1) Vim color file
@@ -133,8 +133,8 @@ end
       search_visibility = 'default',
       -- Screenreader friendly: reduce dynamic accents and colored backgrounds
       screenreader_friendly = false,
-      -- Enhanced accents for Telescope (matching/selection/borders); off by default
-      telescope_accents = false,
+      -- Enhanced accents for Telescope (matching/selection/borders)
+      telescope_accents = true,
       -- Path separator tint (non-Telescope): when true, color path separators in a kitty-like blue
       path_separator_blue = false,
       -- Optional color override for path separators: '#rrggbb' or palette key (e.g. 'include_color').
@@ -1265,9 +1265,116 @@ local function apply_styles(styles)
   end
 end
 
-local function apply_overrides(overrides) U.apply_overrides(overrides, p) end
+  local function apply_overrides(overrides) U.apply_overrides(overrides, p) end
 
-function M.setup(opts)
+  -- Replace default NvimLight* palette leftovers with theme colors
+  local function sanitize_nvim_light_colors(cfg)
+    local ui = cfg and cfg.ui or {}
+    local enable = (ui.sanitize_defaults ~= false)
+    if not enable then return end
+    local ok_api = (vim and vim.api and vim.api.nvim_set_hl and vim.api.nvim_get_hl and vim.fn and vim.fn.getcompletion)
+    if not ok_api then return end
+    local function probe(name)
+      local g = 'NegProbe' .. name
+      pcall(vim.api.nvim_set_hl, 0, g, { fg = name })
+      local ok, t = pcall(vim.api.nvim_get_hl, 0, { name = g, link = false })
+      local v = (ok and type(t) == 'table') and t.fg or nil
+      pcall(vim.cmd, 'hi clear ' .. g)
+      return v
+    end
+    local desired = {
+      -- Light palette fallbacks
+      NvimLightGreen   = p.diff_add_color,
+      NvimLightRed     = p.diff_delete_color,
+      NvimLightCyan    = p.preproc_light_color,
+      NvimLightBlue    = p.include_color,
+      NvimLightYellow  = p.warning_color,
+      NvimLightMagenta = p.violet_color,
+      NvimLightGrey    = p.comment_color,
+      -- Dark palette fallbacks
+      NvimDarkGreen    = p.diff_add_color,
+      NvimDarkRed      = p.diff_delete_color,
+      NvimDarkCyan     = p.preproc_light_color,
+      NvimDarkBlue     = p.include_color,
+      NvimDarkYellow   = p.warning_color,
+      NvimDarkMagenta  = p.violet_color,
+      NvimDarkGrey     = p.comment_color,
+    }
+    local match_values = {}
+    for k, hex in pairs(desired) do
+      local v = probe(k)
+      if type(v) == 'number' then match_values[v] = hex end
+    end
+    local name_map = {
+      ['@string']                 = { fg = p.string_color },
+      ['@character']              = { fg = p.string_color },
+      ['@character.special']      = { fg = p.string_color },
+      ['@string.escape']          = { fg = p.literal2_color },
+      ['@string.regexp']          = { fg = p.string_color },
+      ['@string.special']         = { fg = p.string_color },
+      ['@function']               = { fg = p.function_color },
+      ['@function.builtin']       = { fg = p.function_color },
+      ['@constructor']            = { fg = p.function_color },
+      ['@lsp.type.function']      = { fg = p.function_color },
+      ['@lsp.type.method']        = { fg = p.function_color },
+      ['@tag']                    = { fg = p.tag_color },
+      ['@tag.builtin']            = { fg = p.tag_color },
+      ['@type.builtin']           = { fg = p.keyword3_color },
+      ['@property']               = { fg = p.identifier_color },
+      ['@lsp.type.property']      = { fg = p.identifier_color },
+      ['@module.builtin']         = { fg = p.identifier_color },
+      ['@variable.builtin']       = { fg = p.identifier_color },
+      ['@variable.parameter.builtin'] = { fg = p.identifier_color },
+      ['@constant.builtin']       = { fg = p.literal2_color },
+      ['@attribute.builtin']      = { fg = p.identifier_color },
+      ['@comment.error']          = { fg = p.diff_delete_color },
+      ['@comment.warning']        = { fg = p.warning_color },
+      ['@comment.note']           = { fg = p.identifier_color },
+      ['@punctuation.special']    = { fg = p.delimiter_color },
+      ['@diff.plus']              = { fg = p.diff_add_color },
+      ['@diff.minus']             = { fg = p.diff_delete_color },
+      ['@diff.delta']             = { fg = p.diff_change_color },
+      DiagnosticError             = { fg = p.diff_delete_color },
+      DiagnosticWarn              = { fg = p.warning_color },
+      DiagnosticInfo              = { fg = p.preproc_light_color },
+      DiagnosticHint              = { fg = p.identifier_color },
+      DiagnosticOk                = { fg = p.diff_add_color },
+    }
+    local groups = vim.fn.getcompletion('', 'highlight') or {}
+    for _, name in ipairs(groups) do
+      local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+      if ok and type(hl) == 'table' then
+        local changed = false
+        local spec = {}
+        if hl.bold ~= nil then spec.bold = hl.bold end
+        if hl.italic ~= nil then spec.italic = hl.italic end
+        if hl.underline ~= nil then spec.underline = hl.underline end
+        if hl.undercurl ~= nil then spec.undercurl = hl.undercurl end
+        if hl.strikethrough ~= nil then spec.strikethrough = hl.strikethrough end
+        if hl.reverse ~= nil then spec.reverse = hl.reverse end
+        if hl.blend ~= nil then spec.blend = hl.blend end
+        if hl.fg and match_values[hl.fg] then spec.fg = match_values[hl.fg]; changed = true end
+        if hl.bg and match_values[hl.bg] then spec.bg = match_values[hl.bg]; changed = true end
+        if hl.sp and match_values[hl.sp] then spec.sp = match_values[hl.sp]; changed = true end
+        -- Name-based fallbacks for common groups
+        if name == 'Added'        then spec.fg = p.diff_add_color;    changed = true end
+        if name == 'Removed'      then spec.fg = p.diff_delete_color; changed = true end
+        if name == 'Changed'      then spec.fg = p.diff_change_color; changed = true end
+        if name == 'diffAdded'    then spec.fg = p.diff_add_color;    changed = true end
+        if name == 'diffRemoved'  then spec.fg = p.diff_delete_color; changed = true end
+        if name == 'diffChanged'  then spec.fg = p.diff_change_color; changed = true end
+        if name == 'DiffAdded'    then spec.fg = p.diff_add_color;    changed = true end
+        if name == 'DiffRemoved'  then spec.fg = p.diff_delete_color; changed = true end
+        if name == 'DiffChanged'  then spec.fg = p.diff_change_color; changed = true end
+        -- Treesitter/LSP/common aliases
+        local nm = name_map[name]
+        if nm then for k, v in pairs(nm) do spec[k] = v end; changed = true end
+        if changed then hi(0, name, spec) end
+      end
+    end
+  end
+
+  function M.setup(opts)
   local cfg
   if type(opts) == 'table' and next(opts) ~= nil then
     cfg = vim.tbl_deep_extend('force', default_config, opts)
@@ -1292,6 +1399,8 @@ function M.setup(opts)
 
   -- Core groups
   apply(require('neg.groups.editor'))
+  -- Legacy Vim syntax groups (when Treesitter is not active)
+  safe_apply('neg.groups.legacy')
   -- Optional baseline UI enhancements
   if not (cfg.ui and cfg.ui.core_enhancements == false) then
     safe_apply('neg.groups.editor_extras')
@@ -1396,6 +1505,9 @@ function M.setup(opts)
   apply_path_separator(cfg)
 
   -- User overrides last
+  -- Sanitize any leftover default colors after everything is applied
+  sanitize_nvim_light_colors(cfg)
+  -- User overrides last
   apply_overrides(cfg.overrides)
   define_commands()
   if not autocmds_defined then
@@ -1428,7 +1540,7 @@ function M.setup(opts)
 end
 
 -- User commands
-define_commands = function()
+  define_commands = function()
   if commands_defined then return end
   commands_defined = true
   vim.api.nvim_create_user_command('NegToggleTransparent', function()
@@ -1973,7 +2085,7 @@ define_commands = function()
       if lead == 'vs' then return { 'vs' } end
       local saw_vs = false
       for i = 1, #args do if args[i] == 'vs' then saw_vs = true break end end
-      if saw_vs and (#args <= 4 || args[#args-1] == 'vs') then
+      if saw_vs and (#args <= 4 or args[#args-1] == 'vs') then
         local groups = vim.fn.getcompletion(lead, 'highlight') or {}
         local out = {}
         if lead == '' or lead:sub(1,1) == '#' then out[#out+1] = '#' end
@@ -3061,6 +3173,42 @@ define_commands = function()
     end,
     desc = "neg.nvim: Suggest a 'plugins = { ... }' block from installed lazy plugins"
   })
+  -- Debug: list groups that still use default NvimLight* palette
+  vim.api.nvim_create_user_command('NegSanitizeScan', function()
+    local function probe(name)
+      local g = 'NegProbe' .. name
+      pcall(vim.api.nvim_set_hl, 0, g, { fg = name })
+      local ok, t = pcall(vim.api.nvim_get_hl, 0, { name = g, link = false })
+      local v = (ok and type(t) == 'table') and t.fg or nil
+      pcall(vim.cmd, 'hi clear ' .. g)
+      return v
+    end
+    local targets = { 'NvimLightGreen','NvimLightRed','NvimLightCyan','NvimLightBlue','NvimLightYellow','NvimLightMagenta','NvimLightGrey','NvimDarkGreen','NvimDarkRed','NvimDarkCyan','NvimDarkBlue','NvimDarkYellow','NvimDarkMagenta','NvimDarkGrey' }
+    local match_vals = {}
+    for _, k in ipairs(targets) do
+      local v = probe(k)
+      if type(v) == 'number' then match_vals[v] = k end
+    end
+    local groups = vim.fn.getcompletion('', 'highlight') or {}
+    local found = {}
+    for _, name in ipairs(groups) do
+      local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+      if ok and type(hl) == 'table' then
+        for _, key in ipairs({ 'fg', 'bg', 'sp' }) do
+          local val = hl[key]
+          if val and match_vals[val] then
+            table.insert(found, string.format('%s %s=%s', name, key, match_vals[val]))
+            break
+          end
+        end
+      end
+    end
+    if #found == 0 then
+      print('neg.nvim: sanitize scan — no NvimLight*/NvimDark* leftovers found')
+    else
+      print(table.concat(found, '\n'))
+    end
+  end, { desc = 'neg.nvim: List highlight groups still using default NvimLight*/NvimDark* colors' })
 end
 
 return M
