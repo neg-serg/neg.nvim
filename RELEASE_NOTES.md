@@ -2,6 +2,14 @@
 
 This document summarizes the changes across the 4.x line in a thematic, free‑form way. It complements the per‑version CHANGELOG by grouping features and decisions into topics to make the intent and usage clearer.
 
+## New in 4.67
+
+- Default‑palette sanitizer: remaps any leftover `NvimLight*`/`NvimDark*` highlights to the theme palette. Toggle with `ui.sanitize_defaults`.
+- Tooling: `:NegSanitizeScan` prints groups still using default palette (if any) after apply.
+- Legacy syntax coverage: add core Vim groups (String/Character/Number/Boolean/etc.) so non‑Tree‑sitter setups use palette colors.
+- Colors: strings retuned to a cool, subdued steel‑blue `#6e879f` for better readability.
+- Fix: Lua completion typo (`||` → `or`) that could prevent theme loading in rare paths.
+
 ## Core UI & Editor
 
 - Baseline UI groups filled in (ui.core_enhancements = true by default): Whitespace, EndOfBuffer, LineNrAbove/Below (0.10+), Question, VisualNOS, FloatShadow/FloatShadowThrough, PmenuMatch/MatchSel, Cursor/lCursor/CursorIM.

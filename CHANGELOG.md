@@ -727,3 +727,11 @@ Release date: 2025-10-23 18:22:00 +0300
 Release date: 2025-10-23 18:38:00 +0300
 - Command: add `:NegPluginsSuggest` — prints a ready `plugins = { ... }` block by scanning lazy plugin dirs.
 - Docs: README (EN/RU) updated.
+## [4.67]
+Release date: 2025-10-25 02:20:00 +0300
+- Fix: Lua syntax error in command completion (`||` → `or`) that could break theme loading.
+- Core: add legacy Vim syntax groups (String/Character/Number/Boolean/etc.) so non‑TS setups use palette colors.
+- Core: add default‑palette sanitizer (on by default) to remap any `NvimLight*`/`NvimDark*` leftovers to theme colors; configurable via `ui.sanitize_defaults`.
+- UX: command `:NegSanitizeScan` to list any remaining default‑palette groups after apply.
+- Colors: strings switched to a cooler, subdued steel‑blue `#6e879f` for readability.
+- Meta: bump version and update `Last Change` header in `lua/neg/init.lua`.
