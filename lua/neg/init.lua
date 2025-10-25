@@ -990,22 +990,38 @@ end
 
 local function apply_telescope_accents(cfg)
   local ui = cfg and cfg.ui or {}
-  if not (ui and ui.telescope_accents) then
+  local mode = ui and ui.telescope_accents
+  if mode == nil or mode == false then
     -- Enforce neutral defaults even if other plugins recolor later
-    hi(0, 'TelescopeMatching', { underline = true })
+    hi(0, 'TelescopeMatching', { underline = true, italic = false, fg = nil })
     hi(0, 'TelescopeSelection', { link = 'Visual' })
     return
   end
-  -- Accented matching/selection/borders for Telescope
-  -- Keep tasteful: emphasize matches and selection; borders follow soft_borders if enabled
+  -- Normalize: true -> 'default'
+  if mode == true then mode = 'default' end
+  mode = tostring(mode):lower()
   local match_fg = p.search_color or p.include_color or p.keyword3_color
-  hi(0, 'TelescopeMatching', { fg = match_fg, italic = true, underline = false })
-  -- Selection: use CursorLine but ensure fg remains readable
+  if mode == 'soft' then
+    hi(0, 'TelescopeMatching', { underline = true, italic = false, fg = nil })
+  elseif mode == 'strong' then
+    hi(0, 'TelescopeMatching', { fg = match_fg, underline = true, italic = false })
+  else -- 'default'
+    hi(0, 'TelescopeMatching', { fg = match_fg, underline = false, italic = false })
+  end
+  -- Selection: use CursorLine background; caret gets include_color by default
   local cl = (U.get_hl_colors and U.get_hl_colors('CursorLine')) or {}
-  local sel = { }
+  local sel = {}
   if cl.bg then sel.bg = cl.bg end
   hi(0, 'TelescopeSelection', sel)
-  -- Borders: if soft_borders already set WinSeparator, leave links; nothing to do here
+  -- Preview matches follow matching style
+  if mode == 'soft' then
+    hi(0, 'TelescopePreviewMatch', { underline = true, italic = false, fg = nil })
+  elseif mode == 'strong' then
+    hi(0, 'TelescopePreviewMatch', { fg = match_fg, underline = true, italic = false })
+  else
+    hi(0, 'TelescopePreviewMatch', { fg = match_fg, underline = false, italic = false })
+  end
+  -- Borders follow WinSeparator via links; nothing to do
 end
 
 -- Optional blue path separators (TelescopePathSeparator)
@@ -1267,7 +1283,7 @@ end
 
   local function apply_overrides(overrides) U.apply_overrides(overrides, p) end
 
-  -- Replace default NvimLight* palette leftovers with theme colors
+  -- Replace default NvimLight*/NvimDark* palette leftovers with theme colors
   local function sanitize_nvim_light_colors(cfg)
     local ui = cfg and cfg.ui or {}
     local enable = (ui.sanitize_defaults ~= false)
@@ -1300,11 +1316,24 @@ end
       NvimDarkMagenta  = p.violet_color,
       NvimDarkGrey     = p.comment_color,
     }
+    -- Allow user overrides of palette mapping
+    if type(ui.sanitize_map) == 'table' then
+      for k, v in pairs(ui.sanitize_map) do
+        if type(k) == 'string' and type(v) == 'string' then desired[k] = v end
+      end
+    end
     local match_values = {}
     for k, hex in pairs(desired) do
       local v = probe(k)
       if type(v) == 'number' then match_values[v] = hex end
     end
+    -- Exclusions (do not sanitize these groups by name)
+    local exclude = { Search = true, CurSearch = true, IncSearch = true }
+    if type(ui.sanitize_exclude) == 'table' then
+      for _, n in ipairs(ui.sanitize_exclude) do if type(n) == 'string' then exclude[n] = true end end
+    end
+    -- Background alpha blend strength for bg replacements
+    local bg_alpha = tonumber(ui.sanitize_bg_alpha or ui.sanitize_bg_strength) or 0.22
     local name_map = {
       ['@string']                 = { fg = p.string_color },
       ['@character']              = { fg = p.string_color },
@@ -1342,6 +1371,7 @@ end
     }
     local groups = vim.fn.getcompletion('', 'highlight') or {}
     for _, name in ipairs(groups) do
+      if exclude[name] then goto continue end
       local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
       if ok and type(hl) == 'table' then
         local changed = false
@@ -1354,7 +1384,11 @@ end
         if hl.reverse ~= nil then spec.reverse = hl.reverse end
         if hl.blend ~= nil then spec.blend = hl.blend end
         if hl.fg and match_values[hl.fg] then spec.fg = match_values[hl.fg]; changed = true end
-        if hl.bg and match_values[hl.bg] then spec.bg = match_values[hl.bg]; changed = true end
+        if hl.bg and match_values[hl.bg] then
+          local hex = match_values[hl.bg]
+          spec.bg = (U.alpha and U.alpha(hex, p.bg_default, bg_alpha)) or hex
+          changed = true
+        end
         if hl.sp and match_values[hl.sp] then spec.sp = match_values[hl.sp]; changed = true end
         -- Name-based fallbacks for common groups
         if name == 'Added'        then spec.fg = p.diff_add_color;    changed = true end
@@ -1371,6 +1405,7 @@ end
         if nm then for k, v in pairs(nm) do spec[k] = v end; changed = true end
         if changed then hi(0, name, spec) end
       end
+      ::continue::
     end
   end
 
@@ -2107,21 +2142,27 @@ end
     local cfg = M._config or default_config
     local newcfg = vim.deepcopy(cfg)
     newcfg.ui = newcfg.ui or {}
+    local allowed = { on=true, off=true, toggle=true, soft=true, ['default']=true, strong=true }
+    if arg == '' then arg = 'toggle' end
+    if not allowed[arg] then
+      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle|soft|default|strong")
+      return
+    end
     if arg == 'on' then
-      newcfg.ui.telescope_accents = true
+      newcfg.ui.telescope_accents = 'default'
     elseif arg == 'off' then
       newcfg.ui.telescope_accents = false
-    elseif arg == 'toggle' or arg == '' then
-      newcfg.ui.telescope_accents = not (cfg.ui and cfg.ui.telescope_accents == true)
+    elseif arg == 'toggle' then
+      local cur = cfg.ui and cfg.ui.telescope_accents
+      if cur == false or cur == nil then newcfg.ui.telescope_accents = 'default' else newcfg.ui.telescope_accents = false end
     else
-      print("neg.nvim: unknown arg '" .. arg .. "'. Use: on|off|toggle")
-      return
+      newcfg.ui.telescope_accents = arg
     end
     M.setup(newcfg)
   end, {
     nargs = '?',
-    complete = function() return { 'on', 'off', 'toggle' } end,
-    desc = 'neg.nvim: Toggle/Set enhanced Telescope accents (matching/selection/borders)'
+    complete = function() return { 'on','off','toggle','soft','default','strong' } end,
+    desc = 'neg.nvim: Set Telescope accents (on/off/toggle or soft|default|strong)'
   })
 
   vim.api.nvim_create_user_command('NegPathSep', function(opts)
