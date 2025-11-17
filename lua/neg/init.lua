@@ -1,5 +1,5 @@
 -- Name:        neg
--- Version:     4.69
+-- Version:     4.70
 -- Last Change: 17-11-2025
 -- Maintainer:  Sergey Miroshnichenko <serg.zorg@gmail.com>
 -- URL:         https://github.com/neg-serg/neg.nvim
@@ -193,6 +193,7 @@ end
     overseer = true,
     noice = true,
     obsidian = true,
+    telekasten = true,
     rainbow = true,
     headline = true,
     indent = true,
@@ -1172,15 +1173,16 @@ local function apply_markup_prefs(cfg)
   -- Headings colors (levels 1..6)
   do
     local h = m.headings or {}
-    -- Build a cohesive single-hue ramp from include_color
-    local base = p.include_color
+    -- Build a stronger ramp by blending accent_secondary and include hues
+    local bright = p.accent_secondary
+    local anchor = p.include_color
     local ramp = {
-      U.lighten(base, 25), -- h1 brightest
-      U.lighten(base, 15), -- h2
-      base,                -- h3
-      U.darken(base, 10),  -- h4
-      U.darken(base, 20),  -- h5
-      U.darken(base, 30),  -- h6 darkest
+      U.lighten(bright, 40), -- h1 brightest
+      U.lighten(bright, 25), -- h2
+      bright,                -- h3 baseline
+      anchor,                -- h4 switches to include
+      U.darken(anchor, 15),  -- h5
+      U.darken(anchor, 30),  -- h6 darkest
     }
     for i = 1, 6 do
       local fg = h['h'..i] or ramp[i]
@@ -1466,6 +1468,7 @@ end
     overseer = 'neg.groups.plugins.overseer',
     noice = 'neg.groups.plugins.noice',
     obsidian = 'neg.groups.plugins.obsidian',
+    telekasten = 'neg.groups.plugins.telekasten',
     rainbow = 'neg.groups.plugins.rainbow',
     headline = 'neg.groups.plugins.headline',
     indent = 'neg.groups.plugins.indent',

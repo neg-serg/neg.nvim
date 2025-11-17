@@ -51,6 +51,10 @@ local colors = {
 
     lbgn='#7095b0', -- light preprocessor color
     dbng='#506a7d', -- dark preprocessor color
+
+    -- Telekasten accents (dark charcoal with a cool bias)
+    tkic='#111827', -- icon tint
+    tkbr='#1d2433', -- bracket separators
     col1='#000408',
     col2='#010912',
     col3='#040f1c',
@@ -167,6 +171,8 @@ colors.fg_preproc_light = colors.lbgn
 colors.preproc_light_color = colors.lbgn
 colors.fg_preproc_dark = colors.dbng
 colors.preproc_dark_color = colors.dbng
+colors.telekasten_icon = colors.tkic
+colors.telekasten_bracket = colors.tkbr
 
 -- Shades and rainbow
 colors.shade_01=colors.col1; colors.shade_02=colors.col2; colors.shade_03=colors.col3; colors.shade_04=colors.col4;
