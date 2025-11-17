@@ -4,11 +4,12 @@ This document summarizes the changes across the 4.x line in a thematic, free‑f
 
 ## New in 4.67
 
-- Default‑palette sanitizer: remaps any leftover `NvimLight*`/`NvimDark*` highlights to the theme palette. Toggle with `ui.sanitize_defaults`.
+- Default-palette sanitizer: remaps any leftover `NvimLight*`/`NvimDark*` highlights to the theme palette. Toggle with `ui.sanitize_defaults`.
 - Tooling: `:NegSanitizeScan` prints groups still using default palette (if any) after apply.
-- Legacy syntax coverage: add core Vim groups (String/Character/Number/Boolean/etc.) so non‑Tree‑sitter setups use palette colors.
-- Colors: strings retuned to a cool, subdued steel‑blue `#6e879f` for better readability.
+- Legacy syntax coverage: add core Vim groups (String/Character/Number/Boolean/etc.) so non-Tree-sitter setups use palette colors.
+- Colors: strings retuned to a cool, subdued steel-blue `#6e879f` for better readability.
 - Fix: Lua completion typo (`||` → `or`) that could prevent theme loading in rare paths.
+- Unified `:Neg` command: schema-driven `:Neg {set|toggle|info|scenario|plugins|export|import}` replaces the zoo of `:Neg*` toggles, with multi-level completion (subcommand → option path → values). Legacy commands remain as thin aliases and now reuse the same dispatcher.
 
 ## Core UI & Editor
 
