@@ -2,6 +2,11 @@
 
 This document summarizes the changes across the 4.x line in a thematic, free‑form way. It complements the per‑version CHANGELOG by grouping features and decisions into topics to make the intent and usage clearer.
 
+## New in 4.70
+
+- Telekasten/Markdown UI: new palette swatches and a dedicated plugin module recolor Telekasten icons, tags, and wiki brackets with a deep charcoal tint (slightly cool) so counters and helper glyphs stay visible without altering diff colors.
+- Markdown headings ramp: default Tree-sitter `@markup.heading.*` colors now mix the brighter `accent_secondary` hue (levels 1‑3) with the classic include blue (levels 4‑6), creating noticeably stronger contrast while still respecting custom overrides via `cfg.markup.headings`.
+
 ## New in 4.69
 
 - Default-palette sanitizer: remaps any leftover `NvimLight*`/`NvimDark*` highlights to the theme palette. Toggle with `ui.sanitize_defaults`.
