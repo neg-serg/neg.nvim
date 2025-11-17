@@ -6,7 +6,6 @@ local bracket = p.telekasten_bracket or U.darken(icon, 10)
 local alias = U.lighten(icon, 28)
 
 return {
-  DevIconMd = { fg = icon },
   tkLink = { fg = p.include_color, bold = true },
   tkAliasedLink = { fg = alias },
   tkBrackets = { fg = bracket },
