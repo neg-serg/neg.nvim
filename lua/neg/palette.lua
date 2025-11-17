@@ -36,9 +36,9 @@ local colors = {
     var='#7387a1', -- function highlight
     func='#7095b0', -- function highlight
 
-    dadd='#15b22d', -- diff add
-    dchg='#00406d', -- diff change
-    dred='#ce162b', -- diff red
+    dadd='#35c088', -- diff add (fresh teal-leaning green)
+    dchg='#d5a851', -- diff change (warm amber)
+    dred='#f06a6a', -- diff red (soft coral)
     dwarn='#e0af68', -- warning (yellow/orange)
 
     clin='#131e30', -- cursor line

@@ -5,17 +5,17 @@ return {
   GitSignsAddNr={fg=p.diff_add_color},
   GitSignsAddLn={fg=p.diff_add_color},
 
-  GitSignsChange={fg=p.include_color},
-  GitSignsChangeNr={fg=p.include_color},
-  GitSignsChangeLn={fg=p.include_color},
+  GitSignsChange={fg=p.diff_change_color},
+  GitSignsChangeNr={fg=p.diff_change_color},
+  GitSignsChangeLn={fg=p.diff_change_color},
 
-  GitSignsDelete={fg=p.red_blood_color},
-  GitSignsDeleteNr={fg=p.red_blood_color},
-  GitSignsDeleteLn={fg=p.red_blood_color},
+  GitSignsDelete={fg=p.diff_delete_color},
+  GitSignsDeleteNr={fg=p.diff_delete_color},
+  GitSignsDeleteLn={fg=p.diff_delete_color},
 
-  GitSignsTopdelete={fg=p.red_blood_color},
-  GitSignsChangedelete={fg=p.red_blood_color},
-  GitSignsUntracked={fg=p.keyword3_color},
+  GitSignsTopdelete={fg=p.diff_delete_color},
+  GitSignsChangedelete={fg=p.diff_change_color},
+  GitSignsUntracked={fg=p.identifier_color},
 
   GitSignsCurrentLineBlame={fg=p.comment_color, italic=true},
 }
