@@ -3,5 +3,6 @@ return {
   HeirlineNormal = { link = 'cleared' },
   HeirlineInactive = { link = 'StatusLineNC' },
   HeirlineWinbar = { link = 'WinBar' },
+  HeirlineDirectory = { fg = '#d1e5ff' },
 }
 
