@@ -1412,6 +1412,68 @@ end
     end
   end
 
+-- Plugin highlight modules (deferred to VeryLazy on initial startup)
+local plugin_highlight_map = {
+  cmp = 'neg.groups.plugins.cmp',
+  telescope = 'neg.groups.plugins.telescope',
+  git = 'neg.groups.plugins.git',
+  gitsigns = 'neg.groups.plugins.gitsigns',
+  bufferline = 'neg.groups.plugins.bufferline',
+  alpha = 'neg.groups.plugins.alpha',
+  startify = 'neg.groups.plugins.startify',
+  mini_statusline = 'neg.groups.plugins.mini_statusline',
+  mini_tabline = 'neg.groups.plugins.mini_tabline',
+  todo_comments = 'neg.groups.plugins.todo_comments',
+  navic = 'neg.groups.plugins.navic',
+  lspsaga = 'neg.groups.plugins.lspsaga',
+  navbuddy = 'neg.groups.plugins.navbuddy',
+  neotest = 'neg.groups.plugins.neotest',
+  harpoon = 'neg.groups.plugins.harpoon',
+  treesitter_playground = 'neg.groups.plugins.treesitter_playground',
+  overseer = 'neg.groups.plugins.overseer',
+  noice = 'neg.groups.plugins.noice',
+  obsidian = 'neg.groups.plugins.obsidian',
+  telekasten = 'neg.groups.plugins.telekasten',
+  rainbow = 'neg.groups.plugins.rainbow',
+  headline = 'neg.groups.plugins.headline',
+  indent = 'neg.groups.plugins.indent',
+  which_key = 'neg.groups.plugins.which_key',
+  nvim_tree = 'neg.groups.plugins.nvim_tree',
+  neo_tree = 'neg.groups.plugins.neo_tree',
+  dap = 'neg.groups.plugins.dap',
+  dapui = 'neg.groups.plugins.dapui',
+  trouble = 'neg.groups.plugins.trouble',
+  notify = 'neg.groups.plugins.notify',
+  treesitter_context = 'neg.groups.plugins.treesitter_context',
+  hop = 'neg.groups.plugins.hop',
+  diffview = 'neg.groups.plugins.diffview',
+  fidget = 'neg.groups.plugins.fidget',
+  toggleterm = 'neg.groups.plugins.toggleterm',
+  dashboard = 'neg.groups.plugins.dashboard',
+  heirline = 'neg.groups.plugins.heirline',
+  oil = 'neg.groups.plugins.oil',
+  blink = 'neg.groups.plugins.blink',
+  leap = 'neg.groups.plugins.leap',
+  flash = 'neg.groups.plugins.flash',
+  ufo = 'neg.groups.plugins.ufo',
+  bqf = 'neg.groups.plugins.bqf',
+  glance = 'neg.groups.plugins.glance',
+  barbecue = 'neg.groups.plugins.barbecue',
+  illuminate = 'neg.groups.plugins.illuminate',
+  hlslens = 'neg.groups.plugins.hlslens',
+  virt_column = 'neg.groups.plugins.virt_column',
+  dap_virtual_text = 'neg.groups.plugins.dap_virtual_text',
+  mini_pick = 'neg.groups.plugins.mini_pick',
+  snacks = 'neg.groups.plugins.snacks',
+  fzf_lua = 'neg.groups.plugins.fzf_lua',
+}
+
+function M._apply_plugin_highlights(cfg)
+  for key, mod in pairs(plugin_highlight_map) do
+    if cfg.plugins[key] ~= false then safe_apply(mod) end
+  end
+end
+
   function M.setup(opts)
   local cfg
   if type(opts) == 'table' and next(opts) ~= nil then
@@ -1426,8 +1488,6 @@ end
 
   -- Apply palette saturation before any highlight tables are required
   set_palette_saturation(cfg.saturation or 100)
-  -- Ensure group modules are re-evaluated against the updated palette
-  invalidate_group_modules()
 
   -- Idempotent apply: skip if no changes and no function overrides
   if not force_apply and M._applied_key and type(cfg.overrides) ~= 'function' then
@@ -1447,64 +1507,19 @@ end
   apply(require('neg.groups.lsp'))
   apply(require('neg.groups.treesitter'))
 
-  -- Plugins (toggleable)
-  for key, mod in pairs({
-    cmp = 'neg.groups.plugins.cmp',
-    telescope = 'neg.groups.plugins.telescope',
-    git = 'neg.groups.plugins.git',
-    gitsigns = 'neg.groups.plugins.gitsigns',
-    bufferline = 'neg.groups.plugins.bufferline',
-    alpha = 'neg.groups.plugins.alpha',
-    startify = 'neg.groups.plugins.startify',
-    mini_statusline = 'neg.groups.plugins.mini_statusline',
-    mini_tabline = 'neg.groups.plugins.mini_tabline',
-    todo_comments = 'neg.groups.plugins.todo_comments',
-    navic = 'neg.groups.plugins.navic',
-    lspsaga = 'neg.groups.plugins.lspsaga',
-    navbuddy = 'neg.groups.plugins.navbuddy',
-    neotest = 'neg.groups.plugins.neotest',
-    harpoon = 'neg.groups.plugins.harpoon',
-    treesitter_playground = 'neg.groups.plugins.treesitter_playground',
-    overseer = 'neg.groups.plugins.overseer',
-    noice = 'neg.groups.plugins.noice',
-    obsidian = 'neg.groups.plugins.obsidian',
-    telekasten = 'neg.groups.plugins.telekasten',
-    rainbow = 'neg.groups.plugins.rainbow',
-    headline = 'neg.groups.plugins.headline',
-    indent = 'neg.groups.plugins.indent',
-    which_key = 'neg.groups.plugins.which_key',
-    nvim_tree = 'neg.groups.plugins.nvim_tree',
-    neo_tree = 'neg.groups.plugins.neo_tree',
-    dap = 'neg.groups.plugins.dap',
-    dapui = 'neg.groups.plugins.dapui',
-    trouble = 'neg.groups.plugins.trouble',
-    notify = 'neg.groups.plugins.notify',
-    treesitter_context = 'neg.groups.plugins.treesitter_context',
-    hop = 'neg.groups.plugins.hop',
-    -- phase 1 additions
-    diffview = 'neg.groups.plugins.diffview',
-    fidget = 'neg.groups.plugins.fidget',
-    toggleterm = 'neg.groups.plugins.toggleterm',
-    dashboard = 'neg.groups.plugins.dashboard',
-    heirline = 'neg.groups.plugins.heirline',
-    oil = 'neg.groups.plugins.oil',
-    blink = 'neg.groups.plugins.blink',
-    leap = 'neg.groups.plugins.leap',
-    flash = 'neg.groups.plugins.flash',
-    ufo = 'neg.groups.plugins.ufo',
-    bqf = 'neg.groups.plugins.bqf',
-    -- phase 2 additions
-    glance = 'neg.groups.plugins.glance',
-    barbecue = 'neg.groups.plugins.barbecue',
-    illuminate = 'neg.groups.plugins.illuminate',
-    hlslens = 'neg.groups.plugins.hlslens',
-    virt_column = 'neg.groups.plugins.virt_column',
-    dap_virtual_text = 'neg.groups.plugins.dap_virtual_text',
-    mini_pick = 'neg.groups.plugins.mini_pick',
-    snacks = 'neg.groups.plugins.snacks',
-    fzf_lua = 'neg.groups.plugins.fzf_lua',
-  }) do
-    if cfg.plugins[key] ~= false then safe_apply(mod) end
+  -- Plugin highlights: defer to VeryLazy on initial load, apply eagerly on subsequent re-applies
+  if M._plugins_loaded then
+    M._apply_plugin_highlights(cfg)
+  else
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'VeryLazy', once = true,
+      callback = function()
+        if vim.g.colors_name == 'neg' then
+          M._apply_plugin_highlights(M._config or cfg)
+          M._plugins_loaded = true
+        end
+      end,
+    })
   end
 
   -- Post-processing
@@ -1557,20 +1572,13 @@ end
         pattern = 'VeryLazy',
         once = true,
         callback = function()
-          if vim.g.colors_name == 'neg' then M.setup({ force = true }) end
+          if vim.g.colors_name == 'neg' then M.setup() end
         end,
       })
       -- If someone calls :colorscheme neg again, ensure we apply with current config
       vim.api.nvim_create_autocmd('ColorScheme', {
         callback = function(args)
           if args.match == 'neg' then M.setup({ force = true }) end
-        end,
-      })
-      -- Ensure final pass at VimEnter when everything is loaded
-      vim.api.nvim_create_autocmd('VimEnter', {
-        once = true,
-        callback = function()
-          if vim.g.colors_name == 'neg' then M.setup({ force = true }) end
         end,
       })
     end)
