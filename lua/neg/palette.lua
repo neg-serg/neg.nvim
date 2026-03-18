@@ -39,7 +39,7 @@ local colors = {
     dadd='#007a66', -- diff add (luminous spruce, balanced brightness)
     dchg='#1d4aaf', -- diff change (bright indigo)
     dred='#6b0f2a', -- diff delete (dark burgundy)
-    dwarn='#e0af68', -- warning (yellow/orange)
+    dwarn='#c8a8ef', -- warning (cyberpunk lilac)
 
     clin='#131e30', -- cursor line
     pmen='#6c7e96', -- pmenu color
